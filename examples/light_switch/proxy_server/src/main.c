@@ -81,7 +81,7 @@
 #include "light_switch_example_common.h"
 #include "app_onoff.h"
 
-#define ONOFF_SERVER_0_LED          (BSP_LED_0)
+#define SERVER_LED                      (BSP_LED_0)
 
 #define DEVICE_NAME                     "Server Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
@@ -135,17 +135,16 @@ static uint8_t simple_byte_send_get_cb(const simple_byte_send_server_t * p_serve
 
 static uint8_t simple_byte_send_set_cb(const simple_byte_send_server_t * p_server, uint8_t value)
 {
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Received unsigned char send from client %u\n", value);
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Received unsigned char send from client: %u\n", value);
     
-    if (value = 254) 
+    /*Blink for fun*/
+    if (value = 255) 
     {
         hal_led_mask_set(LEDS_MASK, false);
         hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
     }
     m_byte_send_received = value;
-//    hal_pwm_duty_set(0, m_device_brightness);
-//    hal_pwm_duty_set(1, m_device_brightness);
-//    
+  
     return value;
 }
 
@@ -183,39 +182,39 @@ static void config_server_evt_cb(const config_server_evt_t * p_evt)
 static void button_event_handler(uint32_t button_number)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Button %u pressed\n", button_number);
-//    switch (button_number)
-//    {
-//        /* Pressing SW1 on the Development Kit will result in LED state to toggle and trigger
-//        the STATUS message to inform client about the state change. This is a demonstration of
-//        state change publication due to local event. */
-//        case 0:
-//        {
-//            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "User action \n");
-//            hal_led_pin_set(ONOFF_SERVER_0_LED, !hal_led_pin_get(ONOFF_SERVER_0_LED));
-//            app_onoff_status_publish(&m_onoff_server_0);
-//            break;
-//        }
-//
-//        /* Initiate node reset */
-//        case 3:
-//        {
-//            /* Clear all the states to reset the node. */
-//            if (mesh_stack_is_device_provisioned())
-//            {
-//                (void) proxy_stop();
-//                mesh_stack_config_clear();
-//                node_reset();
-//            }
-//            else
-//            {
-//                __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "The device is unprovisioned. Resetting has no effect.\n");
-//            }
-//            break;
-//        }
-//
-//        default:
-//            break;
-//    }
+    switch (button_number)
+    {
+        /* Pressing SW1 on the Development Kit will result in LED state to toggle and trigger
+        the STATUS message to inform client about the state change. This is a demonstration of
+        state change publication due to local event. */
+        case 0:
+        {
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "User action \n");
+            hal_led_pin_set(SERVER_LED, !hal_led_pin_get(SERVER_LED));
+            simple_byte_send_server_status_publish(&m_byte_send_server, SERVER_LED);
+            break;
+        }
+
+        /* Initiate node reset */
+        case 3:
+        {
+            /* Clear all the states to reset the node. */
+            if (mesh_stack_is_device_provisioned())
+            {
+                (void) proxy_stop();
+                mesh_stack_config_clear();
+                node_reset();
+            }
+            else
+            {
+                __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "The device is unprovisioned. Resetting has no effect.\n");
+            }
+            break;
+        }
+
+        default:
+            break;
+    }
 }
 
 static void app_rtt_input_handler(int key)
@@ -336,7 +335,7 @@ static void conn_params_init(void)
 static void initialize(void)
 {
     __LOG_INIT(LOG_SRC_APP | LOG_SRC_ACCESS | LOG_SRC_BEARER, LOG_LEVEL_INFO, LOG_CALLBACK_DEFAULT);
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Light Switch Proxy Server Demo -----\n");
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Proxy Server -----\n");
 
     ERROR_CHECK(app_timer_init());
     hal_leds_init();

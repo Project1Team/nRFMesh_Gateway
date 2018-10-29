@@ -1,7 +1,9 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks/>
- <Breakpoints groups="Breakpoints" active_group="Breakpoints"/>
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
+  <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
+ </Breakpoints>
  <ExecutionProfileWindow/>
  <FrameBufferWindow>
   <FrameBufferWindow bufferHeight="-1" addressSpace="" addressText="" bufferWidth="-1"/>
@@ -56,7 +58,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="248" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" selected="1" top="241" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="440" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" selected="1" top="429" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="88" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/simple_byte_send/src/simple_byte_send_client.c" selected="0" top="69" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="light_switch_proxy_client_nrf52832_xxAA_s132_6.0.0" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" debugSearchFileMap="" fileDialogInitialDirectory="D:/Study/Thesis/Nordic SDK/nRF5_SDK_for_Mesh_v2.2.0/models/simple_byte_send/src" debugSearchPath="" autoConnectCapabilities="3199"/>

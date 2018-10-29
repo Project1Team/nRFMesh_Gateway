@@ -81,7 +81,7 @@
 #define APP_STATE_OFF                (0)
 #define APP_STATE_ON                 (1)
 
-#define APP_UNACK_MSG_REPEAT_COUNT   (2)
+#define APP_UNACK_MSG_REPEAT_COUNT   (1)
 
 #define DEVICE_NAME                     "Sensor Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
@@ -226,32 +226,17 @@ static void button_event_handler(uint32_t button_number)
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Button %u pressed\n", button_number);
 
     uint32_t status = NRF_SUCCESS;
-    //generic_onoff_set_params_t set_params;
-    //model_transition_t transition_params;
-    //static uint8_t tid = 0;
 
-    /* Button 1: ON, Button 2: Off, Client[0]
-     * Button 2: ON, Button 3: Off, Client[1]
+    /* Button 1, 2, 3: Now only has 1 client, for testing: send a maximum value of a byte
+     * Button 4: Simply send 0
      */
-
-    // switch(button_number)
-    // {
-    //     case 0:
-    //     case 2:
-    //         set_params.on_off = APP_STATE_ON;
-    //         break;
-
-    //     case 1:
-    //     case 3:
-    //         set_params.on_off = APP_STATE_OFF;
-    //         break;
-    // }
     switch (button_number)
     {
         case 0:            
         case 1:            
         case 2:
             simple_byte_send_client_set_unreliable(&m_byte_send_client, 255, APP_UNACK_MSG_REPEAT_COUNT);
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending unreliable msg: %d\n", 255);
             break;
         case 3:
             status =  simple_byte_send_client_set(&m_byte_send_client, 0);
@@ -259,31 +244,6 @@ static void button_event_handler(uint32_t button_number)
         default:
             break;
     }
-
-    //    set_params.tid = tid++;
-    //    transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
-    //    transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
-    //    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: ONOFF SET %d\n", set_params.on_off);
-
-    // switch (button_number)
-    // {
-    //     case 0:
-    //     case 1:
-    //         /* Demonstrate acknowledged transaction, using 1st client model instance */
-    //         /* In this examples, users will not be blocked if the model is busy */
-    //         (void)access_model_reliable_cancel(m_clients[0].model_handle);
-    //         status = generic_onoff_client_set(&m_clients[0], &set_params, &transition_params);
-    //         hal_led_pin_set(BSP_LED_0, set_params.on_off);
-    //         break;
-
-    //     case 2:
-    //     case 3:
-    //         /* Demonstrate un-acknowledged transaction, using 2nd client model instance */
-    //         status = generic_onoff_client_set_unack(&m_clients[1], &set_params,
-    //                                                 &transition_params, APP_UNACK_MSG_REPEAT_COUNT);
-    //         hal_led_pin_set(BSP_LED_1, set_params.on_off);
-    //         break;
-    // }
 
     switch (status)
     {
@@ -425,7 +385,7 @@ static void conn_params_init(void)
 static void initialize(void)
 {
     __LOG_INIT(LOG_SRC_APP | LOG_SRC_ACCESS, LOG_LEVEL_INFO, LOG_CALLBACK_DEFAULT);
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Light Switch Client Demo -----\n");
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Client -----\n");
 
     ERROR_CHECK(app_timer_init());
     hal_leds_init();
