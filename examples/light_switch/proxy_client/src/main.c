@@ -65,6 +65,8 @@
 
 /* Models */
 #include "generic_onoff_client.h"
+#include "simple_byte_send_client.h"
+
 
 /* Logging and RTT */
 #include "log.h"
@@ -81,7 +83,7 @@
 
 #define APP_UNACK_MSG_REPEAT_COUNT   (2)
 
-#define DEVICE_NAME                     "nRF5x Mesh Switch"
+#define DEVICE_NAME                     "Sensor Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)           /**< Maximum acceptable connection interval. */
 #define SLAVE_LATENCY                   0                                           /**< Slave latency. */
@@ -101,6 +103,7 @@ static void on_sd_evt(uint32_t sd_evt, void * p_context)
 NRF_SDH_SOC_OBSERVER(mesh_observer, NRF_SDH_BLE_STACK_OBSERVER_PRIO, on_sd_evt, NULL);
 
 static generic_onoff_client_t m_clients[CLIENT_MODEL_INSTANCE_COUNT];
+static simple_byte_send_client_t m_byte_send_client;
 static bool                   m_device_provisioned;
 
 /* Forward declaration */
@@ -187,6 +190,21 @@ static void app_generic_onoff_client_status_cb(const generic_onoff_client_t * p_
     }
 }
 
+static void simple_byte_send_client_status_cb(const simple_byte_send_client_t * p_self, simple_byte_send_status_t status, uint16_t src)
+{
+    __LOG(LOG_SRC_APP, LOG_LEVEL_ERROR, "Msg server status received: \n");
+    switch (status)
+    {
+        case SIMPLE_BYTE_SEND_STATUS_NORMAL:
+            __LOG(LOG_SRC_APP, LOG_LEVEL_ERROR, "Msg server status: SIMPLE_BYTE_SEND_STATUS_NORMAL\n");
+            break;        
+
+        default:
+            __LOG(LOG_SRC_APP, LOG_LEVEL_ERROR, "Unknown status \n");
+            break;
+    }
+}
+
 static void node_reset(void)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- Node reset  -----\n");
@@ -208,51 +226,64 @@ static void button_event_handler(uint32_t button_number)
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Button %u pressed\n", button_number);
 
     uint32_t status = NRF_SUCCESS;
-    generic_onoff_set_params_t set_params;
-    model_transition_t transition_params;
-    static uint8_t tid = 0;
+    //generic_onoff_set_params_t set_params;
+    //model_transition_t transition_params;
+    //static uint8_t tid = 0;
 
     /* Button 1: ON, Button 2: Off, Client[0]
      * Button 2: ON, Button 3: Off, Client[1]
      */
 
-    switch(button_number)
-    {
-        case 0:
-        case 2:
-            set_params.on_off = APP_STATE_ON;
-            break;
+    // switch(button_number)
+    // {
+    //     case 0:
+    //     case 2:
+    //         set_params.on_off = APP_STATE_ON;
+    //         break;
 
-        case 1:
+    //     case 1:
+    //     case 3:
+    //         set_params.on_off = APP_STATE_OFF;
+    //         break;
+    // }
+    switch (button_number)
+    {
+        case 0:            
+        case 1:            
+        case 2:
+            simple_byte_send_client_set_unreliable(&m_byte_send_client, 255, APP_UNACK_MSG_REPEAT_COUNT);
+            break;
         case 3:
-            set_params.on_off = APP_STATE_OFF;
+            status =  simple_byte_send_client_set(&m_byte_send_client, 0);
+            break;
+        default:
             break;
     }
 
-    set_params.tid = tid++;
-    transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
-    transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: ONOFF SET %d\n", set_params.on_off);
+    //    set_params.tid = tid++;
+    //    transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
+    //    transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
+    //    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: ONOFF SET %d\n", set_params.on_off);
 
-    switch (button_number)
-    {
-        case 0:
-        case 1:
-            /* Demonstrate acknowledged transaction, using 1st client model instance */
-            /* In this examples, users will not be blocked if the model is busy */
-            (void)access_model_reliable_cancel(m_clients[0].model_handle);
-            status = generic_onoff_client_set(&m_clients[0], &set_params, &transition_params);
-            hal_led_pin_set(BSP_LED_0, set_params.on_off);
-            break;
+    // switch (button_number)
+    // {
+    //     case 0:
+    //     case 1:
+    //         /* Demonstrate acknowledged transaction, using 1st client model instance */
+    //         /* In this examples, users will not be blocked if the model is busy */
+    //         (void)access_model_reliable_cancel(m_clients[0].model_handle);
+    //         status = generic_onoff_client_set(&m_clients[0], &set_params, &transition_params);
+    //         hal_led_pin_set(BSP_LED_0, set_params.on_off);
+    //         break;
 
-        case 2:
-        case 3:
-            /* Demonstrate un-acknowledged transaction, using 2nd client model instance */
-            status = generic_onoff_client_set_unack(&m_clients[1], &set_params,
-                                                    &transition_params, APP_UNACK_MSG_REPEAT_COUNT);
-            hal_led_pin_set(BSP_LED_1, set_params.on_off);
-            break;
-      }
+    //     case 2:
+    //     case 3:
+    //         /* Demonstrate un-acknowledged transaction, using 2nd client model instance */
+    //         status = generic_onoff_client_set_unack(&m_clients[1], &set_params,
+    //                                                 &transition_params, APP_UNACK_MSG_REPEAT_COUNT);
+    //         hal_led_pin_set(BSP_LED_1, set_params.on_off);
+    //         break;
+    // }
 
     switch (status)
     {
@@ -296,15 +327,20 @@ static void models_init_cb(void)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Initializing and adding models\n");
 
-    for (uint32_t i = 0; i < CLIENT_MODEL_INSTANCE_COUNT; ++i)
-    {
-        m_clients[i].settings.p_callbacks = &client_cbs;
-        m_clients[i].settings.timeout = 0;
-        m_clients[i].settings.force_segmented = APP_CONFIG_FORCE_SEGMENTATION;
-        m_clients[i].settings.transmic_size = APP_CONFIG_MIC_SIZE;
+    // for (uint32_t i = 0; i < CLIENT_MODEL_INSTANCE_COUNT; ++i)
+    // {
+    //     m_clients[i].settings.p_callbacks = &client_cbs;
+    //     m_clients[i].settings.timeout = 0;
+    //     m_clients[i].settings.force_segmented = APP_CONFIG_FORCE_SEGMENTATION;
+    //     m_clients[i].settings.transmic_size = APP_CONFIG_MIC_SIZE;
 
-        ERROR_CHECK(generic_onoff_client_init(&m_clients[i], i + 1));
-    }
+    //     ERROR_CHECK(generic_onoff_client_init(&m_clients[i], i + 1));
+    // }
+
+    m_byte_send_client.status_cb = simple_byte_send_client_status_cb;
+    m_byte_send_client.timeout_cb = app_gen_onoff_client_publish_interval_cb;
+    ERROR_CHECK(simple_byte_send_client_init(&m_byte_send_client, 0));
+    ERROR_CHECK(access_model_subscription_list_alloc(m_byte_send_client.model_handle));
 }
 
 static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
