@@ -138,10 +138,15 @@ static uint8_t simple_byte_send_set_cb(const simple_byte_send_server_t * p_serve
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Received unsigned char send from client: %u\n", value);
     
     /*Blink for fun*/
-    if (value = 255) 
+    if (value == 255) 
     {
         hal_led_mask_set(LEDS_MASK, false);
         hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+    }
+
+    if (value == 0) 
+    {
+        hal_led_pin_set(SERVER_LED, !hal_led_pin_get(SERVER_LED));
     }
     m_byte_send_received = value;
   
