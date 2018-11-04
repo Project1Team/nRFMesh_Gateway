@@ -52,7 +52,7 @@
  */
 
 /** Client model ID */
-#define GENERIC_ONOFF_CLIENT_MODEL_ID 0x1001
+#define GENERIC_ONOFF_CLIENT_MODEL_ID 0x0009
 
 /* Forward declaration */
 typedef struct __generic_onoff_client_t generic_onoff_client_t;

@@ -67,8 +67,7 @@
 #include "mesh_softdevice_init.h"
 
 /* Models */
-#include "generic_onoff_server.h"
-#include "simple_byte_send_server.h"
+#include "generic_byte_server.h"
 
 /* Logging and RTT */
 #include "log.h"
@@ -79,11 +78,11 @@
 #include "example_common.h"
 #include "nrf_mesh_config_examples.h"
 #include "light_switch_example_common.h"
-#include "app_onoff.h"
+#include "app_byte.h"
 
-#define SERVER_LED                      (BSP_LED_0)
+#define BYTE_SERVER_0_LED          (BSP_LED_0)
 
-#define DEVICE_NAME                     "Server Node"
+#define DEVICE_NAME                     "nRF5x Mesh Light"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)           /**< Maximum acceptable connection interval. */
 #define SLAVE_LATENCY                   0                                           /**< Slave latency. */
@@ -92,72 +91,45 @@
 #define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(2000)                       /**< Time between each call to sd_ble_gap_conn_param_update after the first call. */
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
 
-static simple_byte_send_server_t m_byte_send_server;
-static uint8_t m_byte_send_received;
 static bool m_device_provisioned;
 
 static void gap_params_init(void);
 static void conn_params_init(void);
 
 /*************************************************************************************************/
-//static void app_onoff_server_set_cb(const app_onoff_server_t * p_server, bool onoff);
-//static void app_onoff_server_get_cb(const app_onoff_server_t * p_server, bool * p_present_onoff);
+static void app_byte_server_set_cb(const app_byte_server_t * p_server, bool byte);
+static void app_byte_server_get_cb(const app_byte_server_t * p_server, bool * p_present_byte);
 
-/* Generic OnOff server structure definition and initialization */
-/*APP_ONOFF_SERVER_DEF(m_onoff_server_0,
+/* Generic Byte server structure definition and initialization */
+APP_BYTE_SERVER_DEF(m_byte_server_0,
                      APP_CONFIG_FORCE_SEGMENTATION,
                      APP_CONFIG_MIC_SIZE,
-                     app_onoff_server_set_cb,
-                     app_onoff_server_get_cb)*/
+                     app_byte_server_set_cb,
+                     app_byte_server_get_cb)
 
 /* Callback for updating the hardware state */
-//static void app_onoff_server_set_cb(const app_onoff_server_t * p_server, bool onoff)
-//{
-//    /* Resolve the server instance here if required, this example uses only 1 instance. */
-//
-//    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Setting GPIO value: %d\n", onoff)
-//
-//    hal_led_pin_set(ONOFF_SERVER_0_LED, onoff);
-//}
+static void app_byte_server_set_cb(const app_byte_server_t * p_server, bool byte)
+{
+    /* Resolve the server instance here if required, this example uses only 1 instance. */
+
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Setting GPIO value: %d\n", byte)
+
+    hal_led_pin_set(BYTE_SERVER_0_LED, byte);
+}
 
 /* Callback for reading the hardware state */
-//static void app_onoff_server_get_cb(const app_onoff_server_t * p_server, bool * p_present_onoff)
-//{
-//    /* Resolve the server instance here if required, this example uses only 1 instance. */
-//
-//    *p_present_onoff = hal_led_pin_get(ONOFF_SERVER_0_LED);
-//}
-
-static uint8_t simple_byte_send_get_cb(const simple_byte_send_server_t * p_server)
+static void app_byte_server_get_cb(const app_byte_server_t * p_server, bool * p_present_byte)
 {
-    return m_byte_send_received;
+    /* Resolve the server instance here if required, this example uses only 1 instance. */
+
+    *p_present_byte = hal_led_pin_get(BYTE_SERVER_0_LED);
 }
 
-static uint8_t simple_byte_send_set_cb(const simple_byte_send_server_t * p_server, uint8_t value)
+static void app_model_init(void)
 {
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Received unsigned char send from client: %u\n", value);
-    
-    /*Blink for fun*/
-    if (value == 255) 
-    {
-        hal_led_mask_set(LEDS_MASK, false);
-        hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-    }
-
-    if (value == 0) 
-    {
-        hal_led_pin_set(SERVER_LED, !hal_led_pin_get(SERVER_LED));
-    }
-    m_byte_send_received = value;
-  
-    return value;
+    /* Instantiate byte server on element index 0 */
+    ERROR_CHECK(app_byte_init(&m_byte_server_0, 0));
 }
-
-//static void app_model_init(void)
-//{
-//    /* Instantiate onoff server on element index 0 */
-//    ERROR_CHECK(app_onoff_init(&m_onoff_server_0, 0));
-//}
 
 /*************************************************************************************************/
 
@@ -195,8 +167,8 @@ static void button_event_handler(uint32_t button_number)
         case 0:
         {
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "User action \n");
-            hal_led_pin_set(SERVER_LED, !hal_led_pin_get(SERVER_LED));
-            simple_byte_send_server_status_publish(&m_byte_send_server, SERVER_LED);
+            hal_led_pin_set(BYTE_SERVER_0_LED, !hal_led_pin_get(BYTE_SERVER_0_LED));
+            app_byte_status_publish(&m_byte_server_0);
             break;
         }
 
@@ -270,12 +242,7 @@ static void provisioning_complete_cb(void)
 static void models_init_cb(void)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Initializing and adding models\n");
-    //app_model_init();
-
-    m_byte_send_server.get_cb = simple_byte_send_get_cb;
-    m_byte_send_server.set_cb = simple_byte_send_set_cb;
-    ERROR_CHECK(simple_byte_send_server_init(&m_byte_send_server, 0));
-    ERROR_CHECK(access_model_subscription_list_alloc(m_byte_send_server.model_handle));
+    app_model_init();
 }
 
 static void mesh_init(void)
@@ -340,7 +307,7 @@ static void conn_params_init(void)
 static void initialize(void)
 {
     __LOG_INIT(LOG_SRC_APP | LOG_SRC_ACCESS | LOG_SRC_BEARER, LOG_LEVEL_INFO, LOG_CALLBACK_DEFAULT);
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Proxy Server -----\n");
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Light Switch Proxy Server Demo -----\n");
 
     ERROR_CHECK(app_timer_init());
     hal_leds_init();
