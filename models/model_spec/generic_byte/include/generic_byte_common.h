@@ -24,7 +24,7 @@
  */
 
 /** Model Company ID */
-#define GENERIC_BYTE_COMPANY_ID (ACCESS_COMPANY_ID_NORDIC)
+#define GENERIC_BYTE_COMPANY_ID (ACCESS_COMPANY_ID_NONE)
 
 /** Maximum value of the Byte state, as defined in the Mesh Model Specification v1.0 */
 #define GENERIC_BYTE_MAX        (0xFF)

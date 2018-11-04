@@ -21,22 +21,22 @@
  */
 
 /** Shortest allowed length for the Set message. */
-#define GENERIC_BYTE_SET_MINLEN 0
+#define GENERIC_BYTE_SET_MINLEN 2
 /** Longest allowed length for the Set message. */
-#define GENERIC_BYTE_SET_MAXLEN 255
+#define GENERIC_BYTE_SET_MAXLEN 4
 
 /** Shortest allowed length for the Status message. */
-#define GENERIC_BYTE_STATUS_MINLEN 0
+#define GENERIC_BYTE_STATUS_MINLEN 1
 /** Longest allowed length for the Status message. */
-#define GENERIC_BYTE_STATUS_MAXLEN 255
+#define GENERIC_BYTE_STATUS_MAXLEN 3
 
 /** Generic Byte model message opcodes. */
 typedef enum
 {
-    GENERIC_BYTE_OPCODE_SET = 0xD1,
-    GENERIC_BYTE_OPCODE_SET_UNACKNOWLEDGED = 0xD2,
-    GENERIC_BYTE_OPCODE_GET = 0xD3,
-    GENERIC_BYTE_OPCODE_STATUS = 0xD4
+    GENERIC_BYTE_OPCODE_SET = 0x8202,
+    GENERIC_BYTE_OPCODE_SET_UNACKNOWLEDGED = 0x8203,
+    GENERIC_BYTE_OPCODE_GET = 0x8201,
+    GENERIC_BYTE_OPCODE_STATUS = 0x8204
 } generic_byte_opcode_t;
 
 /** Packed message structure typedefs are used for packing and unpacking byte stream. */

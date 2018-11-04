@@ -23,7 +23,7 @@
  */
 
 /** Client model ID */
-#define GENERIC_BYTE_CLIENT_MODEL_ID 0x0005
+#define GENERIC_BYTE_CLIENT_MODEL_ID 0x1001
 
 /* Forward declaration */
 typedef struct __generic_byte_client_t generic_byte_client_t;

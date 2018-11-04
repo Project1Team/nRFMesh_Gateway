@@ -50,14 +50,13 @@ static void status_handle(access_model_handle_t handle, const access_message_rx_
 
 static const access_opcode_handler_t m_opcode_handlers[] =
 {
-    //{ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_STATUS), status_handle},
-      {{GENERIC_BYTE_OPCODE_STATUS, ACCESS_COMPANY_ID_NORDIC}, status_handle}
+    {ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_STATUS), status_handle},
 };
 
 static uint8_t message_set_packet_create(generic_byte_set_msg_pkt_t *p_set, const generic_byte_set_params_t * p_params,
                                       const model_transition_t * p_transition)
 {
-        p_set->byte = p_params->byte;
+        p_set->byte = p_params->byte ? 1 : 0;
         p_set->tid = p_params->tid;
 
         if (p_transition != NULL)
@@ -76,7 +75,7 @@ static void message_create(generic_byte_client_t * p_client, uint16_t tx_opcode,
                            uint16_t length, access_message_tx_t *p_message)
 {
     p_message->opcode.opcode = tx_opcode;
-    p_message->opcode.company_id = ACCESS_COMPANY_ID_NORDIC;
+    p_message->opcode.company_id = ACCESS_COMPANY_ID_NONE;
     p_message->p_buffer = p_buffer;
     p_message->length = length;
     p_message->force_segmented = p_client->settings.force_segmented;
@@ -89,7 +88,7 @@ static void reliable_context_create(generic_byte_client_t * p_client, uint16_t r
 {
     p_reliable->model_handle = p_client->model_handle;
     p_reliable->reply_opcode.opcode = reply_opcode;
-    p_reliable->reply_opcode.company_id = ACCESS_COMPANY_ID_NORDIC;
+    p_reliable->reply_opcode.company_id = ACCESS_COMPANY_ID_NONE;
     p_reliable->timeout = p_client->settings.timeout;
     p_reliable->status_cb = p_client->settings.p_callbacks->ack_transaction_status_cb;
 }
@@ -113,7 +112,7 @@ uint32_t generic_byte_client_init(generic_byte_client_t * p_client, uint8_t elem
 
     access_model_add_params_t add_params =
     {
-        .model_id = GENERIC_BYTE_CLIENT_MODEL_ID,        
+        .model_id = ACCESS_MODEL_SIG(GENERIC_BYTE_CLIENT_MODEL_ID),
         .element_index = element_index,
         .p_opcode_handlers = &m_opcode_handlers[0],
         .opcode_count = ARRAY_SIZE(m_opcode_handlers),
@@ -215,4 +214,5 @@ uint32_t generic_byte_client_get(generic_byte_client_t * p_client)
         return NRF_ERROR_BUSY;
     }
 }
+
 

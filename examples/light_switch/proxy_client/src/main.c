@@ -82,7 +82,7 @@
 
 #define APP_UNACK_MSG_REPEAT_COUNT   (2)
 
-#define DEVICE_NAME                     "nRF5x Mesh Switch"
+#define DEVICE_NAME                     "Mesh Sensor Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)           /**< Maximum acceptable connection interval. */
 #define SLAVE_LATENCY                   0                                           /**< Slave latency. */
@@ -387,7 +387,7 @@ static void conn_params_init(void)
 static void initialize(void)
 {
     __LOG_INIT(LOG_SRC_APP | LOG_SRC_ACCESS, LOG_LEVEL_INFO, LOG_CALLBACK_DEFAULT);
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Light Switch Client Demo -----\n");
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Sensor -----\n");
 
     ERROR_CHECK(app_timer_init());
     hal_leds_init();

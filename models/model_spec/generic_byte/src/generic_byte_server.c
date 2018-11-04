@@ -138,12 +138,9 @@ static void handle_get(access_model_handle_t model_handle, const access_message_
 
 static const access_opcode_handler_t m_opcode_handlers[] =
 {
-//    {ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_SET), handle_set},
-//    {ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_SET_UNACKNOWLEDGED), handle_set},
-//    {ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_GET), handle_get},
-      {{GENERIC_BYTE_OPCODE_SET, GENERIC_BYTE_COMPANY_ID}, handle_set},
-      {{GENERIC_BYTE_OPCODE_SET_UNACKNOWLEDGED, GENERIC_BYTE_COMPANY_ID}, handle_set},
-      {{GENERIC_BYTE_OPCODE_GET, GENERIC_BYTE_COMPANY_ID}, handle_set}
+    {ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_SET), handle_set},
+    {ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_SET_UNACKNOWLEDGED), handle_set},
+    {ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_GET), handle_get},
 };
 
 
@@ -160,8 +157,7 @@ uint32_t generic_byte_server_init(generic_byte_server_t * p_server, uint8_t elem
 
     access_model_add_params_t init_params =
     {
-        //.model_id = ACCESS_MODEL_SIG(GENERIC_BYTE_SERVER_MODEL_ID),
-        .model_id = GENERIC_BYTE_SERVER_MODEL_ID,
+        .model_id = ACCESS_MODEL_SIG(GENERIC_BYTE_SERVER_MODEL_ID),
         .element_index =  element_index,
         .p_opcode_handlers = &m_opcode_handlers[0],
         .opcode_count = ARRAY_SIZE(m_opcode_handlers),
@@ -189,4 +185,3 @@ uint32_t generic_byte_server_status_publish(generic_byte_server_t * p_server, co
 
     return status_send(p_server, NULL, p_params);
 }
-

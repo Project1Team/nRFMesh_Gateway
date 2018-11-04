@@ -82,7 +82,7 @@
 
 #define BYTE_SERVER_0_LED          (BSP_LED_0)
 
-#define DEVICE_NAME                     "nRF5x Mesh Light"
+#define DEVICE_NAME                     "Mesh Server Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)           /**< Maximum acceptable connection interval. */
 #define SLAVE_LATENCY                   0                                           /**< Slave latency. */
@@ -97,8 +97,8 @@ static void gap_params_init(void);
 static void conn_params_init(void);
 
 /*************************************************************************************************/
-static void app_byte_server_set_cb(const app_byte_server_t * p_server, bool byte);
-static void app_byte_server_get_cb(const app_byte_server_t * p_server, bool * p_present_byte);
+static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint8_t byte);
+static void app_byte_server_get_cb(const app_byte_server_t * p_server, uint8_t * p_present_byte);
 
 /* Generic Byte server structure definition and initialization */
 APP_BYTE_SERVER_DEF(m_byte_server_0,
@@ -108,7 +108,7 @@ APP_BYTE_SERVER_DEF(m_byte_server_0,
                      app_byte_server_get_cb)
 
 /* Callback for updating the hardware state */
-static void app_byte_server_set_cb(const app_byte_server_t * p_server, bool byte)
+static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint8_t byte)
 {
     /* Resolve the server instance here if required, this example uses only 1 instance. */
 
@@ -118,7 +118,7 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, bool byte
 }
 
 /* Callback for reading the hardware state */
-static void app_byte_server_get_cb(const app_byte_server_t * p_server, bool * p_present_byte)
+static void app_byte_server_get_cb(const app_byte_server_t * p_server, uint8_t * p_present_byte)
 {
     /* Resolve the server instance here if required, this example uses only 1 instance. */
 
@@ -307,7 +307,7 @@ static void conn_params_init(void)
 static void initialize(void)
 {
     __LOG_INIT(LOG_SRC_APP | LOG_SRC_ACCESS | LOG_SRC_BEARER, LOG_LEVEL_INFO, LOG_CALLBACK_DEFAULT);
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Light Switch Proxy Server Demo -----\n");
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Gateway - Server -----\n");
 
     ERROR_CHECK(app_timer_init());
     hal_leds_init();

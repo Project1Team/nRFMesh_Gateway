@@ -72,9 +72,9 @@
 typedef struct
 {
     /** Present value of the Byte state */
-    bool present_byte;
+    uint8_t present_byte;
     /** Target value of the Byte state, as received from the model interface. */
-    bool target_byte;
+    uint8_t target_byte;
     /** Remaining time to reach `target_byte`. */
     uint32_t remaining_time_ms;
     /** Time to delay the processing of received SET message. */
@@ -99,7 +99,7 @@ typedef struct __app_byte_server_t app_byte_server_t;
  * @param[in]   p_server        Pointer to @ref __app_byte_server_t [app_byte_server_t] context
  * @param[in]   byte           New byte value to be used by the application
  */
-typedef void (*app_byte_set_cb_t)(const app_byte_server_t * p_server, bool byte);
+typedef void (*app_byte_set_cb_t)(const app_byte_server_t * p_server, uint8_t byte);
 
 /** Application state read callback prototype.
  * This callback is called by the app_model_behaviour.c whenever application byte state is required
@@ -109,7 +109,7 @@ typedef void (*app_byte_set_cb_t)(const app_byte_server_t * p_server, bool byte)
  * @param[out] p_present_byte   User application fills this value with the value retrived from
  *                               the hardware interface.
  */
-typedef void (*app_byte_get_cb_t)(const app_byte_server_t * p_server, bool * p_present_byte);
+typedef void (*app_byte_get_cb_t)(const app_byte_server_t * p_server, uint8_t * p_present_byte);
 
 /** Application level structure holding the Byte server model context and Byte state representation */
 struct __app_byte_server_t
@@ -130,7 +130,7 @@ struct __app_byte_server_t
     uint32_t last_rtc_counter;
     /** Internal variable. To flag if the received message has been processed to update the present
      * Byte value */
-    bool value_updated;
+    uint8_t value_updated;
 };
 
 /** Initiates value fetch from the user application by calling a get callback, updates internal state,
