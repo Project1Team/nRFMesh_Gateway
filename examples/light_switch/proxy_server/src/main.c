@@ -115,11 +115,11 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint8_t b
     /* Resolve the server instance here if required, this example uses only 1 instance. */
 
     //__LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Setting GPIO value: %d\n", byte)
-//    if(byte == 255)
-//    {
-//        hal_led_mask_set(LEDS_MASK, false);
-//        hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_PROV);
-//    }
+    if(byte == 255)
+    {
+        hal_led_mask_set(LEDS_MASK, false);
+        hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_PROV);
+    }
 
 }
 
