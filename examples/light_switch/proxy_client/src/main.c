@@ -77,8 +77,12 @@
 #include "light_switch_example_common.h"
 #include "example_common.h"
 
-#define APP_STATE_OFF                (213)
-#define APP_STATE_ON                 (255)
+#define MSG_0                (9)
+#define MSG_1                (27)
+#define MSG_2                (199)
+#define MSG_3                (255)
+#define CLIENT_LED_VALUE      (0)
+
 
 #define APP_UNACK_MSG_REPEAT_COUNT   (2)
 
@@ -181,11 +185,20 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
     {
         __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "OnOff server: 0x%04x, Present OnOff: %d, Target OnOff: %d, Remaining Time: %d ms\n",
               p_meta->src.value, p_in->present_byte, p_in->target_byte, p_in->remaining_time_ms);
+          if (p_in->present_byte == 255)
+          {
+              
+              hal_led_blink_ms(LEDS_MASK, LED_BLINK_SHORT_INTERVAL_MS, LED_BLINK_CNT_NO_REPLY);
+          }
     }
     else
     {
         __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "OnOff server: 0x%04x, Present OnOff: %d\n",
               p_meta->src.value, p_in->present_byte);
+          if (p_in->present_byte == 255)
+          {
+              hal_led_blink_ms(LEDS_MASK, LED_BLINK_SHORT_INTERVAL_MS, LED_BLINK_CNT_NO_REPLY);
+          }
     }
 }
 
@@ -214,20 +227,19 @@ static void button_event_handler(uint32_t button_number)
     model_transition_t transition_params;
     static uint8_t tid = 0;
 
-    /* Button 1: ON, Button 2: Off, Client[0]
-     * Button 2: ON, Button 3: Off, Client[1]
-     */
-
     switch(button_number)
     {
         case 0:
-        case 2:
-            set_params.byte = APP_STATE_ON;
+            set_params.byte = MSG_0;
             break;
-
         case 1:
+            set_params.byte = MSG_1;
+            break;
+        case 2:
+            set_params.byte = MSG_2;
+            break;
         case 3:
-            set_params.byte = APP_STATE_OFF;
+            set_params.byte = MSG_3;
             break;
     }
 
@@ -239,21 +251,32 @@ static void button_event_handler(uint32_t button_number)
     switch (button_number)
     {
         case 0:
-        case 1:
-            /* Demonstrate acknowledged transaction, using 1st client model instance */
-            /* In this examples, users will not be blocked if the model is busy */
             (void)access_model_reliable_cancel(m_clients.model_handle);
             status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
-            hal_led_pin_set(BSP_LED_0, set_params.byte);
+            hal_led_pin_set(BSP_LED_0, CLIENT_LED_VALUE);
+            break;
+
+        case 1:
+            (void)access_model_reliable_cancel(m_clients.model_handle);
+            status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
+            hal_led_pin_set(BSP_LED_1, CLIENT_LED_VALUE);
             break;
 
         case 2:
-        case 3:
-            /* Demonstrate un-acknowledged transaction, using 2nd client model instance */
-            status = generic_byte_client_set_unack(&m_clients, &set_params,
-                                                    &transition_params, APP_UNACK_MSG_REPEAT_COUNT);
-            hal_led_pin_set(BSP_LED_1, set_params.byte);
+            (void)access_model_reliable_cancel(m_clients.model_handle);
+            status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
+            hal_led_pin_set(BSP_LED_1, CLIENT_LED_VALUE);
             break;
+        case 3:
+            (void)access_model_reliable_cancel(m_clients.model_handle);
+            status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
+            hal_led_pin_set(BSP_LED_1, CLIENT_LED_VALUE);
+            break;
+//            /* Demonstrate un-acknowledged transaction, using 2nd client model instance */
+//            status = generic_byte_client_set_unack(&m_clients, &set_params,
+//                                                    &transition_params, APP_UNACK_MSG_REPEAT_COUNT);
+//            hal_led_pin_set(BSP_LED_1, set_params.byte);
+//            break;
       }
 
     switch (status)
