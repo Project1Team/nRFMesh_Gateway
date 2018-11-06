@@ -145,6 +145,8 @@ struct __app_byte_server_t
  */
 void app_byte_status_publish(app_byte_server_t * p_server);
 
+void app_byte_value_publish(app_byte_server_t * p_server, uint8_t value);
+
 /** Initializes the behavioral module for the generic Byte model
  *
  * @param[in] p_server               Pointer to the application Byte server struture array.

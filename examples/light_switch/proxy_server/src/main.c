@@ -81,6 +81,8 @@
 #include "app_byte.h"
 
 #define BYTE_SERVER_0_LED          (BSP_LED_0)
+#define BYTE_SERVER_2_LED          (BSP_LED_2)
+
 
 #define DEVICE_NAME                     "Mesh Server Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
@@ -168,7 +170,15 @@ static void button_event_handler(uint32_t button_number)
         {
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "User action \n");
             hal_led_pin_set(BYTE_SERVER_0_LED, !hal_led_pin_get(BYTE_SERVER_0_LED));
-            app_byte_status_publish(&m_byte_server_0);
+            app_byte_value_publish(&m_byte_server_0, 1);
+            break;
+        }
+
+        case 1:
+        {
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "User action \n");
+            hal_led_pin_set(BYTE_SERVER_2_LED, !hal_led_pin_get(BYTE_SERVER_2_LED));
+            app_byte_value_publish(&m_byte_server_0, 0);
             break;
         }
 
