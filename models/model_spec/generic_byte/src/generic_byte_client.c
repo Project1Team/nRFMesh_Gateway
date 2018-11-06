@@ -27,11 +27,11 @@ static void status_handle(access_model_handle_t handle, const access_message_rx_
     generic_byte_client_t * p_client = (generic_byte_client_t *) p_args;
     generic_byte_status_params_t in_data = {0};
 
-    if (p_rx_msg->length == GENERIC_BYTE_STATUS_MINLEN || p_rx_msg->length == GENERIC_BYTE_STATUS_MAXLEN)
-    {
+//    if (p_rx_msg->length == GENERIC_BYTE_STATUS_MINLEN || p_rx_msg->length == GENERIC_BYTE_STATUS_MAXLEN)
+//    {
         generic_byte_status_msg_pkt_t * p_msg_params_packed = (generic_byte_status_msg_pkt_t *) p_rx_msg->p_data;
 
-        if (p_rx_msg->length == GENERIC_BYTE_STATUS_MINLEN)
+        if (p_rx_msg->length == GENERIC_BYTE_MAX)
         {
             in_data.present_byte = p_msg_params_packed->present_byte;
             in_data.target_byte = p_msg_params_packed->present_byte;
@@ -45,7 +45,7 @@ static void status_handle(access_model_handle_t handle, const access_message_rx_
         }
 
         p_client->settings.p_callbacks->byte_status_cb(p_client, &p_rx_msg->meta_data, &in_data);
-    }
+
 }
 
 static const access_opcode_handler_t m_opcode_handlers[] =
@@ -56,18 +56,18 @@ static const access_opcode_handler_t m_opcode_handlers[] =
 static uint8_t message_set_packet_create(generic_byte_set_msg_pkt_t *p_set, const generic_byte_set_params_t * p_params,
                                       const model_transition_t * p_transition)
 {
-        p_set->byte = p_params->byte ? 1 : 0;
+        p_set->byte = p_params->byte;
         p_set->tid = p_params->tid;
 
         if (p_transition != NULL)
         {
             p_set->transition_time = model_transition_time_encode(p_transition->transition_time_ms);
             p_set->delay = model_delay_encode(p_transition->delay_ms);
-            return GENERIC_BYTE_SET_MAXLEN;
+            return 3;
         }
         else
         {
-            return GENERIC_BYTE_SET_MINLEN;
+            return 1;
         }
 }
 

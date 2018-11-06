@@ -77,8 +77,8 @@
 #include "light_switch_example_common.h"
 #include "example_common.h"
 
-#define APP_STATE_OFF                (0)
-#define APP_STATE_ON                 (1)
+#define APP_STATE_OFF                (213)
+#define APP_STATE_ON                 (255)
 
 #define APP_UNACK_MSG_REPEAT_COUNT   (2)
 

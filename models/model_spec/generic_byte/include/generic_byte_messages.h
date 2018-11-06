@@ -20,15 +20,15 @@
  * @{
  */
 
-/** Shortest allowed length for the Set message. */
-#define GENERIC_BYTE_SET_MINLEN 2
-/** Longest allowed length for the Set message. */
-#define GENERIC_BYTE_SET_MAXLEN 4
-
-/** Shortest allowed length for the Status message. */
-#define GENERIC_BYTE_STATUS_MINLEN 1
-/** Longest allowed length for the Status message. */
-#define GENERIC_BYTE_STATUS_MAXLEN 3
+///** Shortest allowed length for the Set message. */
+//#define GENERIC_BYTE_SET_MINLEN 2
+///** Longest allowed length for the Set message. */
+//#define GENERIC_BYTE_SET_MAXLEN 4
+//
+///** Shortest allowed length for the Status message. */
+//#define GENERIC_BYTE_STATUS_MINLEN 1
+///** Longest allowed length for the Status message. */
+//#define GENERIC_BYTE_STATUS_MAXLEN 3
 
 /** Generic Byte model message opcodes. */
 typedef enum

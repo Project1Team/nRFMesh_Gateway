@@ -60,7 +60,7 @@
  </Watch4>
  <Files>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="442" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" selected="1" top="432" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="216" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/generic_byte/src/generic_byte_client.c" selected="0" top="108" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="48" y="33" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/generic_byte/src/generic_byte_client.c" selected="0" top="78" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/generic_byte/include/generic_byte_client.h" selected="0" top="11" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/generic_byte/include/generic_byte_common.h" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="39" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/generic_byte/include/generic_byte_messages.h" selected="0" top="12" codecName="Default"/>
@@ -69,6 +69,7 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="245" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/generic_onoff/src/generic_onoff_client.c" selected="0" top="36" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="44" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/generic_onoff/include/generic_onoff_client.h" selected="0" top="35" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="61" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/generic_onoff/include/generic_onoff_messages.h" selected="0" top="69" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="156" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../models/model_spec/common/src/model_common.c" selected="0" top="143" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="light_switch_proxy_client_nrf52832_xxAA_s132_6.0.0" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" debugSearchFileMap="" fileDialogInitialDirectory="D:/Study/Thesis/Nordic SDK/nRF5_SDK_for_Mesh_v2.2.0/models/simple_byte_send/src" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="light_switch_proxy_client_nrf52832_xxAA_s132_6.0.0" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" debugSearchFileMap="" fileDialogInitialDirectory="D:/Study/Thesis/Nordic SDK/nRF5_SDK_for_Mesh_v2.2.0/models/simple_byte_send/src" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>

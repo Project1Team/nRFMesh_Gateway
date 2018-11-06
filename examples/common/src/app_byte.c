@@ -11,12 +11,15 @@
 
 #include <stdint.h>
 
+#include "simple_hal.h"
 #include "sdk_config.h"
 #include "example_common.h"
 #include "generic_byte_server.h"
 
 #include "log.h"
 #include "app_timer.h"
+#include "boards.h"
+
 
 /** This sample implementation shows how model behaviour requirements of Generic Byte server can
  * be implemented.
@@ -174,6 +177,11 @@ static void generic_byte_state_set_cb(const generic_byte_server_t * p_self,
                                        generic_byte_status_params_t * p_out)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "msg: SET: %d\n", p_in->byte);
+    if(p_in->byte == 255)
+    {
+        hal_led_mask_set(LEDS_MASK, false);
+        hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_PROV);
+    }
 
     app_byte_server_t   * p_server = PARENT_BY_FIELD_GET(app_byte_server_t, server, p_self);
 

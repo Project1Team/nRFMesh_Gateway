@@ -45,7 +45,7 @@ static uint32_t status_send(generic_byte_server_t * p_server,
     {
         .opcode = ACCESS_OPCODE_SIG(GENERIC_BYTE_OPCODE_STATUS),
         .p_buffer = (const uint8_t *) &msg_pkt,
-        .length = p_params->remaining_time_ms > 0 ? GENERIC_BYTE_STATUS_MAXLEN : GENERIC_BYTE_STATUS_MINLEN,
+        .length = sizeof(msg_pkt),
         .force_segmented = p_server->settings.force_segmented,
         .transmic_size = p_server->settings.transmic_size
     };
@@ -71,13 +71,13 @@ static void periodic_publish_cb(access_model_handle_t handle, void * p_args)
 
 /** Opcode Handlers */
 
-static inline bool set_params_validate(const access_message_rx_t * p_rx_msg, const generic_byte_set_msg_pkt_t * p_params)
-{
-    return (
-            (p_rx_msg->length == GENERIC_BYTE_SET_MINLEN || p_rx_msg->length == GENERIC_BYTE_SET_MAXLEN) &&
-            (p_params->byte <= GENERIC_BYTE_MAX)
-           );
-}
+//static inline bool set_params_validate(const access_message_rx_t * p_rx_msg, const generic_byte_set_msg_pkt_t * p_params)
+//{
+//    return (
+//            (p_rx_msg->length == GENERIC_BYTE_SET_MINLEN || p_rx_msg->length == GENERIC_BYTE_SET_MAXLEN) &&
+//            (p_params->byte <= GENERIC_BYTE_MAX)
+//           );
+//}
 
 static void handle_set(access_model_handle_t model_handle, const access_message_rx_t * p_rx_msg, void * p_args)
 {
@@ -87,15 +87,15 @@ static void handle_set(access_model_handle_t model_handle, const access_message_
     generic_byte_status_params_t out_data = {0};
     generic_byte_set_msg_pkt_t * p_msg_params_packed = (generic_byte_set_msg_pkt_t *) p_rx_msg->p_data;
 
-    if (set_params_validate(p_rx_msg, p_msg_params_packed))
-    {
+//    if (set_params_validate(p_rx_msg, p_msg_params_packed))
+//    {
         in_data.byte = p_msg_params_packed->byte;
         in_data.tid = p_msg_params_packed->tid;
 
         if (model_tid_validate(&p_server->tid_tracker, &p_rx_msg->meta_data, GENERIC_BYTE_OPCODE_SET, in_data.tid))
         {
-            if (p_rx_msg->length == GENERIC_BYTE_SET_MAXLEN)
-            {
+//            if (p_rx_msg->length == GENERIC_BYTE_SET_MAXLEN)
+//            {
                 if (!model_transition_time_is_valid(p_msg_params_packed->transition_time))
                 {
                     return;
@@ -103,20 +103,18 @@ static void handle_set(access_model_handle_t model_handle, const access_message_
 
                 in_data_tr.transition_time_ms = model_transition_time_decode(p_msg_params_packed->transition_time);
                 in_data_tr.delay_ms = model_delay_decode(p_msg_params_packed->delay);
-            }
+//            }
 
             p_server->settings.p_callbacks->byte_cbs.set_cb(p_server,
                                                             &p_rx_msg->meta_data,
-                                                            &in_data,
-                                                            (p_rx_msg->length == GENERIC_BYTE_SET_MINLEN) ? NULL : &in_data_tr,
-                                                            (p_rx_msg->opcode.opcode == GENERIC_BYTE_OPCODE_SET) ? &out_data : NULL);
+                                                            &in_data, &in_data_tr, &out_data);
 
             if (p_rx_msg->opcode.opcode == GENERIC_BYTE_OPCODE_SET)
             {
                 (void) status_send(p_server, p_rx_msg, &out_data);
             }
         }
-    }
+    
 }
 
 static inline bool get_params_validate(const access_message_rx_t * p_rx_msg)
