@@ -81,7 +81,12 @@
 #define MSG_1                (27)
 #define MSG_2                (199)
 #define MSG_3                (255)
-#define CLIENT_LED_VALUE      (0)
+
+#define CLIENT_LED_0         (BSP_LED_0)
+#define CLIENT_LED_1         (BSP_LED_1)
+#define CLIENT_LED_2         (BSP_LED_2)
+#define CLIENT_LED_3         (BSP_LED_3)
+
 
 
 #define APP_UNACK_MSG_REPEAT_COUNT   (2)
@@ -186,18 +191,44 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
         __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "OnOff server: 0x%04x, Present OnOff: %d, Target OnOff: %d, Remaining Time: %d ms\n",
               p_meta->src.value, p_in->present_byte, p_in->target_byte, p_in->remaining_time_ms);
           if (p_in->present_byte == 255)
+          {        
+              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+          }
+          
+          if (p_in->present_byte == 78)
           {
-              
-              hal_led_blink_ms(LEDS_MASK, LED_BLINK_SHORT_INTERVAL_MS, LED_BLINK_CNT_NO_REPLY);
+              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+
+          }
+
+          if (p_in->present_byte == 65)
+          {
+              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
           }
     }
     else
     {
         __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "OnOff server: 0x%04x, Present OnOff: %d\n",
               p_meta->src.value, p_in->present_byte);
-          if (p_in->present_byte == 255)
+          if (p_in->present_byte == 65)
           {
-              hal_led_blink_ms(LEDS_MASK, LED_BLINK_SHORT_INTERVAL_MS, LED_BLINK_CNT_NO_REPLY);
+              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+          }
+
+          if (p_in->present_byte == 78)
+          {              
+              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+          }
+          
+          if (p_in->present_byte == 255)
+          {              
+              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
           }
     }
 }
@@ -246,31 +277,31 @@ static void button_event_handler(uint32_t button_number)
     set_params.tid = tid++;
     transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
     transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: ONOFF SET %d\n", set_params.byte);
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: %d\n", set_params.byte);
 
     switch (button_number)
     {
         case 0:
             (void)access_model_reliable_cancel(m_clients.model_handle);
             status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
-            hal_led_pin_set(BSP_LED_0, CLIENT_LED_VALUE);
+            hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
             break;
 
         case 1:
             (void)access_model_reliable_cancel(m_clients.model_handle);
             status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
-            hal_led_pin_set(BSP_LED_1, CLIENT_LED_VALUE);
+            hal_led_pin_set(CLIENT_LED_1, !hal_led_pin_get(CLIENT_LED_1));
             break;
 
         case 2:
             (void)access_model_reliable_cancel(m_clients.model_handle);
             status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
-            hal_led_pin_set(BSP_LED_1, CLIENT_LED_VALUE);
+            hal_led_pin_set(CLIENT_LED_2, !hal_led_pin_get(CLIENT_LED_2));
             break;
         case 3:
             (void)access_model_reliable_cancel(m_clients.model_handle);
             status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
-            hal_led_pin_set(BSP_LED_1, CLIENT_LED_VALUE);
+            hal_led_pin_set(CLIENT_LED_3, !hal_led_pin_get(CLIENT_LED_3));
             break;
 //            /* Demonstrate un-acknowledged transaction, using 2nd client model instance */
 //            status = generic_byte_client_set_unack(&m_clients, &set_params,
