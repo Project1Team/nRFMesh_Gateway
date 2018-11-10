@@ -279,6 +279,79 @@ static void provisioning_complete_cb(void)
     hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_PROV);
 }
 
+
+/**@brief   Function for handling app_uart events.
+ *
+ * @details This function will receive a single character from the app_uart module and append it to
+ *          a string. The string will be be sent over BLE when the last character received was a
+ *          'new line' '\n' (hex 0x0A) or if the string has reached the maximum data length.
+ */
+/**@snippet [Handling the data received over UART] */
+void uart_event_handle(app_uart_evt_t * p_event)
+{
+    uint8_t cr;
+    uint32_t err_code;
+
+    switch (p_event->evt_type)
+    {
+        case APP_UART_DATA_READY:
+            err_code = app_uart_get(&cr);
+            do
+            {
+                err_code = app_uart_put(cr);
+                hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+                hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+                __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending message to client... \n");
+                app_byte_value_publish(&m_byte_server_0, cr);
+            } while (err_code == NRF_ERROR_BUSY);
+
+            break;
+
+        case APP_UART_COMMUNICATION_ERROR:
+            APP_ERROR_HANDLER(p_event->data.error_communication);
+            break;
+
+        case APP_UART_FIFO_ERROR:
+            APP_ERROR_HANDLER(p_event->data.error_code);
+            break;
+
+        default:
+            break;
+    }
+}
+/**@snippet [Handling the data received over UART] */
+
+
+/**@brief  Function for initializing the UART module.
+ */
+/**@snippet [UART Initialization] */
+static void uart_init(void)
+{
+    uint32_t                     err_code;
+    app_uart_comm_params_t const comm_params =
+    {
+        .rx_pin_no    = RX_PIN_NUMBER,
+        .tx_pin_no    = TX_PIN_NUMBER,
+        .rts_pin_no   = RTS_PIN_NUMBER,
+        .cts_pin_no   = CTS_PIN_NUMBER,
+        .flow_control = APP_UART_FLOW_CONTROL_DISABLED,
+        .use_parity   = false,
+#if defined (UART_PRESENT)
+        .baud_rate    = NRF_UART_BAUDRATE_115200
+#else
+        .baud_rate    = NRF_UARTE_BAUDRATE_115200
+#endif
+    };
+
+    APP_UART_FIFO_INIT(&comm_params,
+                       UART_RX_BUF_SIZE,
+                       UART_TX_BUF_SIZE,
+                       uart_event_handle,
+                       APP_IRQ_PRIORITY_LOWEST,
+                       err_code);
+    APP_ERROR_CHECK(err_code);
+}
+
 static void models_init_cb(void)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Initializing and adding models\n");
@@ -396,130 +469,13 @@ static void start(void)
     __LOG_XB(LOG_SRC_APP, LOG_LEVEL_INFO, "Device UUID ", p_uuid, NRF_MESH_UUID_SIZE);
 }
 
-/*UART*/
-void uart_error_handle(app_uart_evt_t * p_event)
-{
-    if (p_event->evt_type == APP_UART_COMMUNICATION_ERROR)
-    {
-        APP_ERROR_HANDLER(p_event->data.error_communication);
-    }
-    else if (p_event->evt_type == APP_UART_FIFO_ERROR)
-    {
-        APP_ERROR_HANDLER(p_event->data.error_code);
-    }
-}
-
-
-#ifdef ENABLE_LOOPBACK_TEST
-/* Use flow control in loopback test. */
-#define UART_HWFC APP_UART_FLOW_CONTROL_ENABLED
-
-/** @brief Function for setting the @ref ERROR_PIN high, and then enter an infinite loop.
- */
-static void show_error(void)
-{
-
-    bsp_board_leds_on();
-    while (true)
-    {
-        // Do nothing.
-    }
-}
-
-
-/** @brief Function for testing UART loop back.
- *  @details Transmitts one character at a time to check if the data received from the loopback is same as the transmitted data.
- *  @note  @ref TX_PIN_NUMBER must be connected to @ref RX_PIN_NUMBER)
- */
-static void uart_loopback_test()
-{
-    uint8_t * tx_data = (uint8_t *)("\r\nLOOPBACK_TEST\r\n");
-    uint8_t   rx_data;
-
-    // Start sending one byte and see if you get the same
-    for (uint32_t i = 0; i < MAX_TEST_DATA_BYTES; i++)
-    {
-        uint32_t err_code;
-        while (app_uart_put(tx_data[i]) != NRF_SUCCESS);
-
-        nrf_delay_ms(10);
-        err_code = app_uart_get(&rx_data);
-
-        if ((rx_data != tx_data[i]) || (err_code != NRF_SUCCESS))
-        {
-            show_error();
-        }
-    }
-    return;
-}
-#else
-/* When UART is used for communication with the host do not use flow control.*/
-#define UART_HWFC APP_UART_FLOW_CONTROL_DISABLED
-#endif
-
 
 
 int main(void)
 {
+    uart_init();
     initialize();
     execution_start(start);
-    uint32_t err_code;
-
-    const app_uart_comm_params_t comm_params =
-      {
-          RX_PIN_NUMBER,
-          TX_PIN_NUMBER,
-          RTS_PIN_NUMBER,
-          CTS_PIN_NUMBER,
-          UART_HWFC,
-          false,
-#if defined (UART_PRESENT)
-          NRF_UART_BAUDRATE_115200
-#else
-          NRF_UARTE_BAUDRATE_115200
-#endif
-      };
-
-    APP_UART_FIFO_INIT(&comm_params,
-                         UART_RX_BUF_SIZE,
-                         UART_TX_BUF_SIZE,
-                         uart_error_handle,
-                         APP_IRQ_PRIORITY_LOWEST,
-                         err_code);
-
-    APP_ERROR_CHECK(err_code);
-    
-
-#ifndef ENABLE_LOOPBACK_TEST
-
-    while (true)
-    {       
-        uint8_t cr;
-        while (app_uart_get(&cr) != NRF_SUCCESS);
-        while (app_uart_put(cr) != NRF_SUCCESS);
-      
-        hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-        hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-        app_byte_value_publish(&m_byte_server_0, cr);
-
-//        if (cr == 'q' || cr == 'Q')
-//        {
-//            printf(" \r\nExit!\r\n");
-//
-//            while (true)
-//            {
-//                // Do nothing.
-//            }
-//        }
-    }
-#else
-
-    // This part of the example is just for testing the loopback .
-    while (true)
-    {
-        uart_loopback_test();
-    }
-#endif
 
     for (;;)
     { 
