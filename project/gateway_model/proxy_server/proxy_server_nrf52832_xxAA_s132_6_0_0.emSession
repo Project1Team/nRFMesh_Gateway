@@ -59,7 +59,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="474" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" selected="1" top="472" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="474" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" selected="1" top="250" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="411" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../mesh/core/api/nrf_mesh.h" selected="0" top="390" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="12195" useTextEdit="1" useBinaryEdit="0" left="0" path="include/sdk_config.h" selected="0" top="12168" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="94" useTextEdit="1" useBinaryEdit="0" left="0" path="../../common/src/app_error_weak.c" selected="0" top="75" codecName="Default"/>

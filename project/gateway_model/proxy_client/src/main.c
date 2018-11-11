@@ -76,6 +76,7 @@
 #include "nrf_mesh_config_thesis.h"
 #include "gateway_model_common.h"
 #include "thesis_common.h"
+#include "nrf_gpio.h"
 
 #define MSG_0                (9)
 #define MSG_1                (27)
@@ -87,6 +88,7 @@
 #define CLIENT_LED_2         (BSP_LED_2)
 #define CLIENT_LED_3         (BSP_LED_3)
 
+#define LED_PIN              (2)
 
 
 #define APP_UNACK_MSG_REPEAT_COUNT   (2)
@@ -188,8 +190,8 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
 {
     if (p_in->remaining_time_ms > 0)
     {
-        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "OnOff server: 0x%04x, Present OnOff: %d, Target OnOff: %d, Remaining Time: %d ms\n",
-              p_meta->src.value, p_in->present_byte, p_in->target_byte, p_in->remaining_time_ms);
+        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d, Remaining Time: %d ms\n",
+              p_meta->src.value, p_in->present_byte, p_in->remaining_time_ms);
           if (p_in->present_byte == 255)
           {        
               hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
@@ -200,7 +202,6 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
           {
               hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
               hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-
           }
 
           if (p_in->present_byte == 65)
@@ -211,18 +212,22 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
     }
     else
     {
-        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "OnOff server: 0x%04x, Present OnOff: %d\n",
+        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d\n",
               p_meta->src.value, p_in->present_byte);
           if (p_in->present_byte == 65)
           {
               hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
               hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+              nrf_gpio_cfg_output(LED_PIN);
+              nrf_gpio_pin_clear(LED_PIN);
           }
 
           if (p_in->present_byte == 78)
           {              
               hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
               hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+              nrf_gpio_cfg_output(LED_PIN);
+              nrf_gpio_pin_set(LED_PIN);
           }
           
           if (p_in->present_byte == 255)
