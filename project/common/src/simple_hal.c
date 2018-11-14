@@ -54,6 +54,13 @@
 /*****************************************************************************
  * Definitions
  *****************************************************************************/
+ #define INPUT_PIN_CONFIG ((GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)     | \
+                           (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)    | \
+                           (INPUT_PULL << GPIO_PIN_CNF_PULL_Pos)                 | \
+                           (INPUT_DOWN << GPIO_PIN_CNF_PULL_Pos)                 | \
+                           (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos) | \
+                           (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos))
+
 #define LED_PIN_CONFIG ((GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos)   | \
                         (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)       | \
                         (GPIO_PIN_CNF_PULL_Disabled << GPIO_PIN_CNF_PULL_Pos)     | \
@@ -64,6 +71,7 @@
 #define BUTTON_PIN_CONFIG ((GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)     | \
                            (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)    | \
                            (BUTTON_PULL << GPIO_PIN_CNF_PULL_Pos)                 | \
+                           (BUTTON_DOWN << GPIO_PIN_CNF_PULL_Pos)                 | \
                            (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos) | \
                            (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos))
 #endif
@@ -79,6 +87,9 @@ static uint8_t m_buttons_list[BUTTONS_NUMBER] = BUTTONS_LIST;
 static uint32_t m_last_button_press;
 static hal_button_handler_cb_t m_button_handler_cb;
 #endif
+
+static uint8_t m_inputs_list[INPUTS_NUMBER] = INPUTS_LIST;
+static hal_input_handler_cb_t m_input_handler_cb;
 
 APP_TIMER_DEF(m_blink_timer);
 static uint32_t m_blink_count;
@@ -185,11 +196,31 @@ uint32_t hal_buttons_init(hal_button_handler_cb_t cb)
 #endif
 }
 
+uint32_t hal_inputs_init(hal_input_handler_cb_t cb)
+{
+    if (cb == NULL)
+    {
+        return NRF_ERROR_NULL;
+    }
+    m_input_handler_cb = cb;
+
+    for (uint32_t i = 0; i < INPUTS_NUMBER ; ++i)
+    {
+        NRF_GPIO->PIN_CNF[m_inputs_list[i]] = INPUT_PIN_CONFIG;
+    }
+
+    NRF_GPIOTE->INTENSET = GPIOTE_INTENSET_PORT_Msk;
+    NRF_GPIOTE->EVENTS_PORT  = 0;
+
+    NVIC_SetPriority(GPIOTE_IRQn, GPIOTE_IRQ_LEVEL);
+    NVIC_EnableIRQ(GPIOTE_IRQn);
+    return NRF_SUCCESS;
+}
+
 /*****************************************************************************
  * IRQ handler(s)
  *****************************************************************************/
-
-#if BUTTON_BOARD
+/*
 void GPIOTE_IRQHandler(void)
 {
     NRF_GPIOTE->EVENTS_PORT = 0;
@@ -199,12 +230,22 @@ void GPIOTE_IRQHandler(void)
          * NOTE: There is a bug with this at the wrap-around for the RTC0 where the button could be
          * pressed before HAL_BUTTON_PRESS_FREQUENCY has passed a single time. It doesn't matter practically.
          */
-        if ((~NRF_GPIO->IN & (1 << (m_buttons_list[i]))) &&
+/*        if ((~NRF_GPIO->IN & (1 << (m_buttons_list[i]))) &&
             TIMER_DIFF(m_last_button_press, NRF_RTC0->COUNTER) > HAL_BUTTON_PRESS_FREQUENCY)
         {
             m_last_button_press = NRF_RTC0->COUNTER;
             m_button_handler_cb(i);
         }
     }
+}*/
+void GPIOTE_IRQHandler(void)
+{
+    NRF_GPIOTE->EVENTS_PORT = 0;
+    for (uint8_t i = 0; i < INPUTS_NUMBER; ++i)
+    {
+        if (~NRF_GPIO->IN & (1 << (m_inputs_list[i])))
+        {
+            m_input_handler_cb(i);
+        }
+    }
 }
-#endif

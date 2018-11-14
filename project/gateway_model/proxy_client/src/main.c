@@ -253,7 +253,21 @@ static void config_server_evt_cb(const config_server_evt_t * p_evt)
         node_reset();
     }
 }
-
+static void input_event_handler(uint32_t input_number)
+{
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Input %u received\n", input_number);
+    switch(input_number)
+    {
+        case 0:
+            // updatre received data
+             hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
+            break;
+        case 1:
+            // update received data
+            hal_led_pin_set(CLIENT_LED_1, !hal_led_pin_get(CLIENT_LED_1));
+            break;
+    }
+}
 static void button_event_handler(uint32_t button_number)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Button %u pressed\n", button_number);
@@ -451,9 +465,8 @@ static void initialize(void)
     ERROR_CHECK(app_timer_init());
     hal_leds_init();
 
-#if BUTTON_BOARD
-    ERROR_CHECK(hal_buttons_init(button_event_handler));
-#endif
+    //ERROR_CHECK(hal_buttons_init(button_event_handler));
+    ERROR_CHECK(hal_inputs_init(input_event_handler));
     uint32_t err_code = nrf_sdh_enable_request();
     APP_ERROR_CHECK(err_code);
 #if defined S140 // todo remove that after S140 priority fixing
