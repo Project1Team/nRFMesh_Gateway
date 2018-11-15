@@ -69,11 +69,10 @@
 
 #define INPUTS_NUMBER   2
 
-#define INPUT_0        11
-#define INPUT_1        13
+#define INPUT_0        23
+#define INPUT_1        24
 #define INPUTS_LIST { INPUT_0, INPUT_1 }
-#define INPUT_PULL     NRF_GPIO_PIN_NOPULL
-#define INPUT_DOWN    NRF_GPIO_PIN_PULLDOWN
+#define INPUT_PULL     NRF_GPIO_PIN_PULLUP
 
 #define INPUT_POLARITY     NRF_GPIOTE_POLARITY_TOGGLE
 /**

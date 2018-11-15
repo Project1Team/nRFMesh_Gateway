@@ -57,7 +57,6 @@
  #define INPUT_PIN_CONFIG ((GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)     | \
                            (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)    | \
                            (INPUT_PULL << GPIO_PIN_CNF_PULL_Pos)                 | \
-                           (INPUT_DOWN << GPIO_PIN_CNF_PULL_Pos)                 | \
                            (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos) | \
                            (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos))
 
