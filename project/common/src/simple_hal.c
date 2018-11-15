@@ -71,12 +71,11 @@
 #define BUTTON_PIN_CONFIG ((GPIO_PIN_CNF_SENSE_Low << GPIO_PIN_CNF_SENSE_Pos)     | \
                            (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)    | \
                            (BUTTON_PULL << GPIO_PIN_CNF_PULL_Pos)                 | \
-                           (BUTTON_DOWN << GPIO_PIN_CNF_PULL_Pos)                 | \
                            (GPIO_PIN_CNF_INPUT_Connect << GPIO_PIN_CNF_INPUT_Pos) | \
                            (GPIO_PIN_CNF_DIR_Input << GPIO_PIN_CNF_DIR_Pos))
 #endif
 
-#define GPIOTE_IRQ_LEVEL NRF_MESH_IRQ_PRIORITY_LOWEST
+
 
 /*****************************************************************************
  * Static variables

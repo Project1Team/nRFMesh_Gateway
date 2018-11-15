@@ -64,11 +64,25 @@
 /** Boards with user buttons */
 #define BUTTON_BOARD (defined(BOARD_PCA10040) || defined(BOARD_PCA10028) || defined(BOARD_PCA10056)) //lint -e491 // Suppress "non-standard use of 'defined' preprocessor operator"
 
+
+#define GPIOTE_IRQ_LEVEL NRF_MESH_IRQ_PRIORITY_LOWEST
+
+#define INPUTS_NUMBER   2
+
+#define INPUT_0        11
+#define INPUT_1        13
+#define INPUTS_LIST { INPUT_0, INPUT_1 }
+#define INPUT_PULL     NRF_GPIO_PIN_NOPULL
+#define INPUT_DOWN    NRF_GPIO_PIN_PULLDOWN
+
+#define INPUT_POLARITY     NRF_GPIOTE_POLARITY_TOGGLE
 /**
  * Button event handler callback type.
  * @param[in] button_number Button number (0-3).
  */
 typedef void (*hal_button_handler_cb_t)(uint32_t button_number);
+
+typedef void (*hal_input_handler_cb_t)(uint32_t input_number);
 
 /** Initializes the LEDs. */
 void hal_leds_init(void);
@@ -84,6 +98,7 @@ void hal_leds_init(void);
  */
 uint32_t hal_buttons_init(hal_button_handler_cb_t cb);
 
+uint32_t hal_inputs_init(hal_input_handler_cb_t cb);
 
 /**
  * Sets the LED for the given PIN.
