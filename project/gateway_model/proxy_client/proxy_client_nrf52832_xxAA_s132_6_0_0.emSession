@@ -23,12 +23,8 @@
  <Project>
   <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0"/>
   <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0;proxy_client_nrf52832_xxAA_s132_6.0.0"/>
-  <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0;proxy_client_nrf52832_xxAA_s132_6.0.0;Access"/>
   <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0;proxy_client_nrf52832_xxAA_s132_6.0.0;Application"/>
-  <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0;proxy_client_nrf52832_xxAA_s132_6.0.0;TWI Handler"/>
-  <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0;proxy_client_nrf52832_xxAA_s132_6.0.0;TWI Handler;nRF_Drivers"/>
-  <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0;proxy_client_nrf52832_xxAA_s132_6.0.0;TWI Handler;nRF_Libraries"/>
-  <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0;proxy_client_nrf52832_xxAA_s132_6.0.0;TWI Handler;nRF_Log"/>
+  <ProjectSessionItem path="proxy_client_nrf52832_xxAA_s132_6.0.0;proxy_client_nrf52832_xxAA_s132_6.0.0;SEGGER RTT"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="proxy_client_nrf52832_xxAA_s132_6.0.0" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -61,14 +57,9 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="540" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" selected="0" top="545" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="9588" useTextEdit="1" useBinaryEdit="0" left="0" path="include/sdk_config.h" selected="0" top="5048" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="36" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../nRF5_SDK_15.0.0_a53641a/integration/nrfx/legacy/nrf_drv_twi.c" selected="0" top="21" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../nRF5_SDK_15.0.0_a53641a/modules/nrfx/drivers/src/nrfx_twi.c" selected="0" top="24" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../nRF5_SDK_15.0.0_a53641a/modules/nrfx/drivers/src/nrfx_uart.c" selected="0" top="623" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../nRF5_SDK_15.0.0_a53641a/modules/nrfx/drivers/src/nrfx_twim.c" selected="0" top="34" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../nRF5_SDK_15.0.0_a53641a/modules/nrfx/drivers/src/nrfx_uarte.c" selected="0" top="539" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="125" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../../nRF5_SDK_15.0.0_a53641a/integration/nrfx/legacy/nrf_drv_twi.h" selected="1" top="112" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="523" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" selected="1" top="515" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="77" useTextEdit="1" useBinaryEdit="0" left="0" path="../../common/src/simple_hal.c" selected="0" top="58" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="77" useTextEdit="1" useBinaryEdit="0" left="0" path="../../common/include/simple_hal.h" selected="0" top="64" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="proxy_client_nrf52832_xxAA_s132_6.0.0" fileDialogDefaultFilter="" autoConnectTarget="J-Link" buildConfiguration="Debug" debugSearchFileMap="" fileDialogInitialDirectory="C:/Users/namnguyen/Desktop/Git Updated/nRF5_SDK_15.0.0_a53641a/components/libraries/balloc" debugSearchPath="" autoConnectCapabilities="3711"/>
+ <ARMCrossStudioWindow activeProject="proxy_client_nrf52832_xxAA_s132_6.0.0" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
