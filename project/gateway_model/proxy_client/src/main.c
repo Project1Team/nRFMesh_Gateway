@@ -168,7 +168,6 @@ static uint8_t m_sample_idx = 0;
     __ASM(".global _printf_float");
 #endif
 
-/*------------------------------------TWI-----------------------------------*/
 
 
 /*------------------------------------MESH-----------------------------------*/
@@ -581,6 +580,7 @@ static void start(void)
     hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
 }
 
+/*------------------------------------TWI-----------------------------------*/
 void read_all_cb(ret_code_t result, void * p_user_data)
 {
     if (result != NRF_SUCCESS)
@@ -619,7 +619,43 @@ void read_all_cb(ret_code_t result, void * p_user_data)
     {
         //NRF_LOG_RAW_INFO("\nTemp: " NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT((float)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES)));
         //NRF_LOG_INFO("Temp: %d\n", (int)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES));
-        printf("Temp: %d\n", (int)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES));
+        //printf("Temp: %d\n", (uint8_t)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES));
+        set_params.byte = (uint8_t)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES);
+        set_params.tid = tid++;
+        transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
+        transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
+
+        status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
+
+        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: %d\n", set_params.byte);
+
+        switch (status)
+        {
+            case NRF_SUCCESS:
+                break;
+
+            case NRF_ERROR_NO_MEM:
+            case NRF_ERROR_BUSY:
+            case NRF_ERROR_INVALID_STATE:
+                __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Client cannot send temperature\n");
+                hal_led_blink_ms(LEDS_MASK, LED_BLINK_SHORT_INTERVAL_MS, LED_BLINK_CNT_NO_REPLY);
+                break;
+
+            case NRF_ERROR_INVALID_PARAM:
+                /* Publication not enabled for this client. One (or more) of the following is wrong:
+                 * - An application key is missing, or there is no application key bound to the model
+                 * - The client does not have its publication state set
+                 *
+                 * It is the provisioner that adds an application key, binds it to the model and sets
+                 * the model's publication state.
+                 */
+                __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Publication not configured for client\n");
+                break;
+
+            default:
+                ERROR_CHECK(status);
+                break;
+        }
     }
 }
 
@@ -691,50 +727,24 @@ void read_init(void)
 
     err_code = app_timer_create(&m_timer, APP_TIMER_MODE_REPEATED, timer_handler);
     APP_ERROR_CHECK(err_code);
-
-    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(200), NULL);
+    
+    //about 1 minute calculated
+    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(2000), NULL);
     APP_ERROR_CHECK(err_code);
 }
 
-void twi_log_init(void)
-{
-    ret_code_t err_code;
-
-    err_code = NRF_LOG_INIT(NULL);
-    APP_ERROR_CHECK(err_code);
-
-    NRF_LOG_DEFAULT_BACKENDS_INIT();
-}
 
 int main(void)
 {
-//    initialize();
-//    execution_start(start);
-
-    ret_code_t err_code;
-
-
     lfclk_config();
-
     bsp_config();
-
-    err_code = nrf_pwr_mgmt_init();
-    APP_ERROR_CHECK(err_code);
-
     twi_config();
-
+    initialize();
+    execution_start(start);
     read_init();
 
-    // Initialize sensors.
-    APP_ERROR_CHECK(nrf_twi_mngr_perform(&m_nrf_twi_mngr, NULL, lm75b_init_transfers, LM75B_INIT_TRANSFER_COUNT, NULL));
-
-    while (true)
+    for (;;)
     {
-        nrf_pwr_mgmt_run();
+        (void)sd_app_evt_wait();
     }
-
-//    for (;;)
-//    {
-//        (void)sd_app_evt_wait();
-//    }
 }

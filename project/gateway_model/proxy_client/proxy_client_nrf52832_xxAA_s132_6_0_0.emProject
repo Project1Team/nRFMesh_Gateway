@@ -38,8 +38,8 @@
       <file file_name="../../common/src/mesh_app_utils.c" />
       <file file_name="../../common/src/mesh_adv.c" />
       <file file_name="../../nrf_mesh_weak.c" />
-      <file file_name="../../common/src/app_error_weak.c" />
       <file file_name="../../common/src/assertion_handler_weak.c" />
+      <file file_name="../../../../nRF5_SDK_15.0.0_a53641a/components/libraries/util/app_error_weak.c" />
     </folder>
     <folder Name="Core">
       <file file_name="../../../mesh/core/src/internal_event.c" />
@@ -107,7 +107,6 @@
       <file file_name="../../../mesh/access/src/access_reliable.c" />
       <file file_name="../../../mesh/access/src/access_loopback.c" />
       <file file_name="../../../mesh/access/src/device_state_manager.c" />
-      <file file_name="include/sdk_config.h" />
     </folder>
     <folder Name="Bearer">
       <file file_name="../../../mesh/bearer/src/ad_listener.c" />
