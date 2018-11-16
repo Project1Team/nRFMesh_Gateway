@@ -35,6 +35,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -71,12 +72,49 @@
 #include "log.h"
 #include "rtt_input.h"
 
-/* Example specific includes */
+/* Project specific includes */
 #include "app_config.h"
 #include "nrf_mesh_config_thesis.h"
 #include "gateway_model_common.h"
 #include "thesis_common.h"
 #include "nrf_gpio.h"
+
+/* TWI specific includes */
+#include "app_util_platform.h"
+#include "nrf_pwr_mgmt.h"
+#include "nrf_drv_clock.h"
+#include "bsp.h"
+#include "app_error.h"
+#include "nrf_twi_mngr.h"
+#include "lm75b.h"
+#include "compiler_abstraction.h"
+
+#include "nrf_log.h"
+#include "nrf_log_ctrl.h"
+#include "nrf_log_default_backends.h"
+
+#define TWI_INSTANCE_ID             0
+
+#define MAX_PENDING_TRANSACTIONS    5
+
+NRF_TWI_MNGR_DEF(m_nrf_twi_mngr, MAX_PENDING_TRANSACTIONS, TWI_INSTANCE_ID);
+APP_TIMER_DEF(m_timer);
+
+// Pin number for indicating communication with sensors.
+#ifdef BSP_LED_3
+    #define READ_ALL_INDICATOR  BSP_BOARD_LED_3
+#else
+    #error "Please choose an output pin"
+#endif
+
+
+// Buffer for data read from sensors.
+#define BUFFER_SIZE  11
+
+// Data structures needed for averaging of data read from sensors.
+// [max 32, otherwise "int16_t" won't be sufficient to hold the sum
+//  of temperature samples]
+#define NUMBER_OF_SAMPLES  16
 
 #define MSG_0                (9)
 #define MSG_1                (27)
@@ -102,6 +140,38 @@
 #define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(2000)                       /**< Time between each call to sd_ble_gap_conn_param_update after the first call. */
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
 
+
+/*------------------------------------TWI-----------------------------------*/
+static uint8_t m_buffer[BUFFER_SIZE];
+
+typedef struct
+{
+    int16_t temp;
+} sum_t;
+
+static sum_t m_sum = { 0 };
+
+typedef struct
+{
+    // [use bit fields to fit whole structure into one 32-bit word]
+    int16_t temp : 11;
+} sample_t;
+
+static sample_t m_samples[NUMBER_OF_SAMPLES] = { { 0 } };
+
+static uint8_t m_sample_idx = 0;
+
+#if defined( __GNUC__ ) && (__LINT__ == 0)
+    // This is required if one wants to use floating-point values in 'printf'
+    // (by default this feature is not linked together with newlib-nano).
+    // Please note, however, that this adds about 13 kB code footprint...
+    __ASM(".global _printf_float");
+#endif
+
+/*------------------------------------TWI-----------------------------------*/
+
+
+/*------------------------------------MESH-----------------------------------*/
 static void gap_params_init(void);
 static void conn_params_init(void);
 
@@ -511,13 +581,160 @@ static void start(void)
     hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
 }
 
+void read_all_cb(ret_code_t result, void * p_user_data)
+{
+    if (result != NRF_SUCCESS)
+    {
+        //NRF_LOG_WARNING("read_all_cb - error: %d", (int)result);
+        return;
+    }
+
+    uint32_t status = NRF_SUCCESS;
+    generic_byte_set_params_t set_params;
+    model_transition_t transition_params;
+    static uint8_t tid = 0;
+
+    sample_t * p_sample = &m_samples[m_sample_idx];
+    m_sum.temp -= p_sample->temp;
+
+
+    uint8_t temp_hi = m_buffer[0];
+    uint8_t temp_lo = m_buffer[1];
+
+    p_sample->temp = LM75B_GET_TEMPERATURE_VALUE(temp_hi, temp_lo);
+
+    m_sum.temp += p_sample->temp;
+
+
+    ++m_sample_idx;
+    if (m_sample_idx >= NUMBER_OF_SAMPLES)
+    {
+        m_sample_idx = 0;
+    }
+
+    // Show current average values every time sample index rolls over (for RTC
+    // ticking at 32 Hz and 16 samples it will be every 500 ms) or when tilt
+    // status changes.
+    if (m_sample_idx == 0)
+    {
+        //NRF_LOG_RAW_INFO("\nTemp: " NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT((float)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES)));
+        //NRF_LOG_INFO("Temp: %d\n", (int)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES));
+        printf("Temp: %d\n", (int)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES));
+    }
+}
+
+
+static void read_all(void)
+{
+    // [these structures have to be "static" - they cannot be placed on stack
+    //  since the transaction is scheduled and these structures most likely
+    //  will be referred after this function returns]
+    static nrf_twi_mngr_transfer_t const transfers[] =
+    {
+        LM75B_READ_TEMP(&m_buffer[0])
+    };
+    static nrf_twi_mngr_transaction_t NRF_TWI_MNGR_BUFFER_LOC_IND transaction =
+    {
+        .callback            = read_all_cb,
+        .p_user_data         = NULL,
+        .p_transfers         = transfers,
+        .number_of_transfers = sizeof(transfers) / sizeof(transfers[0])
+    };
+
+    APP_ERROR_CHECK(nrf_twi_mngr_schedule(&m_nrf_twi_mngr, &transaction));
+}
+
+
+static void bsp_config(void)
+{
+    uint32_t err_code;
+
+    err_code = app_timer_init();
+    APP_ERROR_CHECK(err_code);
+}
+
+// TWI (with transaction manager) initialization.
+static void twi_config(void)
+{
+    uint32_t err_code;
+
+    nrf_drv_twi_config_t const config = {
+       .scl                = ARDUINO_SCL_PIN,
+       .sda                = ARDUINO_SDA_PIN,
+       .frequency          = NRF_DRV_TWI_FREQ_100K,
+       .interrupt_priority = APP_IRQ_PRIORITY_LOWEST,
+       .clear_bus_init     = false
+    };
+
+    err_code = nrf_twi_mngr_init(&m_nrf_twi_mngr, &config);
+    APP_ERROR_CHECK(err_code);
+}
+
+static void lfclk_config(void)
+{
+    uint32_t err_code;
+
+    err_code = nrf_drv_clock_init();
+    APP_ERROR_CHECK(err_code);
+
+    nrf_drv_clock_lfclk_request(NULL);
+}
+
+void timer_handler(void * p_context)
+{
+    read_all();
+}
+
+void read_init(void)
+{
+    ret_code_t err_code;
+
+    err_code = app_timer_create(&m_timer, APP_TIMER_MODE_REPEATED, timer_handler);
+    APP_ERROR_CHECK(err_code);
+
+    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(200), NULL);
+    APP_ERROR_CHECK(err_code);
+}
+
+void twi_log_init(void)
+{
+    ret_code_t err_code;
+
+    err_code = NRF_LOG_INIT(NULL);
+    APP_ERROR_CHECK(err_code);
+
+    NRF_LOG_DEFAULT_BACKENDS_INIT();
+}
+
 int main(void)
 {
-    initialize();
-    execution_start(start);
+//    initialize();
+//    execution_start(start);
 
-    for (;;)
+    ret_code_t err_code;
+
+
+    lfclk_config();
+
+    bsp_config();
+
+    err_code = nrf_pwr_mgmt_init();
+    APP_ERROR_CHECK(err_code);
+
+    twi_config();
+
+    read_init();
+
+    // Initialize sensors.
+    APP_ERROR_CHECK(nrf_twi_mngr_perform(&m_nrf_twi_mngr, NULL, lm75b_init_transfers, LM75B_INIT_TRANSFER_COUNT, NULL));
+
+    while (true)
     {
-        (void)sd_app_evt_wait();
+        nrf_pwr_mgmt_run();
     }
+
+//    for (;;)
+//    {
+//        (void)sd_app_evt_wait();
+//    }
 }

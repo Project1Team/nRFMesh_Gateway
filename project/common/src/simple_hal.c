@@ -236,14 +236,14 @@ void GPIOTE_IRQHandler(void)
         }
     }
 }*/
-void GPIOTE_IRQHandler(void)
-{
-    NRF_GPIOTE->EVENTS_PORT = 0;
-    for (uint8_t i = 0; i < INPUTS_NUMBER; ++i)
-    {
-        if (~NRF_GPIO->IN & (1 << (m_inputs_list[i])))
-        {
-            m_input_handler_cb(i);
-        }
-    }
-}
+//void GPIOTE_IRQHandler(void)
+//{
+//    NRF_GPIOTE->EVENTS_PORT = 0;
+//    for (uint8_t i = 0; i < INPUTS_NUMBER; ++i)
+//    {
+//        if (~NRF_GPIO->IN & (1 << (m_inputs_list[i])))
+//        {
+//            m_input_handler_cb(i);
+//        }
+//    }
+//}
