@@ -75,6 +75,7 @@
 #define INPUT_PULL     NRF_GPIO_PIN_PULLUP
 
 #define INPUT_POLARITY     NRF_GPIOTE_POLARITY_TOGGLE
+
 /**
  * Button event handler callback type.
  * @param[in] button_number Button number (0-3).

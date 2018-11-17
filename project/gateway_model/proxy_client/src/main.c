@@ -638,7 +638,8 @@ void read_all_cb(ret_code_t result, void * p_user_data)
             case NRF_ERROR_BUSY:
             case NRF_ERROR_INVALID_STATE:
                 __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Client cannot send temperature\n");
-                hal_led_blink_ms(LEDS_MASK, LED_BLINK_SHORT_INTERVAL_MS, LED_BLINK_CNT_NO_REPLY);
+                hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+                hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
                 break;
 
             case NRF_ERROR_INVALID_PARAM:
@@ -729,7 +730,7 @@ void read_init(void)
     APP_ERROR_CHECK(err_code);
     
     //about 1 minute calculated
-    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(2000), NULL);
+    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(200), NULL);
     APP_ERROR_CHECK(err_code);
 }
 
