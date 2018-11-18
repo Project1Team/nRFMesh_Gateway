@@ -93,45 +93,17 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+
 #define TWI_INSTANCE_ID             0
-
 #define MAX_PENDING_TRANSACTIONS    5
-
-NRF_TWI_MNGR_DEF(m_nrf_twi_mngr, MAX_PENDING_TRANSACTIONS, TWI_INSTANCE_ID);
-APP_TIMER_DEF(m_timer);
-
-// Pin number for indicating communication with sensors.
-#ifdef BSP_LED_3
-    #define READ_ALL_INDICATOR  BSP_BOARD_LED_3
-#else
-    #error "Please choose an output pin"
-#endif
-
-
 // Buffer for data read from sensors.
 #define BUFFER_SIZE  11
-
 // Data structures needed for averaging of data read from sensors.
 // [max 32, otherwise "int16_t" won't be sufficient to hold the sum
 //  of temperature samples]
-#define NUMBER_OF_SAMPLES  16
+#define NUMBER_OF_SAMPLES               16
 
-
-
-#define MSG_0                (9)
-#define MSG_1                (27)
-#define MSG_2                (199)
-#define MSG_3                (255)
-
-#define CLIENT_LED_0         (BSP_LED_0)
-#define CLIENT_LED_1         (BSP_LED_1)
-#define CLIENT_LED_2         (BSP_LED_2)
-#define CLIENT_LED_3         (BSP_LED_3)
-
-#define LED_PIN              (2)
-
-
-#define APP_UNACK_MSG_REPEAT_COUNT   (2)
+#define APP_UNACK_MSG_REPEAT_COUNT      2
 
 #define DEVICE_NAME                     "Mesh Client Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
@@ -142,9 +114,25 @@ APP_TIMER_DEF(m_timer);
 #define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(2000)                       /**< Time between each call to sd_ble_gap_conn_param_update after the first call. */
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
 
+#define LED_PIN                         (2)
+#define CLIENT_LED_0                    (BSP_LED_0)
+#define CLIENT_LED_1                    (BSP_LED_1)
+#define CLIENT_LED_2                    (BSP_LED_2)
+#define CLIENT_LED_3                    (BSP_LED_3)
+
+/* Generic message opcode for clients' data */
+#define MSG_OPCODE_FIRE                 (0x46 << 8)                                 /**< ASCII "F"(0x46) for "Fire" */
+#define MSG_OPCODE_GAS                  (0x47 << 8)                                 /**< ASCII "G"(0x47) for "Gas" */
+#define MSG_OPCODE_TEMP                 (0x54 << 8)                                 /**< ASCII "T"(0x54) for "Temperature" */
+#define MSG_OPCODE_SWITCH_ON            (0x80)                                      /**< ASCII "0"(0x79) + (1) for "ON" */
+#define MSG_OPCODE_SWITCH_OFF           (0x79)                                      /**< ASCII "0"(0x79) + (0) for "OFF" */
+
+
 
 /*------------------------------------TWI-----------------------------------*/
 static uint8_t m_buffer[BUFFER_SIZE];
+NRF_TWI_MNGR_DEF(m_nrf_twi_mngr, MAX_PENDING_TRANSACTIONS, TWI_INSTANCE_ID);
+APP_TIMER_DEF(m_timer);
 
 typedef struct
 {
@@ -263,49 +251,11 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
     {
         __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d, Remaining Time: %d ms\n",
               p_meta->src.value, p_in->present_byte, p_in->remaining_time_ms);
-          if (p_in->present_byte == 255)
-          {        
-              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-          }
-          
-          if (p_in->present_byte == 78)
-          {
-              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-          }
-
-          if (p_in->present_byte == 65)
-          {
-              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-          }
     }
     else
     {
         __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d\n",
               p_meta->src.value, p_in->present_byte);
-          if (p_in->present_byte == 65)
-          {
-              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-              nrf_gpio_cfg_output(LED_PIN);
-              nrf_gpio_pin_clear(LED_PIN);
-          }
-
-          if (p_in->present_byte == 78)
-          {              
-              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-              nrf_gpio_cfg_output(LED_PIN);
-              nrf_gpio_pin_set(LED_PIN);
-          }
-          
-          if (p_in->present_byte == 255)
-          {              
-              hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-              hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
-          }
     }
 }
 
@@ -351,16 +301,7 @@ static void button_event_handler(uint32_t button_number)
     switch(button_number)
     {
         case 0:
-            set_params.byte = 65535;
-            break;
-        case 1:
-            set_params.byte = MSG_1;
-            break;
-        case 2:
-            set_params.byte = MSG_2;
-            break;
-        case 3:
-            set_params.byte = MSG_3;
+            set_params.byte = ((uint16_t)(MSG_OPCODE_TEMP)) | ((uint16_t)(123));
             break;
     }
 
@@ -376,28 +317,6 @@ static void button_event_handler(uint32_t button_number)
             status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
             hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
             break;
-
-        case 1:
-            (void)access_model_reliable_cancel(m_clients.model_handle);
-            status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
-            hal_led_pin_set(CLIENT_LED_1, !hal_led_pin_get(CLIENT_LED_1));
-            break;
-
-        case 2:
-            (void)access_model_reliable_cancel(m_clients.model_handle);
-            status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
-            hal_led_pin_set(CLIENT_LED_2, !hal_led_pin_get(CLIENT_LED_2));
-            break;
-        case 3:
-            (void)access_model_reliable_cancel(m_clients.model_handle);
-            status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
-            hal_led_pin_set(CLIENT_LED_3, !hal_led_pin_get(CLIENT_LED_3));
-            break;
-//            /* Demonstrate un-acknowledged transaction, using 2nd client model instance */
-//            status = generic_byte_client_set_unack(&m_clients, &set_params,
-//                                                    &transition_params, APP_UNACK_MSG_REPEAT_COUNT);
-//            hal_led_pin_set(BSP_LED_1, set_params.byte);
-//            break;
       }
 
     switch (status)
@@ -409,7 +328,8 @@ static void button_event_handler(uint32_t button_number)
         case NRF_ERROR_BUSY:
         case NRF_ERROR_INVALID_STATE:
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Client %u cannot send\n", button_number);
-            hal_led_blink_ms(LEDS_MASK, LED_BLINK_SHORT_INTERVAL_MS, LED_BLINK_CNT_NO_REPLY);
+            hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+            hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
             break;
 
         case NRF_ERROR_INVALID_PARAM:
@@ -621,15 +541,17 @@ void read_all_cb(ret_code_t result, void * p_user_data)
     {
         //NRF_LOG_RAW_INFO("\nTemp: " NRF_LOG_FLOAT_MARKER , NRF_LOG_FLOAT((float)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES)));
         //NRF_LOG_INFO("Temp: %d\n", (int)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES));
-        //printf("Temp: %d\n", (uint8_t)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES));
-        set_params.byte = (uint8_t)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES);
+        //set_params.byte = (uint8_t)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES);
+
+        /* Sending TWO BYTES: TEMPERATURE OPCODE|VALUE */
+        set_params.byte = ((uint16_t)(MSG_OPCODE_TEMP)) | ((uint16_t)((uint8_t)((m_sum.temp * 0.125) / NUMBER_OF_SAMPLES)));
         set_params.tid = tid++;
         transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
         transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
 
         status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
 
-        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: %d\n", set_params.byte);
+        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending Temperature: %d Celsius degrees.\n", set_params.byte);
 
         switch (status)
         {
@@ -731,8 +653,8 @@ void read_init(void)
     err_code = app_timer_create(&m_timer, APP_TIMER_MODE_REPEATED, timer_handler);
     APP_ERROR_CHECK(err_code);
     
-    //about 1 minute calculated
-    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(200), NULL);
+    //about half a minute calculated
+    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(1000), NULL);
     APP_ERROR_CHECK(err_code);
 }
 
