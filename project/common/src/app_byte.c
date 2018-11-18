@@ -174,12 +174,7 @@ static void generic_byte_state_set_cb(const generic_byte_server_t * p_self,
                                        const model_transition_t * p_in_transition,
                                        generic_byte_status_params_t * p_out)
 {
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "msg: SET: %d\n", p_in->byte);
-//    if(p_in->byte == 255)
-//    {
-//        hal_led_mask_set(LEDS_MASK, false);
-//        hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_PROV);
-//    }
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Client: 0x%04x, msg: %d\n", p_meta->src.value, p_in->byte);
 
     app_byte_server_t   * p_server = PARENT_BY_FIELD_GET(app_byte_server_t, server, p_self);
 

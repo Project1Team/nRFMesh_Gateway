@@ -100,11 +100,6 @@
 #define BYTE_SERVER_2_LED          (BSP_LED_2)
 #define BYTE_SERVER_3_LED          (BSP_LED_3)
 
-#define MSG_0                      (9)
-#define MSG_1                      (27)
-#define MSG_2                      (199)
-#define MSG_3                      (255)
-
 #define DEVICE_NAME                     "Mesh Server Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)           /**< Maximum acceptable connection interval. */
@@ -140,16 +135,7 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t 
 {
     /* Resolve the server instance here if required, this example uses only 1 instance. */
 
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Setting GPIO value correspond with MSG: %d\n", byte)
-    if(byte == MSG_0)
-        hal_led_pin_set(BYTE_SERVER_0_LED, !hal_led_pin_get(BYTE_SERVER_0_LED));
-    if(byte == MSG_1)
-        hal_led_pin_set(BYTE_SERVER_1_LED, !hal_led_pin_get(BYTE_SERVER_1_LED));
-    if(byte == MSG_2)
-        hal_led_pin_set(BYTE_SERVER_2_LED, !hal_led_pin_get(BYTE_SERVER_2_LED));
-    if(byte == MSG_3)
-        hal_led_pin_set(BYTE_SERVER_3_LED, !hal_led_pin_get(BYTE_SERVER_3_LED));
-
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Received message from client: %d\n", byte)
 }
 
 /* Callback for reading the hardware state */

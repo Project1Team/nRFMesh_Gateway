@@ -124,8 +124,8 @@
 #define MSG_OPCODE_FIRE                 (0x46 << 8)                                 /**< ASCII "F"(0x46) for "Fire" */
 #define MSG_OPCODE_GAS                  (0x47 << 8)                                 /**< ASCII "G"(0x47) for "Gas" */
 #define MSG_OPCODE_TEMP                 (0x54 << 8)                                 /**< ASCII "T"(0x54) for "Temperature" */
-#define MSG_OPCODE_SWITCH_ON            (0x80)                                      /**< ASCII "0"(0x79) + (1) for "ON" */
-#define MSG_OPCODE_SWITCH_OFF           (0x79)                                      /**< ASCII "0"(0x79) + (0) for "OFF" */
+#define MSG_OPCODE_SWITCH_ON            (0x50)                                      /**< ASCII "0"(0x4F) + (1) for "ON" */
+#define MSG_OPCODE_SWITCH_OFF           (0x4F)                                      /**< ASCII "0"(0x4F) + (0) for "OFF" */
 
 
 
@@ -171,7 +171,13 @@ static void on_sd_evt(uint32_t sd_evt, void * p_context)
 
 NRF_SDH_SOC_OBSERVER(mesh_observer, NRF_SDH_BLE_STACK_OBSERVER_PRIO, on_sd_evt, NULL);
 
-static generic_byte_client_t m_clients;
+/* 4 clients:
+/*              1. TEMPERATURE SENSOR
+/*              2. FIRE SENSOR
+/*              3. GAS SENSOR
+/*              4. 4-RELAYS MODULE
+*/
+static generic_byte_client_t m_clients[CLIENT_NODE_COUNT];
 
 static bool                   m_device_provisioned;
 
@@ -256,6 +262,19 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
     {
         __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d\n",
               p_meta->src.value, p_in->present_byte);
+
+        /* TODO FIRE and GAS sensor ----> THONG will do this */
+        /* Just for testing receive on onff msg from server*/
+        if (p_in->present_byte == MSG_OPCODE_SWITCH_ON)
+        {
+            nrf_gpio_cfg_output(LED_PIN);
+            nrf_gpio_pin_set(LED_PIN);
+        }
+        if (p_in->present_byte == MSG_OPCODE_SWITCH_OFF)
+        {
+            nrf_gpio_cfg_output(LED_PIN);
+            nrf_gpio_pin_clear(LED_PIN);
+        }
     }
 }
 
@@ -313,8 +332,8 @@ static void button_event_handler(uint32_t button_number)
     switch (button_number)
     {
         case 0:
-            (void)access_model_reliable_cancel(m_clients.model_handle);
-            status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
+            (void)access_model_reliable_cancel(m_clients[1].model_handle);
+            status = generic_byte_client_set(&m_clients[1], &set_params, &transition_params);
             hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
             break;
       }
@@ -361,12 +380,16 @@ static void rtt_input_handler(int key)
 static void models_init_cb(void)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Initializing and adding models\n");
-    m_clients.settings.p_callbacks = &client_cbs;
-    m_clients.settings.timeout = 0;
-    m_clients.settings.force_segmented = APP_CONFIG_FORCE_SEGMENTATION;
-    m_clients.settings.transmic_size = APP_CONFIG_MIC_SIZE;
+    
+    for (uint32_t i = 0; i < CLIENT_MODEL_INSTANCE_COUNT; ++i)
+    {
+        m_clients[i].settings.p_callbacks = &client_cbs;
+        m_clients[i].settings.timeout = 0;
+        m_clients[i].settings.force_segmented = APP_CONFIG_FORCE_SEGMENTATION;
+        m_clients[i].settings.transmic_size = APP_CONFIG_MIC_SIZE;
 
-    ERROR_CHECK(generic_byte_client_init(&m_clients, 0));
+        ERROR_CHECK(generic_byte_client_init(&m_clients[i], i + 1));
+    }
 }
 
 static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
@@ -451,7 +474,7 @@ static void conn_params_init(void)
 static void initialize(void)
 {
     __LOG_INIT(LOG_SRC_APP | LOG_SRC_ACCESS, LOG_LEVEL_INFO, LOG_CALLBACK_DEFAULT);
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Sensor -----\n");
+    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "----- BLE Mesh Client -----\n");
 
     ERROR_CHECK(app_timer_init());
     hal_leds_init();
@@ -549,7 +572,7 @@ void read_all_cb(ret_code_t result, void * p_user_data)
         transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
         transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
 
-        status = generic_byte_client_set(&m_clients, &set_params, &transition_params);
+        status = generic_byte_client_set(&m_clients[0], &set_params, &transition_params);
 
         __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending Temperature: %d Celsius degrees.\n", set_params.byte);
 
@@ -574,7 +597,7 @@ void read_all_cb(ret_code_t result, void * p_user_data)
                  * It is the provisioner that adds an application key, binds it to the model and sets
                  * the model's publication state.
                  */
-                __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Publication not configured for client\n");
+                __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Publication not configured for temperature client\n");
                 break;
 
             default:
@@ -654,7 +677,7 @@ void read_init(void)
     APP_ERROR_CHECK(err_code);
     
     //about half a minute calculated
-    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(1000), NULL);
+    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(300), NULL);
     APP_ERROR_CHECK(err_code);
 }
 
