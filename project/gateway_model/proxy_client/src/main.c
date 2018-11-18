@@ -116,6 +116,8 @@ APP_TIMER_DEF(m_timer);
 //  of temperature samples]
 #define NUMBER_OF_SAMPLES  16
 
+
+
 #define MSG_0                (9)
 #define MSG_1                (27)
 #define MSG_2                (199)
@@ -131,7 +133,7 @@ APP_TIMER_DEF(m_timer);
 
 #define APP_UNACK_MSG_REPEAT_COUNT   (2)
 
-#define DEVICE_NAME                     "Mesh Sensor Node"
+#define DEVICE_NAME                     "Mesh Client Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)           /**< Maximum acceptable connection interval. */
 #define SLAVE_LATENCY                   0                                           /**< Slave latency. */
@@ -349,7 +351,7 @@ static void button_event_handler(uint32_t button_number)
     switch(button_number)
     {
         case 0:
-            set_params.byte = MSG_0;
+            set_params.byte = 65535;
             break;
         case 1:
             set_params.byte = MSG_1;

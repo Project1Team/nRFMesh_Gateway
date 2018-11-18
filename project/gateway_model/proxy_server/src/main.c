@@ -125,8 +125,8 @@ static void gap_params_init(void);
 static void conn_params_init(void);
 
 /*************************************************************************************************/
-static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint8_t byte);
-static void app_byte_server_get_cb(const app_byte_server_t * p_server, uint8_t * p_present_byte);
+static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t byte);
+static void app_byte_server_get_cb(const app_byte_server_t * p_server, uint16_t * p_present_byte);
 
 /* Generic Byte server structure definition and initialization */
 APP_BYTE_SERVER_DEF(m_byte_server_0,
@@ -136,7 +136,7 @@ APP_BYTE_SERVER_DEF(m_byte_server_0,
                      app_byte_server_get_cb)
 
 /* Callback for updating the hardware state */
-static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint8_t byte)
+static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t byte)
 {
     /* Resolve the server instance here if required, this example uses only 1 instance. */
 
@@ -153,7 +153,7 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint8_t b
 }
 
 /* Callback for reading the hardware state */
-static void app_byte_server_get_cb(const app_byte_server_t * p_server, uint8_t * p_present_byte)
+static void app_byte_server_get_cb(const app_byte_server_t * p_server, uint16_t * p_present_byte)
 {
     /* Resolve the server instance here if required, this example uses only 1 instance. */
 

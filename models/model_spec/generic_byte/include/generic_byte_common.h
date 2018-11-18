@@ -27,7 +27,7 @@
 #define GENERIC_BYTE_COMPANY_ID (ACCESS_COMPANY_ID_NONE)
 
 /** Maximum value of the Byte state, as defined in the Mesh Model Specification v1.0 */
-#define GENERIC_BYTE_MAX        (0xFF)
+#define GENERIC_BYTE_MAX        (0xFFFF)
 
 /**
  * Unpacked message structure typedefs are used for API interfaces and for implementing model code. This helps to minimize code
@@ -37,22 +37,22 @@
 /** Structure containing value of the Byte state */
 typedef struct
 {
-    uint8_t byte;                                            /**< State to set */
+    uint16_t byte;                                            /**< State to set */
     uint8_t tid;                                            /**< Transaction ID */
 } generic_byte_state_t;
 
 /** Mandatory parameters for the Generic Byte Set message. */
 typedef struct
 {
-    uint8_t byte;                                            /**< State to set */
+    uint16_t byte;                                            /**< State to set */
     uint8_t tid;                                            /**< Transaction ID */
 } generic_byte_set_params_t;
 
 /** Parameters for the Generic Byte Status message. */
 typedef struct
 {
-    uint8_t present_byte;                                 /**< The present value of the Generic Byte state */
-    uint8_t target_byte;                                  /**< The target value of the Generic Byte state (optional) */
+    uint16_t present_byte;                                 /**< The present value of the Generic Byte state */
+    uint16_t target_byte;                                  /**< The target value of the Generic Byte state (optional) */
     uint32_t remaining_time_ms;                             /**< Remaining time value in milliseconds */
 } generic_byte_status_params_t;
 

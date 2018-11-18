@@ -44,7 +44,7 @@ typedef enum
 /** Message format for the generic_byte Set message. */
 typedef struct __attribute((packed))
 {
-    uint8_t byte;                                         /**< State to set */
+    uint16_t byte;                                         /**< State to set */
     uint8_t tid;                                            /**< Transaction number for application */
     uint8_t transition_time;                                /**< Encoded transition time value */
     uint8_t delay;                                          /**< Encoded message execution delay in 5 millisecond steps */
@@ -53,8 +53,8 @@ typedef struct __attribute((packed))
 /** Message format for the generic_byte Status message. */
 typedef struct __attribute((packed))
 {
-    uint8_t present_byte;                                 /**< The present value of the Generic Byte state */
-    uint8_t target_byte;                                  /**< The target value of the Generic Byte state (optional) */
+    uint16_t present_byte;                                 /**< The present value of the Generic Byte state */
+    uint16_t target_byte;                                  /**< The target value of the Generic Byte state (optional) */
     uint8_t remaining_time;                                 /**< Encoded remaining time */
 } generic_byte_status_msg_pkt_t;
 
