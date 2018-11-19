@@ -28,7 +28,6 @@ static uint32_t status_send(generic_byte_server_t * p_server,
     generic_byte_status_msg_pkt_t msg_pkt;
 
     if (p_params->present_byte > GENERIC_BYTE_MAX ||
-        p_params->target_byte  > GENERIC_BYTE_MAX ||
         p_params->remaining_time_ms > TRANSITION_TIME_STEP_10M_MAX)
     {
         return NRF_ERROR_INVALID_PARAM;
@@ -37,7 +36,6 @@ static uint32_t status_send(generic_byte_server_t * p_server,
     msg_pkt.present_byte = p_params->present_byte;
     if (p_params->remaining_time_ms > 0)
     {
-        msg_pkt.target_byte = p_params->target_byte;
         msg_pkt.remaining_time = model_transition_time_encode(p_params->remaining_time_ms);
     }
 

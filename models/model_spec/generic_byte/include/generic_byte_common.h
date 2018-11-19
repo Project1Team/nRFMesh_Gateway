@@ -52,7 +52,6 @@ typedef struct
 typedef struct
 {
     uint16_t present_byte;                                 /**< The present value of the Generic Byte state */
-    uint16_t target_byte;                                  /**< The target value of the Generic Byte state (optional) */
     uint32_t remaining_time_ms;                             /**< Remaining time value in milliseconds */
 } generic_byte_status_params_t;
 

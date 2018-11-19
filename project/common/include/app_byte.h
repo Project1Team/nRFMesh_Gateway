@@ -146,8 +146,7 @@ struct __app_byte_server_t
 void app_byte_status_publish(app_byte_server_t * p_server);
 
 
-//TODO: Do we need 2 bytes for controlling the client switch?
-void app_byte_value_publish(app_byte_server_t * p_server, uint8_t value);
+void app_byte_value_publish(app_byte_server_t * p_server, uint16_t value);
 
 /** Initializes the behavioral module for the generic Byte model
  *

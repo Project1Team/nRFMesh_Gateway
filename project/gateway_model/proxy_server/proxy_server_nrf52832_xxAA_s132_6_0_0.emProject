@@ -169,15 +169,12 @@
     <folder Name="Health Model">
       <file file_name="../../../models/foundation/health/src/health_server.c" />
     </folder>
-    <folder Name="Generic OnOff Model">
-      <file file_name="../../../models/model_spec/generic_onoff/src/generic_onoff_server.c" />
-      <file file_name="../../../models/model_spec/common/src/model_common.c" />
-    </folder>
     <folder Name="Other">
       <file file_name="../../../external/sdk_fix/nrf_sdh.c" />
     </folder>
     <folder Name="Generic Byte Model">
       <file file_name="../../../models/model_spec/generic_byte/src/generic_byte_server.c" />
+      <file file_name="../../../models/model_spec/common/src/model_common.c" />
     </folder>
     <folder Name="Board Definition">
       <file file_name="../../../../nRF5_SDK_15.0.0_a53641a/components/boards/boards.c" />

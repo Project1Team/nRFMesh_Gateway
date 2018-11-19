@@ -21,14 +21,14 @@
  */
 
 /** Shortest allowed length for the Set message. */
-#define GENERIC_BYTE_SET_MINLEN 2
+#define GENERIC_BYTE_SET_MINLEN 4
 /** Longest allowed length for the Set message. */
 #define GENERIC_BYTE_SET_MAXLEN 4
 
 /** Shortest allowed length for the Status message. */
-#define GENERIC_BYTE_STATUS_MINLEN 1
+#define GENERIC_BYTE_STATUS_MINLEN 4
 /** Longest allowed length for the Status message. */
-#define GENERIC_BYTE_STATUS_MAXLEN 3
+#define GENERIC_BYTE_STATUS_MAXLEN 4
 
 /** Generic Byte model message opcodes. */
 typedef enum
@@ -54,7 +54,6 @@ typedef struct __attribute((packed))
 typedef struct __attribute((packed))
 {
     uint16_t present_byte;                                 /**< The present value of the Generic Byte state */
-    uint16_t target_byte;                                  /**< The target value of the Generic Byte state (optional) */
     uint8_t remaining_time;                                 /**< Encoded remaining time */
 } generic_byte_status_msg_pkt_t;
 

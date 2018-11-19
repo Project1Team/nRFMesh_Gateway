@@ -91,7 +91,6 @@ static void byte_state_value_update(app_byte_server_t * p_server)
 
         generic_byte_status_params_t status_params;
         status_params.present_byte = p_server->state.present_byte;
-        status_params.target_byte = p_server->state.target_byte;
         status_params.remaining_time_ms = p_server->state.remaining_time_ms;
         (void) generic_byte_server_status_publish(&p_server->server, &status_params);
 
@@ -147,7 +146,6 @@ static void generic_byte_state_get_cb(const generic_byte_server_t * p_self,
     /* Requirement: Provide the current value of the Byte state */
     p_server->byte_get_cb(p_server, &p_server->state.present_byte);
     p_out->present_byte = p_server->state.present_byte;
-    p_out->target_byte = p_server->state.target_byte;
 
     /* Requirement: Always report remaining time */
     if (p_server->state.remaining_time_ms > 0 && p_server->state.delay_ms == 0)
@@ -199,7 +197,6 @@ static void generic_byte_state_set_cb(const generic_byte_server_t * p_self,
     if (p_out != NULL)
     {
         p_out->present_byte = p_server->state.present_byte;
-        p_out->target_byte = p_server->state.target_byte;
         p_out->remaining_time_ms = p_server->state.remaining_time_ms;
     }
 }
@@ -218,24 +215,19 @@ void app_byte_status_publish(app_byte_server_t * p_server)
 
     generic_byte_status_params_t status = {
                 .present_byte = p_server->state.present_byte,
-                .target_byte = p_server->state.target_byte,
                 .remaining_time_ms = p_server->state.remaining_time_ms
             };
     (void) generic_byte_server_status_publish(&p_server->server, &status);
 }
 
-void app_byte_value_publish(app_byte_server_t * p_server, uint8_t value)
+void app_byte_value_publish(app_byte_server_t * p_server, uint16_t value)
 {
-    p_server->byte_get_cb(p_server, &p_server->state.present_byte);
-
-    p_server->state.target_byte = p_server->state.present_byte;
     p_server->state.delay_ms = 0;
     p_server->state.remaining_time_ms = 0;
     (void) app_timer_stop(*p_server->p_timer_id);
 
     generic_byte_status_params_t status = {
                 .present_byte = value,
-                .target_byte = p_server->state.target_byte,
                 .remaining_time_ms = p_server->state.remaining_time_ms
             };
     (void) generic_byte_server_status_publish(&p_server->server, &status);

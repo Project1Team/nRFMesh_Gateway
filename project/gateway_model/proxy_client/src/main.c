@@ -253,29 +253,44 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
                                                const access_message_rx_meta_t * p_meta,
                                                const generic_byte_status_params_t * p_in)
 {
-    if (p_in->remaining_time_ms > 0)
-    {
-        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d, Remaining Time: %d ms\n",
-              p_meta->src.value, p_in->present_byte, p_in->remaining_time_ms);
-    }
-    else
-    {
-        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d\n",
+      __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d\n",
               p_meta->src.value, p_in->present_byte);
 
-        /* TODO FIRE and GAS sensor ----> THONG will do this */
-        /* Just for testing receive on onff msg from server*/
-        if (p_in->present_byte == MSG_OPCODE_SWITCH_ON)
-        {
-            nrf_gpio_cfg_output(LED_PIN);
-            nrf_gpio_pin_set(LED_PIN);
-        }
-        if (p_in->present_byte == MSG_OPCODE_SWITCH_OFF)
-        {
-            nrf_gpio_cfg_output(LED_PIN);
-            nrf_gpio_pin_clear(LED_PIN);
-        }
-    }
+      /* TODO FIRE and GAS sensor ----> THONG will do this */
+      /* Just for testing receive on onff msg from server*/
+      if (p_in->present_byte == MSG_OPCODE_SWITCH_ON)
+      {
+          nrf_gpio_cfg_output(LED_PIN);
+          nrf_gpio_pin_set(LED_PIN);
+      }
+      if (p_in->present_byte == MSG_OPCODE_SWITCH_OFF)
+      {
+          nrf_gpio_cfg_output(LED_PIN);
+          nrf_gpio_pin_clear(LED_PIN);
+      }
+//    if (p_in->remaining_time_ms > 0)
+//    {
+//        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d, Remaining Time: %d ms\n",
+//              p_meta->src.value, p_in->present_byte, p_in->remaining_time_ms);
+//    }
+//    else
+//    {
+//        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d\n",
+//              p_meta->src.value, p_in->present_byte);
+//
+//        /* TODO FIRE and GAS sensor ----> THONG will do this */
+//        /* Just for testing receive on onff msg from server*/
+//        if (p_in->present_byte == MSG_OPCODE_SWITCH_ON)
+//        {
+//            nrf_gpio_cfg_output(LED_PIN);
+//            nrf_gpio_pin_set(LED_PIN);
+//        }
+//        if (p_in->present_byte == MSG_OPCODE_SWITCH_OFF)
+//        {
+//            nrf_gpio_cfg_output(LED_PIN);
+//            nrf_gpio_pin_clear(LED_PIN);
+//        }
+//    }
 }
 
 static void node_reset(void)
@@ -320,7 +335,16 @@ static void button_event_handler(uint32_t button_number)
     switch(button_number)
     {
         case 0:
-            set_params.byte = ((uint16_t)(MSG_OPCODE_TEMP)) | ((uint16_t)(123));
+            set_params.byte = 65535;
+            break;
+        case 1:
+            set_params.byte = 1234;
+            break;
+        case 2:
+            set_params.byte = 123;
+            break;
+        case 3:
+            set_params.byte = 1;
             break;
     }
 
@@ -332,6 +356,21 @@ static void button_event_handler(uint32_t button_number)
     switch (button_number)
     {
         case 0:
+            (void)access_model_reliable_cancel(m_clients[1].model_handle);
+            status = generic_byte_client_set(&m_clients[1], &set_params, &transition_params);
+            hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
+            break;
+        case 1:
+            (void)access_model_reliable_cancel(m_clients[1].model_handle);
+            status = generic_byte_client_set(&m_clients[1], &set_params, &transition_params);
+            hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
+            break;
+        case 2:
+            (void)access_model_reliable_cancel(m_clients[1].model_handle);
+            status = generic_byte_client_set(&m_clients[1], &set_params, &transition_params);
+            hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
+            break;
+        case 3:
             (void)access_model_reliable_cancel(m_clients[1].model_handle);
             status = generic_byte_client_set(&m_clients[1], &set_params, &transition_params);
             hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
@@ -479,8 +518,8 @@ static void initialize(void)
     ERROR_CHECK(app_timer_init());
     hal_leds_init();
 
-    //ERROR_CHECK(hal_buttons_init(button_event_handler));
-    ERROR_CHECK(hal_inputs_init(input_event_handler));
+    ERROR_CHECK(hal_buttons_init(button_event_handler));
+    //ERROR_CHECK(hal_inputs_init(input_event_handler));
     uint32_t err_code = nrf_sdh_enable_request();
     APP_ERROR_CHECK(err_code);
 #if defined S140 // todo remove that after S140 priority fixing

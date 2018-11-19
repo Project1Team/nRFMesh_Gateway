@@ -186,7 +186,7 @@ static void button_event_handler(uint32_t button_number)
         {
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending message to client... \n");
             hal_led_pin_set(BYTE_SERVER_0_LED, !hal_led_pin_get(BYTE_SERVER_0_LED));
-            app_byte_value_publish(&m_byte_server_0, 255);
+            app_byte_value_publish(&m_byte_server_0, 65535);
             break;
         }
 
@@ -194,7 +194,21 @@ static void button_event_handler(uint32_t button_number)
         {
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending message to client... \n");
             hal_led_pin_set(BYTE_SERVER_2_LED, !hal_led_pin_get(BYTE_SERVER_2_LED));
-            app_byte_value_publish(&m_byte_server_0, 213);
+            app_byte_value_publish(&m_byte_server_0, 1234);
+            break;
+        }
+        case 2:
+        {
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending message to client... \n");
+            hal_led_pin_set(BYTE_SERVER_2_LED, !hal_led_pin_get(BYTE_SERVER_2_LED));
+            app_byte_value_publish(&m_byte_server_0, 123);
+            break;
+        }
+        case 3:
+        {
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending message to client... \n");
+            hal_led_pin_set(BYTE_SERVER_2_LED, !hal_led_pin_get(BYTE_SERVER_2_LED));
+            app_byte_value_publish(&m_byte_server_0, 1);
             break;
         }
 

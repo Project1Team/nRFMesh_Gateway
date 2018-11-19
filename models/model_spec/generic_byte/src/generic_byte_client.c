@@ -26,26 +26,31 @@ static void status_handle(access_model_handle_t handle, const access_message_rx_
 {
     generic_byte_client_t * p_client = (generic_byte_client_t *) p_args;
     generic_byte_status_params_t in_data = {0};
+    generic_byte_status_msg_pkt_t * p_msg_params_packed = (generic_byte_status_msg_pkt_t *) p_rx_msg->p_data;
 
-    if (p_rx_msg->length == GENERIC_BYTE_STATUS_MINLEN || p_rx_msg->length == GENERIC_BYTE_STATUS_MAXLEN)
-    {
-        generic_byte_status_msg_pkt_t * p_msg_params_packed = (generic_byte_status_msg_pkt_t *) p_rx_msg->p_data;
+    in_data.present_byte = p_msg_params_packed->present_byte;
+    in_data.remaining_time_ms = 0;
+    p_client->settings.p_callbacks->byte_status_cb(p_client, &p_rx_msg->meta_data, &in_data);
 
-        if (p_rx_msg->length == GENERIC_BYTE_STATUS_MINLEN)
-        {
-            in_data.present_byte = p_msg_params_packed->present_byte;
-            in_data.target_byte = p_msg_params_packed->present_byte;
-            in_data.remaining_time_ms = 0;
-        }
-        else
-        {
-            in_data.present_byte = p_msg_params_packed->present_byte;
-            in_data.target_byte = p_msg_params_packed->target_byte;
-            in_data.remaining_time_ms = model_transition_time_decode(p_msg_params_packed->remaining_time);
-        }
-
-        p_client->settings.p_callbacks->byte_status_cb(p_client, &p_rx_msg->meta_data, &in_data);
-    }
+//    if (p_rx_msg->length == GENERIC_BYTE_STATUS_MINLEN || p_rx_msg->length == GENERIC_BYTE_STATUS_MAXLEN)
+//    {
+//        generic_byte_status_msg_pkt_t * p_msg_params_packed = (generic_byte_status_msg_pkt_t *) p_rx_msg->p_data;
+//
+//        if (p_rx_msg->length == GENERIC_BYTE_STATUS_MINLEN)
+//        {
+//            in_data.present_byte = p_msg_params_packed->present_byte;
+//            in_data.target_byte = p_msg_params_packed->present_byte;
+//            in_data.remaining_time_ms = 0;
+//        }
+//        else
+//        {
+//            in_data.present_byte = p_msg_params_packed->present_byte;
+//            in_data.target_byte = p_msg_params_packed->target_byte;
+//            in_data.remaining_time_ms = model_transition_time_decode(p_msg_params_packed->remaining_time);
+//        }
+//
+//        p_client->settings.p_callbacks->byte_status_cb(p_client, &p_rx_msg->meta_data, &in_data);
+//    }
 }
 
 static const access_opcode_handler_t m_opcode_handlers[] =
