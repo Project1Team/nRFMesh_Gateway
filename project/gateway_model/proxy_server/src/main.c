@@ -108,7 +108,6 @@
 #define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(100)                        /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called. */
 #define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(2000)                       /**< Time between each call to sd_ble_gap_conn_param_update after the first call. */
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
-//#define ENABLE_LOOPBACK_TEST  /**< if defined, then this example will be a loopback test, which means that TX should be connected to RX to get data loopback. */
 
 #define MAX_TEST_DATA_BYTES     (15U)                /**< max number of test bytes to be used for tx and rx. */
 #define UART_TX_BUF_SIZE 256                         /**< UART TX buffer size. */
@@ -194,14 +193,14 @@ static void button_event_handler(uint32_t button_number)
         {
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending message to client... \n");
             hal_led_pin_set(BYTE_SERVER_2_LED, !hal_led_pin_get(BYTE_SERVER_2_LED));
-            app_byte_value_publish(&m_byte_server_0, 1234);
+            app_byte_value_publish(&m_byte_server_0, 701);
             break;
         }
         case 2:
         {
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending message to client... \n");
             hal_led_pin_set(BYTE_SERVER_2_LED, !hal_led_pin_get(BYTE_SERVER_2_LED));
-            app_byte_value_publish(&m_byte_server_0, 123);
+            app_byte_value_publish(&m_byte_server_0, 700);
             break;
         }
         case 3:

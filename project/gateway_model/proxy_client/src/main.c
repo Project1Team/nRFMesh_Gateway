@@ -106,13 +106,13 @@
 #define APP_UNACK_MSG_REPEAT_COUNT      2
 
 #define DEVICE_NAME                     "Mesh Client Node"
-#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)           /**< Minimum acceptable connection interval. */
-#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)           /**< Maximum acceptable connection interval. */
-#define SLAVE_LATENCY                   0                                           /**< Slave latency. */
-#define CONN_SUP_TIMEOUT                MSEC_TO_UNITS(4000, UNIT_10_MS)             /**< Connection supervisory timeout (4 seconds). */
-#define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(100)                        /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called. */
-#define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(2000)                       /**< Time between each call to sd_ble_gap_conn_param_update after the first call. */
-#define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
+#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)         /**< Minimum acceptable connection interval. */
+#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)         /**< Maximum acceptable connection interval. */
+#define SLAVE_LATENCY                   0                                         /**< Slave latency. */
+#define CONN_SUP_TIMEOUT                MSEC_TO_UNITS(4000, UNIT_10_MS)           /**< Connection supervisory timeout (4 seconds). */
+#define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(100)                      /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called. */
+#define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(2000)                     /**< Time between each call to sd_ble_gap_conn_param_update after the first call. */
+#define MAX_CONN_PARAMS_UPDATE_COUNT    3                                         /**< Number of attempts before giving up the connection parameter negotiation. */
 
 #define LED_PIN                         (2)
 #define CLIENT_LED_0                    (BSP_LED_0)
@@ -121,11 +121,11 @@
 #define CLIENT_LED_3                    (BSP_LED_3)
 
 /* Generic message opcode for clients' data */
-#define MSG_OPCODE_FIRE                 (0x46 << 8)                                 /**< ASCII "F"(0x46) for "Fire" */
-#define MSG_OPCODE_GAS                  (0x47 << 8)                                 /**< ASCII "G"(0x47) for "Gas" */
-#define MSG_OPCODE_TEMP                 (0x54 << 8)                                 /**< ASCII "T"(0x54) for "Temperature" */
-#define MSG_OPCODE_SWITCH_ON            (0x50)                                      /**< ASCII "0"(0x4F) + (1) for "ON" */
-#define MSG_OPCODE_SWITCH_OFF           (0x4F)                                      /**< ASCII "0"(0x4F) + (0) for "OFF" */
+#define MSG_OPCODE_FLAME                (0x46 << 8)                               /**< ASCII "F"(0x46) for "Fire" */
+#define MSG_OPCODE_GAS                  (0x47 << 8)                               /**< ASCII "G"(0x47) for "Gas" */
+#define MSG_OPCODE_TEMP                 (0x54 << 8)                               /**< ASCII "T"(0x54) for "Temperature" */
+#define MSG_OPCODE_SWITCH_ON            (0x2BD)                                   /**< ASCII "0"(0x4F) + "1" for "ON"  (equivalent 701(DEC)) */
+#define MSG_OPCODE_SWITCH_OFF           (0x2BC)                                   /**< ASCII "0"(0x4F) + "0" for "OFF" (equivalent 700(DEC))*/
 
 
 
@@ -257,7 +257,7 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
               p_meta->src.value, p_in->present_byte);
 
       /* TODO FIRE and GAS sensor ----> THONG will do this */
-      /* Just for testing receive on onff msg from server*/
+      /* Just for testing receive ON/OFF msg from server --> Set LED on PIN 2 */
       if (p_in->present_byte == MSG_OPCODE_SWITCH_ON)
       {
           nrf_gpio_cfg_output(LED_PIN);
@@ -268,29 +268,6 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
           nrf_gpio_cfg_output(LED_PIN);
           nrf_gpio_pin_clear(LED_PIN);
       }
-//    if (p_in->remaining_time_ms > 0)
-//    {
-//        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d, Remaining Time: %d ms\n",
-//              p_meta->src.value, p_in->present_byte, p_in->remaining_time_ms);
-//    }
-//    else
-//    {
-//        __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Server: 0x%04x, Message: %d\n",
-//              p_meta->src.value, p_in->present_byte);
-//
-//        /* TODO FIRE and GAS sensor ----> THONG will do this */
-//        /* Just for testing receive on onff msg from server*/
-//        if (p_in->present_byte == MSG_OPCODE_SWITCH_ON)
-//        {
-//            nrf_gpio_cfg_output(LED_PIN);
-//            nrf_gpio_pin_set(LED_PIN);
-//        }
-//        if (p_in->present_byte == MSG_OPCODE_SWITCH_OFF)
-//        {
-//            nrf_gpio_cfg_output(LED_PIN);
-//            nrf_gpio_pin_clear(LED_PIN);
-//        }
-//    }
 }
 
 static void node_reset(void)
@@ -310,16 +287,68 @@ static void config_server_evt_cb(const config_server_evt_t * p_evt)
 }
 static void input_event_handler(uint32_t input_number)
 {
-    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Input %u received\n", input_number);
+    uint32_t status = NRF_SUCCESS;
+    generic_byte_set_params_t set_params;
+    model_transition_t transition_params;
+    static uint8_t tid = 0;
     switch(input_number)
     {
         case 0:
-            // updatre received data
-             hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Flame detected!!!\n");
+            hal_led_pin_set(CLIENT_LED_0, !hal_led_pin_get(CLIENT_LED_0));
+
+            /* Sending TWO BYTES: FLAME_OPCODE|VALUE */
+            set_params.byte = ((uint16_t)(MSG_OPCODE_FLAME)) | ((uint16_t)(1));
+            set_params.tid = tid++;
+            transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
+            transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
+
+            status = generic_byte_client_set(&m_clients[2], &set_params, &transition_params);
+
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "%d Flame detected!!!\n", set_params.byte);
             break;
         case 1:
-            // update received data
-            hal_led_pin_set(CLIENT_LED_1, !hal_led_pin_get(CLIENT_LED_1));
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Gas detected!!!\n");
+            hal_led_pin_set(CLIENT_LED_2, !hal_led_pin_get(CLIENT_LED_2));
+
+            /* Sending TWO BYTES: GAS_OPCODE|VALUE */
+            set_params.byte = ((uint16_t)(MSG_OPCODE_GAS)) | ((uint16_t)(1));
+            set_params.tid = tid++;
+            transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
+            transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
+
+            status = generic_byte_client_set(&m_clients[3], &set_params, &transition_params);
+
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "%d Gas detected!!!\n", set_params.byte);
+            break;
+    }
+
+    switch (status)
+    {
+        case NRF_SUCCESS:
+            break;
+
+        case NRF_ERROR_NO_MEM:
+        case NRF_ERROR_BUSY:
+        case NRF_ERROR_INVALID_STATE:
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Client cannot send\n");
+            hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
+            hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+            break;
+
+        case NRF_ERROR_INVALID_PARAM:
+            /* Publication not enabled for this client. One (or more) of the following is wrong:
+             * - An application key is missing, or there is no application key bound to the model
+             * - The client does not have its publication state set
+             *
+             * It is the provisioner that adds an application key, binds it to the model and sets
+             * the model's publication state.
+             */
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Publication not configured for client\n");
+            break;
+
+        default:
+            ERROR_CHECK(status);
             break;
     }
 }
@@ -518,8 +547,8 @@ static void initialize(void)
     ERROR_CHECK(app_timer_init());
     hal_leds_init();
 
-    ERROR_CHECK(hal_buttons_init(button_event_handler));
-    //ERROR_CHECK(hal_inputs_init(input_event_handler));
+    //ERROR_CHECK(hal_buttons_init(button_event_handler));
+    ERROR_CHECK(hal_inputs_init(input_event_handler));
     uint32_t err_code = nrf_sdh_enable_request();
     APP_ERROR_CHECK(err_code);
 #if defined S140 // todo remove that after S140 priority fixing
