@@ -50,230 +50,6 @@
 // <h> nRF_Drivers 
 
 //==========================================================
-// <e> CLOCK_ENABLED - nrf_drv_clock - CLOCK peripheral driver - legacy layer
-//==========================================================
-#ifndef CLOCK_ENABLED
-#define CLOCK_ENABLED 1
-#endif
-// <o> CLOCK_CONFIG_LF_SRC  - LF Clock Source
- 
-// <0=> RC 
-// <1=> XTAL 
-// <2=> Synth 
-
-#ifndef CLOCK_CONFIG_LF_SRC
-#define CLOCK_CONFIG_LF_SRC 1
-#endif
-
-// <o> CLOCK_CONFIG_IRQ_PRIORITY  - Interrupt priority
- 
-
-// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
-// <0=> 0 (highest) 
-// <1=> 1 
-// <2=> 2 
-// <3=> 3 
-// <4=> 4 
-// <5=> 5 
-// <6=> 6 
-// <7=> 7 
-
-#ifndef CLOCK_CONFIG_IRQ_PRIORITY
-#define CLOCK_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// </e>
-
-// <e> GPIOTE_ENABLED - nrf_drv_gpiote - GPIOTE peripheral driver - legacy layer
-//==========================================================
-#ifndef GPIOTE_ENABLED
-#define GPIOTE_ENABLED 1
-#endif
-// <o> GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS - Number of lower power input pins 
-#ifndef GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS
-#define GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS 4
-#endif
-
-// <o> GPIOTE_CONFIG_IRQ_PRIORITY  - Interrupt priority
- 
-
-// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
-// <0=> 0 (highest) 
-// <1=> 1 
-// <2=> 2 
-// <3=> 3 
-// <4=> 4 
-// <5=> 5 
-// <6=> 6 
-// <7=> 7 
-
-#ifndef GPIOTE_CONFIG_IRQ_PRIORITY
-#define GPIOTE_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// </e>
-
-// <e> NRFX_CLOCK_ENABLED - nrfx_clock - CLOCK peripheral driver
-//==========================================================
-#ifndef NRFX_CLOCK_ENABLED
-#define NRFX_CLOCK_ENABLED 1
-#endif
-// <o> NRFX_CLOCK_CONFIG_LF_SRC  - LF Clock Source
- 
-// <0=> RC 
-// <1=> XTAL 
-// <2=> Synth 
-
-#ifndef NRFX_CLOCK_CONFIG_LF_SRC
-#define NRFX_CLOCK_CONFIG_LF_SRC 1
-#endif
-
-// <o> NRFX_CLOCK_CONFIG_IRQ_PRIORITY  - Interrupt priority
- 
-// <0=> 0 (highest) 
-// <1=> 1 
-// <2=> 2 
-// <3=> 3 
-// <4=> 4 
-// <5=> 5 
-// <6=> 6 
-// <7=> 7 
-
-#ifndef NRFX_CLOCK_CONFIG_IRQ_PRIORITY
-#define NRFX_CLOCK_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// <e> NRFX_CLOCK_CONFIG_LOG_ENABLED - Enables logging in the module.
-//==========================================================
-#ifndef NRFX_CLOCK_CONFIG_LOG_ENABLED
-#define NRFX_CLOCK_CONFIG_LOG_ENABLED 0
-#endif
-// <o> NRFX_CLOCK_CONFIG_LOG_LEVEL  - Default Severity level
- 
-// <0=> Off 
-// <1=> Error 
-// <2=> Warning 
-// <3=> Info 
-// <4=> Debug 
-
-#ifndef NRFX_CLOCK_CONFIG_LOG_LEVEL
-#define NRFX_CLOCK_CONFIG_LOG_LEVEL 3
-#endif
-
-// <o> NRFX_CLOCK_CONFIG_INFO_COLOR  - ANSI escape code prefix.
- 
-// <0=> Default 
-// <1=> Black 
-// <2=> Red 
-// <3=> Green 
-// <4=> Yellow 
-// <5=> Blue 
-// <6=> Magenta 
-// <7=> Cyan 
-// <8=> White 
-
-#ifndef NRFX_CLOCK_CONFIG_INFO_COLOR
-#define NRFX_CLOCK_CONFIG_INFO_COLOR 0
-#endif
-
-// <o> NRFX_CLOCK_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
- 
-// <0=> Default 
-// <1=> Black 
-// <2=> Red 
-// <3=> Green 
-// <4=> Yellow 
-// <5=> Blue 
-// <6=> Magenta 
-// <7=> Cyan 
-// <8=> White 
-
-#ifndef NRFX_CLOCK_CONFIG_DEBUG_COLOR
-#define NRFX_CLOCK_CONFIG_DEBUG_COLOR 0
-#endif
-
-// </e>
-
-// </e>
-
-// <e> NRFX_GPIOTE_ENABLED - nrfx_gpiote - GPIOTE peripheral driver
-//==========================================================
-#ifndef NRFX_GPIOTE_ENABLED
-#define NRFX_GPIOTE_ENABLED 1
-#endif
-// <o> NRFX_GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS - Number of lower power input pins 
-#ifndef NRFX_GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS
-#define NRFX_GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS 1
-#endif
-
-// <o> NRFX_GPIOTE_CONFIG_IRQ_PRIORITY  - Interrupt priority
- 
-// <0=> 0 (highest) 
-// <1=> 1 
-// <2=> 2 
-// <3=> 3 
-// <4=> 4 
-// <5=> 5 
-// <6=> 6 
-// <7=> 7 
-
-#ifndef NRFX_GPIOTE_CONFIG_IRQ_PRIORITY
-#define NRFX_GPIOTE_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// <e> NRFX_GPIOTE_CONFIG_LOG_ENABLED - Enables logging in the module.
-//==========================================================
-#ifndef NRFX_GPIOTE_CONFIG_LOG_ENABLED
-#define NRFX_GPIOTE_CONFIG_LOG_ENABLED 0
-#endif
-// <o> NRFX_GPIOTE_CONFIG_LOG_LEVEL  - Default Severity level
- 
-// <0=> Off 
-// <1=> Error 
-// <2=> Warning 
-// <3=> Info 
-// <4=> Debug 
-
-#ifndef NRFX_GPIOTE_CONFIG_LOG_LEVEL
-#define NRFX_GPIOTE_CONFIG_LOG_LEVEL 3
-#endif
-
-// <o> NRFX_GPIOTE_CONFIG_INFO_COLOR  - ANSI escape code prefix.
- 
-// <0=> Default 
-// <1=> Black 
-// <2=> Red 
-// <3=> Green 
-// <4=> Yellow 
-// <5=> Blue 
-// <6=> Magenta 
-// <7=> Cyan 
-// <8=> White 
-
-#ifndef NRFX_GPIOTE_CONFIG_INFO_COLOR
-#define NRFX_GPIOTE_CONFIG_INFO_COLOR 0
-#endif
-
-// <o> NRFX_GPIOTE_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
- 
-// <0=> Default 
-// <1=> Black 
-// <2=> Red 
-// <3=> Green 
-// <4=> Yellow 
-// <5=> Blue 
-// <6=> Magenta 
-// <7=> Cyan 
-// <8=> White 
-
-#ifndef NRFX_GPIOTE_CONFIG_DEBUG_COLOR
-#define NRFX_GPIOTE_CONFIG_DEBUG_COLOR 0
-#endif
-
-// </e>
-
-// </e>
-
 // <e> NRFX_PRS_ENABLED - nrfx_prs - Peripheral Resource Sharing module
 //==========================================================
 #ifndef NRFX_PRS_ENABLED
@@ -361,227 +137,6 @@
 
 #ifndef NRFX_PRS_CONFIG_DEBUG_COLOR
 #define NRFX_PRS_CONFIG_DEBUG_COLOR 0
-#endif
-
-// </e>
-
-// </e>
-
-// <e> NRFX_TWIM_ENABLED - nrfx_twim - TWIM peripheral driver
-//==========================================================
-#ifndef NRFX_TWIM_ENABLED
-#define NRFX_TWIM_ENABLED 1
-#endif
-// <q> NRFX_TWIM0_ENABLED  - Enable TWIM0 instance
- 
-
-#ifndef NRFX_TWIM0_ENABLED
-#define NRFX_TWIM0_ENABLED 0
-#endif
-
-// <q> NRFX_TWIM1_ENABLED  - Enable TWIM1 instance
- 
-
-#ifndef NRFX_TWIM1_ENABLED
-#define NRFX_TWIM1_ENABLED 0
-#endif
-
-// <o> NRFX_TWIM_DEFAULT_CONFIG_FREQUENCY  - Frequency
- 
-// <26738688=> 100k 
-// <67108864=> 250k 
-// <104857600=> 400k 
-
-#ifndef NRFX_TWIM_DEFAULT_CONFIG_FREQUENCY
-#define NRFX_TWIM_DEFAULT_CONFIG_FREQUENCY 26738688
-#endif
-
-// <q> NRFX_TWIM_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
- 
-
-#ifndef NRFX_TWIM_DEFAULT_CONFIG_HOLD_BUS_UNINIT
-#define NRFX_TWIM_DEFAULT_CONFIG_HOLD_BUS_UNINIT 0
-#endif
-
-// <o> NRFX_TWIM_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
- 
-// <0=> 0 (highest) 
-// <1=> 1 
-// <2=> 2 
-// <3=> 3 
-// <4=> 4 
-// <5=> 5 
-// <6=> 6 
-// <7=> 7 
-
-#ifndef NRFX_TWIM_DEFAULT_CONFIG_IRQ_PRIORITY
-#define NRFX_TWIM_DEFAULT_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// <e> NRFX_TWIM_CONFIG_LOG_ENABLED - Enables logging in the module.
-//==========================================================
-#ifndef NRFX_TWIM_CONFIG_LOG_ENABLED
-#define NRFX_TWIM_CONFIG_LOG_ENABLED 0
-#endif
-// <o> NRFX_TWIM_CONFIG_LOG_LEVEL  - Default Severity level
- 
-// <0=> Off 
-// <1=> Error 
-// <2=> Warning 
-// <3=> Info 
-// <4=> Debug 
-
-#ifndef NRFX_TWIM_CONFIG_LOG_LEVEL
-#define NRFX_TWIM_CONFIG_LOG_LEVEL 3
-#endif
-
-// <o> NRFX_TWIM_CONFIG_INFO_COLOR  - ANSI escape code prefix.
- 
-// <0=> Default 
-// <1=> Black 
-// <2=> Red 
-// <3=> Green 
-// <4=> Yellow 
-// <5=> Blue 
-// <6=> Magenta 
-// <7=> Cyan 
-// <8=> White 
-
-#ifndef NRFX_TWIM_CONFIG_INFO_COLOR
-#define NRFX_TWIM_CONFIG_INFO_COLOR 0
-#endif
-
-// <o> NRFX_TWIM_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
- 
-// <0=> Default 
-// <1=> Black 
-// <2=> Red 
-// <3=> Green 
-// <4=> Yellow 
-// <5=> Blue 
-// <6=> Magenta 
-// <7=> Cyan 
-// <8=> White 
-
-#ifndef NRFX_TWIM_CONFIG_DEBUG_COLOR
-#define NRFX_TWIM_CONFIG_DEBUG_COLOR 0
-#endif
-
-// </e>
-
-// <q> NRFX_TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED  - Enables nRF52 anomaly 109 workaround for TWIM.
- 
-
-// <i> The workaround uses interrupts to wake up the CPU by catching
-// <i> the start event of zero-frequency transmission, clear the 
-// <i> peripheral, set desired frequency, start the peripheral, and
-// <i> the proper transmission. See more in the Errata document or
-// <i> Anomaly 109 Addendum located at https://infocenter.nordicsemi.com/
-
-#ifndef NRFX_TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED
-#define NRFX_TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED 0
-#endif
-
-// </e>
-
-// <e> NRFX_TWI_ENABLED - nrfx_twi - TWI peripheral driver
-//==========================================================
-#ifndef NRFX_TWI_ENABLED
-#define NRFX_TWI_ENABLED 1
-#endif
-// <q> NRFX_TWI0_ENABLED  - Enable TWI0 instance
- 
-
-#ifndef NRFX_TWI0_ENABLED
-#define NRFX_TWI0_ENABLED 0
-#endif
-
-// <q> NRFX_TWI1_ENABLED  - Enable TWI1 instance
- 
-
-#ifndef NRFX_TWI1_ENABLED
-#define NRFX_TWI1_ENABLED 0
-#endif
-
-// <o> NRFX_TWI_DEFAULT_CONFIG_FREQUENCY  - Frequency
- 
-// <26738688=> 100k 
-// <67108864=> 250k 
-// <104857600=> 400k 
-
-#ifndef NRFX_TWI_DEFAULT_CONFIG_FREQUENCY
-#define NRFX_TWI_DEFAULT_CONFIG_FREQUENCY 26738688
-#endif
-
-// <q> NRFX_TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
- 
-
-#ifndef NRFX_TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT
-#define NRFX_TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT 0
-#endif
-
-// <o> NRFX_TWI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
- 
-// <0=> 0 (highest) 
-// <1=> 1 
-// <2=> 2 
-// <3=> 3 
-// <4=> 4 
-// <5=> 5 
-// <6=> 6 
-// <7=> 7 
-
-#ifndef NRFX_TWI_DEFAULT_CONFIG_IRQ_PRIORITY
-#define NRFX_TWI_DEFAULT_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// <e> NRFX_TWI_CONFIG_LOG_ENABLED - Enables logging in the module.
-//==========================================================
-#ifndef NRFX_TWI_CONFIG_LOG_ENABLED
-#define NRFX_TWI_CONFIG_LOG_ENABLED 0
-#endif
-// <o> NRFX_TWI_CONFIG_LOG_LEVEL  - Default Severity level
- 
-// <0=> Off 
-// <1=> Error 
-// <2=> Warning 
-// <3=> Info 
-// <4=> Debug 
-
-#ifndef NRFX_TWI_CONFIG_LOG_LEVEL
-#define NRFX_TWI_CONFIG_LOG_LEVEL 3
-#endif
-
-// <o> NRFX_TWI_CONFIG_INFO_COLOR  - ANSI escape code prefix.
- 
-// <0=> Default 
-// <1=> Black 
-// <2=> Red 
-// <3=> Green 
-// <4=> Yellow 
-// <5=> Blue 
-// <6=> Magenta 
-// <7=> Cyan 
-// <8=> White 
-
-#ifndef NRFX_TWI_CONFIG_INFO_COLOR
-#define NRFX_TWI_CONFIG_INFO_COLOR 0
-#endif
-
-// <o> NRFX_TWI_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
- 
-// <0=> Default 
-// <1=> Black 
-// <2=> Red 
-// <3=> Green 
-// <4=> Yellow 
-// <5=> Blue 
-// <6=> Magenta 
-// <7=> Cyan 
-// <8=> White 
-
-#ifndef NRFX_TWI_CONFIG_DEBUG_COLOR
-#define NRFX_TWI_CONFIG_DEBUG_COLOR 0
 #endif
 
 // </e>
@@ -830,95 +385,6 @@
 
 // </e>
 
-// <e> TWI_ENABLED - nrf_drv_twi - TWI/TWIM peripheral driver - legacy layer
-//==========================================================
-#ifndef TWI_ENABLED
-#define TWI_ENABLED 1
-#endif
-// <o> TWI_DEFAULT_CONFIG_FREQUENCY  - Frequency
- 
-// <26738688=> 100k 
-// <67108864=> 250k 
-// <104857600=> 400k 
-
-#ifndef TWI_DEFAULT_CONFIG_FREQUENCY
-#define TWI_DEFAULT_CONFIG_FREQUENCY 26738688
-#endif
-
-// <q> TWI_DEFAULT_CONFIG_CLR_BUS_INIT  - Enables bus clearing procedure during init
- 
-
-#ifndef TWI_DEFAULT_CONFIG_CLR_BUS_INIT
-#define TWI_DEFAULT_CONFIG_CLR_BUS_INIT 0
-#endif
-
-// <q> TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
- 
-
-#ifndef TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT
-#define TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT 0
-#endif
-
-// <o> TWI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
- 
-
-// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
-// <0=> 0 (highest) 
-// <1=> 1 
-// <2=> 2 
-// <3=> 3 
-// <4=> 4 
-// <5=> 5 
-// <6=> 6 
-// <7=> 7 
-
-#ifndef TWI_DEFAULT_CONFIG_IRQ_PRIORITY
-#define TWI_DEFAULT_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// <e> TWI0_ENABLED - Enable TWI0 instance
-//==========================================================
-#ifndef TWI0_ENABLED
-#define TWI0_ENABLED 1
-#endif
-// <q> TWI0_USE_EASY_DMA  - Use EasyDMA (if present)
- 
-
-#ifndef TWI0_USE_EASY_DMA
-#define TWI0_USE_EASY_DMA 0
-#endif
-
-// </e>
-
-// <e> TWI1_ENABLED - Enable TWI1 instance
-//==========================================================
-#ifndef TWI1_ENABLED
-#define TWI1_ENABLED 0
-#endif
-// <q> TWI1_USE_EASY_DMA  - Use EasyDMA (if present)
- 
-
-#ifndef TWI1_USE_EASY_DMA
-#define TWI1_USE_EASY_DMA 0
-#endif
-
-// </e>
-
-// <q> TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED  - Enables nRF52 anomaly 109 workaround for TWIM.
- 
-
-// <i> The workaround uses interrupts to wake up the CPU by catching
-// <i> the start event of zero-frequency transmission, clear the 
-// <i> peripheral, set desired frequency, start the peripheral, and
-// <i> the proper transmission. See more in the Errata document or
-// <i> Anomaly 109 Addendum located at https://infocenter.nordicsemi.com/
-
-#ifndef TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED
-#define TWIM_NRF52_ANOMALY_109_WORKAROUND_ENABLED 0
-#endif
-
-// </e>
-
 // <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver - legacy layer
 //==========================================================
 #ifndef UART_ENABLED
@@ -1018,115 +484,32 @@
 // <h> nRF_Libraries 
 
 //==========================================================
-// <e> APP_SCHEDULER_ENABLED - app_scheduler - Events scheduler
+// <q> APP_FIFO_ENABLED  - app_fifo - Software FIFO implementation
+ 
+
+#ifndef APP_FIFO_ENABLED
+#define APP_FIFO_ENABLED 1
+#endif
+
+// <e> APP_UART_ENABLED - app_uart - UART driver
 //==========================================================
-#ifndef APP_SCHEDULER_ENABLED
-#define APP_SCHEDULER_ENABLED 1
+#ifndef APP_UART_ENABLED
+#define APP_UART_ENABLED 1
 #endif
-// <q> APP_SCHEDULER_WITH_PAUSE  - Enabling pause feature
+// <o> APP_UART_DRIVER_INSTANCE  - UART instance used
  
+// <0=> 0 
 
-#ifndef APP_SCHEDULER_WITH_PAUSE
-#define APP_SCHEDULER_WITH_PAUSE 0
+#ifndef APP_UART_DRIVER_INSTANCE
+#define APP_UART_DRIVER_INSTANCE 0
 #endif
-
-// <q> APP_SCHEDULER_WITH_PROFILER  - Enabling scheduler profiling
- 
-
-#ifndef APP_SCHEDULER_WITH_PROFILER
-#define APP_SCHEDULER_WITH_PROFILER 0
-#endif
-
-// </e>
-
-// <e> APP_TIMER_ENABLED - app_timer - Application timer functionality
-//==========================================================
-#ifndef APP_TIMER_ENABLED
-#define APP_TIMER_ENABLED 1
-#endif
-// <o> APP_TIMER_CONFIG_RTC_FREQUENCY  - Configure RTC prescaler.
- 
-// <0=> 32768 Hz 
-// <1=> 16384 Hz 
-// <3=> 8192 Hz 
-// <7=> 4096 Hz 
-// <15=> 2048 Hz 
-// <31=> 1024 Hz 
-
-#ifndef APP_TIMER_CONFIG_RTC_FREQUENCY
-#define APP_TIMER_CONFIG_RTC_FREQUENCY 0
-#endif
-
-// <o> APP_TIMER_CONFIG_IRQ_PRIORITY  - Interrupt priority
- 
-
-// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
-// <0=> 0 (highest) 
-// <1=> 1 
-// <2=> 2 
-// <3=> 3 
-// <4=> 4 
-// <5=> 5 
-// <6=> 6 
-// <7=> 7 
-
-#ifndef APP_TIMER_CONFIG_IRQ_PRIORITY
-#define APP_TIMER_CONFIG_IRQ_PRIORITY 7
-#endif
-
-// <o> APP_TIMER_CONFIG_OP_QUEUE_SIZE - Capacity of timer requests queue. 
-// <i> Size of the queue depends on how many timers are used
-// <i> in the system, how often timers are started and overall
-// <i> system latency. If queue size is too small app_timer calls
-// <i> will fail.
-
-#ifndef APP_TIMER_CONFIG_OP_QUEUE_SIZE
-#define APP_TIMER_CONFIG_OP_QUEUE_SIZE 10
-#endif
-
-// <q> APP_TIMER_CONFIG_USE_SCHEDULER  - Enable scheduling app_timer events to app_scheduler
- 
-
-#ifndef APP_TIMER_CONFIG_USE_SCHEDULER
-#define APP_TIMER_CONFIG_USE_SCHEDULER 0
-#endif
-
-// <q> APP_TIMER_KEEPS_RTC_ACTIVE  - Enable RTC always on
- 
-
-// <i> If option is enabled RTC is kept running even if there is no active timers.
-// <i> This option can be used when app_timer is used for timestamping.
-
-#ifndef APP_TIMER_KEEPS_RTC_ACTIVE
-#define APP_TIMER_KEEPS_RTC_ACTIVE 0
-#endif
-
-// <h> App Timer Legacy configuration - Legacy configuration.
-
-//==========================================================
-// <q> APP_TIMER_WITH_PROFILER  - Enable app_timer profiling
- 
-
-#ifndef APP_TIMER_WITH_PROFILER
-#define APP_TIMER_WITH_PROFILER 0
-#endif
-
-// <q> APP_TIMER_CONFIG_SWI_NUMBER  - Configure SWI instance used.
- 
-
-#ifndef APP_TIMER_CONFIG_SWI_NUMBER
-#define APP_TIMER_CONFIG_SWI_NUMBER 0
-#endif
-
-// </h> 
-//==========================================================
 
 // </e>
 
 // <e> NRF_BALLOC_ENABLED - nrf_balloc - Block allocator module
 //==========================================================
 #ifndef NRF_BALLOC_ENABLED
-#define NRF_BALLOC_ENABLED 1
+#define NRF_BALLOC_ENABLED 0
 #endif
 // <e> NRF_BALLOC_CONFIG_DEBUG_ENABLED - Enables debug mode in the module.
 //==========================================================
@@ -1179,146 +562,11 @@
 
 // </e>
 
-// <q> NRF_FPRINTF_ENABLED  - nrf_fprintf - fprintf function.
- 
-
-#ifndef NRF_FPRINTF_ENABLED
-#define NRF_FPRINTF_ENABLED 1
-#endif
-
 // <q> NRF_MEMOBJ_ENABLED  - nrf_memobj - Linked memory allocator module
  
 
 #ifndef NRF_MEMOBJ_ENABLED
-#define NRF_MEMOBJ_ENABLED 1
-#endif
-
-// <e> NRF_PWR_MGMT_ENABLED - nrf_pwr_mgmt - Power management module
-//==========================================================
-#ifndef NRF_PWR_MGMT_ENABLED
-#define NRF_PWR_MGMT_ENABLED 1
-#endif
-// <e> NRF_PWR_MGMT_CONFIG_DEBUG_PIN_ENABLED - Enables pin debug in the module.
-
-// <i> Selected pin will be set when CPU is in sleep mode.
-//==========================================================
-#ifndef NRF_PWR_MGMT_CONFIG_DEBUG_PIN_ENABLED
-#define NRF_PWR_MGMT_CONFIG_DEBUG_PIN_ENABLED 0
-#endif
-// <o> NRF_PWR_MGMT_SLEEP_DEBUG_PIN  - Pin number
- 
-// <0=> 0 (P0.0) 
-// <1=> 1 (P0.1) 
-// <2=> 2 (P0.2) 
-// <3=> 3 (P0.3) 
-// <4=> 4 (P0.4) 
-// <5=> 5 (P0.5) 
-// <6=> 6 (P0.6) 
-// <7=> 7 (P0.7) 
-// <8=> 8 (P0.8) 
-// <9=> 9 (P0.9) 
-// <10=> 10 (P0.10) 
-// <11=> 11 (P0.11) 
-// <12=> 12 (P0.12) 
-// <13=> 13 (P0.13) 
-// <14=> 14 (P0.14) 
-// <15=> 15 (P0.15) 
-// <16=> 16 (P0.16) 
-// <17=> 17 (P0.17) 
-// <18=> 18 (P0.18) 
-// <19=> 19 (P0.19) 
-// <20=> 20 (P0.20) 
-// <21=> 21 (P0.21) 
-// <22=> 22 (P0.22) 
-// <23=> 23 (P0.23) 
-// <24=> 24 (P0.24) 
-// <25=> 25 (P0.25) 
-// <26=> 26 (P0.26) 
-// <27=> 27 (P0.27) 
-// <28=> 28 (P0.28) 
-// <29=> 29 (P0.29) 
-// <30=> 30 (P0.30) 
-// <31=> 31 (P0.31) 
-// <4294967295=> Not connected 
-
-#ifndef NRF_PWR_MGMT_SLEEP_DEBUG_PIN
-#define NRF_PWR_MGMT_SLEEP_DEBUG_PIN 31
-#endif
-
-// </e>
-
-// <q> NRF_PWR_MGMT_CONFIG_CPU_USAGE_MONITOR_ENABLED  - Enables CPU usage monitor.
- 
-
-// <i> Module will trace percentage of CPU usage in one second intervals.
-
-#ifndef NRF_PWR_MGMT_CONFIG_CPU_USAGE_MONITOR_ENABLED
-#define NRF_PWR_MGMT_CONFIG_CPU_USAGE_MONITOR_ENABLED 0
-#endif
-
-// <e> NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_ENABLED - Enable standby timeout.
-//==========================================================
-#ifndef NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_ENABLED
-#define NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_ENABLED 0
-#endif
-// <o> NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_S - Standby timeout (in seconds). 
-// <i> Shutdown procedure will begin no earlier than after this number of seconds.
-
-#ifndef NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_S
-#define NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_S 3
-#endif
-
-// </e>
-
-// <q> NRF_PWR_MGMT_CONFIG_FPU_SUPPORT_ENABLED  - Enables FPU event cleaning.
- 
-
-#ifndef NRF_PWR_MGMT_CONFIG_FPU_SUPPORT_ENABLED
-#define NRF_PWR_MGMT_CONFIG_FPU_SUPPORT_ENABLED 1
-#endif
-
-// <q> NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY  - Blocked shutdown procedure will be retried every second.
- 
-
-#ifndef NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY
-#define NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY 0
-#endif
-
-// <q> NRF_PWR_MGMT_CONFIG_USE_SCHEDULER  - Module will use @ref app_scheduler.
- 
-
-#ifndef NRF_PWR_MGMT_CONFIG_USE_SCHEDULER
-#define NRF_PWR_MGMT_CONFIG_USE_SCHEDULER 0
-#endif
-
-// <o> NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT - The number of priorities for module handlers. 
-// <i> The number of stages of the shutdown process.
-
-#ifndef NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT
-#define NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT 3
-#endif
-
-// </e>
-
-// <e> NRF_QUEUE_ENABLED - nrf_queue - Queue module
-//==========================================================
-#ifndef NRF_QUEUE_ENABLED
-#define NRF_QUEUE_ENABLED 1
-#endif
-// <q> NRF_QUEUE_CLI_CMDS  - Enable CLI commands specific to the module
- 
-
-#ifndef NRF_QUEUE_CLI_CMDS
-#define NRF_QUEUE_CLI_CMDS 0
-#endif
-
-// </e>
-
-// <q> NRF_SECTION_ITER_ENABLED  - nrf_section_iter - Section iterator
- 
-
-#ifndef NRF_SECTION_ITER_ENABLED
-#define NRF_SECTION_ITER_ENABLED 1
+#define NRF_MEMOBJ_ENABLED 0
 #endif
 
 // <q> NRF_STRERROR_ENABLED  - nrf_strerror - Library for converting error code to string.
@@ -1328,32 +576,12 @@
 #define NRF_STRERROR_ENABLED 1
 #endif
 
-// <q> NRF_TWI_MNGR_ENABLED  - nrf_twi_mngr - TWI transaction manager
+// <q> RETARGET_ENABLED  - retarget - Retargeting stdio functions
  
 
-#ifndef NRF_TWI_MNGR_ENABLED
-#define NRF_TWI_MNGR_ENABLED 1
+#ifndef RETARGET_ENABLED
+#define RETARGET_ENABLED 1
 #endif
-
-// <h> app_button - buttons handling module
-
-//==========================================================
-// <q> BUTTON_ENABLED  - Enables Button module
- 
-
-#ifndef BUTTON_ENABLED
-#define BUTTON_ENABLED 1
-#endif
-
-// <q> BUTTON_HIGH_ACCURACY_ENABLED  - Enables GPIOTE high accuracy for buttons
- 
-
-#ifndef BUTTON_HIGH_ACCURACY_ENABLED
-#define BUTTON_HIGH_ACCURACY_ENABLED 0
-#endif
-
-// </h> 
-//==========================================================
 
 // </h> 
 //==========================================================
@@ -1361,98 +589,13 @@
 // <h> nRF_Log 
 
 //==========================================================
-// <e> NRF_LOG_BACKEND_RTT_ENABLED - nrf_log_backend_rtt - Log RTT backend
-//==========================================================
-#ifndef NRF_LOG_BACKEND_RTT_ENABLED
-#define NRF_LOG_BACKEND_RTT_ENABLED 0
-#endif
-// <o> NRF_LOG_BACKEND_RTT_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings. 
-// <i> Size of the buffer is a trade-off between RAM usage and processing.
-// <i> if buffer is smaller then strings will often be fragmented.
-// <i> It is recommended to use size which will fit typical log and only the
-// <i> longer one will be fragmented.
-
-#ifndef NRF_LOG_BACKEND_RTT_TEMP_BUFFER_SIZE
-#define NRF_LOG_BACKEND_RTT_TEMP_BUFFER_SIZE 64
-#endif
-
-// <o> NRF_LOG_BACKEND_RTT_TX_RETRY_DELAY_MS - Period before retrying writing to RTT 
-#ifndef NRF_LOG_BACKEND_RTT_TX_RETRY_DELAY_MS
-#define NRF_LOG_BACKEND_RTT_TX_RETRY_DELAY_MS 1
-#endif
-
-// <o> NRF_LOG_BACKEND_RTT_TX_RETRY_CNT - Writing to RTT retries. 
-// <i> If RTT fails to accept any new data after retries
-// <i> module assumes that host is not active and on next
-// <i> request it will perform only one write attempt.
-// <i> On successful writing, module assumes that host is active
-// <i> and scheme with retry is applied again.
-
-#ifndef NRF_LOG_BACKEND_RTT_TX_RETRY_CNT
-#define NRF_LOG_BACKEND_RTT_TX_RETRY_CNT 3
-#endif
-
-// </e>
-
-// <e> NRF_LOG_BACKEND_UART_ENABLED - nrf_log_backend_uart - Log UART backend
-//==========================================================
-#ifndef NRF_LOG_BACKEND_UART_ENABLED
-#define NRF_LOG_BACKEND_UART_ENABLED 1
-#endif
-// <o> NRF_LOG_BACKEND_UART_TX_PIN - UART TX pin 
-#ifndef NRF_LOG_BACKEND_UART_TX_PIN
-#define NRF_LOG_BACKEND_UART_TX_PIN 6
-#endif
-
-// <o> NRF_LOG_BACKEND_UART_BAUDRATE  - Default Baudrate
- 
-// <323584=> 1200 baud 
-// <643072=> 2400 baud 
-// <1290240=> 4800 baud 
-// <2576384=> 9600 baud 
-// <3862528=> 14400 baud 
-// <5152768=> 19200 baud 
-// <7716864=> 28800 baud 
-// <10289152=> 38400 baud 
-// <15400960=> 57600 baud 
-// <20615168=> 76800 baud 
-// <30801920=> 115200 baud 
-// <61865984=> 230400 baud 
-// <67108864=> 250000 baud 
-// <121634816=> 460800 baud 
-// <251658240=> 921600 baud 
-// <268435456=> 1000000 baud 
-
-#ifndef NRF_LOG_BACKEND_UART_BAUDRATE
-#define NRF_LOG_BACKEND_UART_BAUDRATE 30801920
-#endif
-
-// <o> NRF_LOG_BACKEND_UART_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings. 
-// <i> Size of the buffer is a trade-off between RAM usage and processing.
-// <i> if buffer is smaller then strings will often be fragmented.
-// <i> It is recommended to use size which will fit typical log and only the
-// <i> longer one will be fragmented.
-
-#ifndef NRF_LOG_BACKEND_UART_TEMP_BUFFER_SIZE
-#define NRF_LOG_BACKEND_UART_TEMP_BUFFER_SIZE 64
-#endif
-
-// </e>
-
-// <q> NRF_LOG_STR_FORMATTER_TIMESTAMP_FORMAT_ENABLED  - nrf_log_str_formatter - Log string formatter
- 
-
-#ifndef NRF_LOG_STR_FORMATTER_TIMESTAMP_FORMAT_ENABLED
-#define NRF_LOG_STR_FORMATTER_TIMESTAMP_FORMAT_ENABLED 1
-#endif
-
 // <h> nrf_log - Logger
 
 //==========================================================
 // <e> NRF_LOG_ENABLED - Logging module for nRF5 SDK
 //==========================================================
 #ifndef NRF_LOG_ENABLED
-#define NRF_LOG_ENABLED 1
+#define NRF_LOG_ENABLED 0
 #endif
 // <e> NRF_LOG_USES_COLORS - If enabled then ANSI escape code for colors is prefixed to every string
 //==========================================================
@@ -3906,66 +3049,7 @@
 // </h> 
 //==========================================================
 
-// <h> nRF_Segger_RTT 
 
-//==========================================================
-// <h> segger_rtt - SEGGER RTT
-
-//==========================================================
-// <o> SEGGER_RTT_CONFIG_BUFFER_SIZE_UP - Size of upstream buffer. 
-// <i> Note that either @ref NRF_LOG_BACKEND_RTT_OUTPUT_BUFFER_SIZE
-// <i> or this value is actually used. It depends on which one is bigger.
-
-#ifndef SEGGER_RTT_CONFIG_BUFFER_SIZE_UP
-#define SEGGER_RTT_CONFIG_BUFFER_SIZE_UP 512
-#endif
-
-// <o> SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS - Size of upstream buffer. 
-#ifndef SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS
-#define SEGGER_RTT_CONFIG_MAX_NUM_UP_BUFFERS 2
-#endif
-
-// <o> SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN - Size of upstream buffer. 
-#ifndef SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN
-#define SEGGER_RTT_CONFIG_BUFFER_SIZE_DOWN 16
-#endif
-
-// <o> SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS - Size of upstream buffer. 
-#ifndef SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS
-#define SEGGER_RTT_CONFIG_MAX_NUM_DOWN_BUFFERS 2
-#endif
-
-// <o> SEGGER_RTT_CONFIG_DEFAULT_MODE  - RTT behavior if the buffer is full.
- 
-
-// <i> The following modes are supported:
-// <i> - SKIP  - Do not block, output nothing.
-// <i> - TRIM  - Do not block, output as much as fits.
-// <i> - BLOCK - Wait until there is space in the buffer.
-// <0=> SKIP 
-// <1=> TRIM 
-// <2=> BLOCK_IF_FIFO_FULL 
-
-#ifndef SEGGER_RTT_CONFIG_DEFAULT_MODE
-#define SEGGER_RTT_CONFIG_DEFAULT_MODE 0
-#endif
-
-// </h> 
-//==========================================================
-
-// </h> 
-//==========================================================
-
-// <<< end of configuration section >>>
-
-
-
-
-
-
-
-
-/*---------------------------------------------MESHES------------------------------------------------------------*/
 // <h> nRF_BLE
 
 //==========================================================
@@ -5111,6 +4195,46 @@
 #define NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS 0
 #endif
 
+// </h>
+//==========================================================
+
+// </h>
+//==========================================================
+
+// <h> nRF_Drivers
+
+//==========================================================
+// <e> CLOCK_ENABLED - nrf_drv_clock - CLOCK peripheral driver - legacy layer
+//==========================================================
+#ifndef CLOCK_ENABLED
+#define CLOCK_ENABLED 0
+#endif
+// <o> CLOCK_CONFIG_LF_SRC  - LF Clock Source
+
+// <0=> RC
+// <1=> XTAL
+// <2=> Synth
+
+#ifndef CLOCK_CONFIG_LF_SRC
+#define CLOCK_CONFIG_LF_SRC 1
+#endif
+
+// <o> CLOCK_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef CLOCK_CONFIG_IRQ_PRIORITY
+#define CLOCK_CONFIG_IRQ_PRIORITY 7
+#endif
 
 // </e>
 
@@ -5211,6 +4335,34 @@
 #define EGU_ENABLED 0
 #endif
 
+// <e> GPIOTE_ENABLED - nrf_drv_gpiote - GPIOTE peripheral driver - legacy layer
+//==========================================================
+#ifndef GPIOTE_ENABLED
+#define GPIOTE_ENABLED 0
+#endif
+// <o> GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS - Number of lower power input pins
+#ifndef GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS
+#define GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS 1
+#endif
+
+// <o> GPIOTE_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef GPIOTE_CONFIG_IRQ_PRIORITY
+#define GPIOTE_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// </e>
 
 // <e> I2S_ENABLED - nrf_drv_i2s - I2S peripheral driver - legacy layer
 //==========================================================
@@ -5487,6 +4639,90 @@
 #define LPCOMP_CONFIG_IRQ_PRIORITY 7
 #endif
 
+// </e>
+
+// <e> NRFX_CLOCK_ENABLED - nrfx_clock - CLOCK peripheral driver
+//==========================================================
+#ifndef NRFX_CLOCK_ENABLED
+#define NRFX_CLOCK_ENABLED 0
+#endif
+// <o> NRFX_CLOCK_CONFIG_LF_SRC  - LF Clock Source
+
+// <0=> RC
+// <1=> XTAL
+// <2=> Synth
+
+#ifndef NRFX_CLOCK_CONFIG_LF_SRC
+#define NRFX_CLOCK_CONFIG_LF_SRC 1
+#endif
+
+// <o> NRFX_CLOCK_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef NRFX_CLOCK_CONFIG_IRQ_PRIORITY
+#define NRFX_CLOCK_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// <e> NRFX_CLOCK_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRFX_CLOCK_CONFIG_LOG_ENABLED
+#define NRFX_CLOCK_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRFX_CLOCK_CONFIG_LOG_LEVEL  - Default Severity level
+
+// <0=> Off
+// <1=> Error
+// <2=> Warning
+// <3=> Info
+// <4=> Debug
+
+#ifndef NRFX_CLOCK_CONFIG_LOG_LEVEL
+#define NRFX_CLOCK_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRFX_CLOCK_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+
+// <0=> Default
+// <1=> Black
+// <2=> Red
+// <3=> Green
+// <4=> Yellow
+// <5=> Blue
+// <6=> Magenta
+// <7=> Cyan
+// <8=> White
+
+#ifndef NRFX_CLOCK_CONFIG_INFO_COLOR
+#define NRFX_CLOCK_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRFX_CLOCK_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+
+// <0=> Default
+// <1=> Black
+// <2=> Red
+// <3=> Green
+// <4=> Yellow
+// <5=> Blue
+// <6=> Magenta
+// <7=> Cyan
+// <8=> White
+
+#ifndef NRFX_CLOCK_CONFIG_DEBUG_COLOR
+#define NRFX_CLOCK_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// </e>
 
 // <e> NRFX_COMP_ENABLED - nrfx_comp - COMP peripheral driver
 //==========================================================
@@ -5623,6 +4859,87 @@
 #define NRFX_COMP_CONFIG_DEBUG_COLOR 0
 #endif
 
+// </e>
+
+// </e>
+
+// <e> NRFX_GPIOTE_ENABLED - nrfx_gpiote - GPIOTE peripheral driver
+//==========================================================
+#ifndef NRFX_GPIOTE_ENABLED
+#define NRFX_GPIOTE_ENABLED 0
+#endif
+// <o> NRFX_GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS - Number of lower power input pins
+#ifndef NRFX_GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS
+#define NRFX_GPIOTE_CONFIG_NUM_OF_LOW_POWER_EVENTS 1
+#endif
+
+// <o> NRFX_GPIOTE_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef NRFX_GPIOTE_CONFIG_IRQ_PRIORITY
+#define NRFX_GPIOTE_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// <e> NRFX_GPIOTE_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRFX_GPIOTE_CONFIG_LOG_ENABLED
+#define NRFX_GPIOTE_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRFX_GPIOTE_CONFIG_LOG_LEVEL  - Default Severity level
+
+// <0=> Off
+// <1=> Error
+// <2=> Warning
+// <3=> Info
+// <4=> Debug
+
+#ifndef NRFX_GPIOTE_CONFIG_LOG_LEVEL
+#define NRFX_GPIOTE_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRFX_GPIOTE_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+
+// <0=> Default
+// <1=> Black
+// <2=> Red
+// <3=> Green
+// <4=> Yellow
+// <5=> Blue
+// <6=> Magenta
+// <7=> Cyan
+// <8=> White
+
+#ifndef NRFX_GPIOTE_CONFIG_INFO_COLOR
+#define NRFX_GPIOTE_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRFX_GPIOTE_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+
+// <0=> Default
+// <1=> Black
+// <2=> Red
+// <3=> Green
+// <4=> Yellow
+// <5=> Blue
+// <6=> Magenta
+// <7=> Cyan
+// <8=> White
+
+#ifndef NRFX_GPIOTE_CONFIG_DEBUG_COLOR
+#define NRFX_GPIOTE_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// </e>
 
 // <e> NRFX_PDM_ENABLED - nrfx_pdm - PDM peripheral driver
 //==========================================================
@@ -6843,6 +6160,107 @@
 #define NRFX_TIMER_CONFIG_DEBUG_COLOR 0
 #endif
 
+// </e>
+
+// </e>
+
+// <e> NRFX_TWIM_ENABLED - nrfx_twim - TWIM peripheral driver
+//==========================================================
+#ifndef NRFX_TWIM_ENABLED
+#define NRFX_TWIM_ENABLED 0
+#endif
+// <q> NRFX_TWIM0_ENABLED  - Enable TWIM0 instance
+
+
+#ifndef NRFX_TWIM0_ENABLED
+#define NRFX_TWIM0_ENABLED 0
+#endif
+
+// <o> NRFX_TWIM_DEFAULT_CONFIG_FREQUENCY  - Frequency
+
+// <26738688=> 100k
+// <67108864=> 250k
+// <104857600=> 400k
+
+#ifndef NRFX_TWIM_DEFAULT_CONFIG_FREQUENCY
+#define NRFX_TWIM_DEFAULT_CONFIG_FREQUENCY 26738688
+#endif
+
+// <q> NRFX_TWIM_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
+
+
+#ifndef NRFX_TWIM_DEFAULT_CONFIG_HOLD_BUS_UNINIT
+#define NRFX_TWIM_DEFAULT_CONFIG_HOLD_BUS_UNINIT 0
+#endif
+
+// <o> NRFX_TWIM_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef NRFX_TWIM_DEFAULT_CONFIG_IRQ_PRIORITY
+#define NRFX_TWIM_DEFAULT_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// <e> NRFX_TWIM_CONFIG_LOG_ENABLED - Enables logging in the module.
+//==========================================================
+#ifndef NRFX_TWIM_CONFIG_LOG_ENABLED
+#define NRFX_TWIM_CONFIG_LOG_ENABLED 0
+#endif
+// <o> NRFX_TWIM_CONFIG_LOG_LEVEL  - Default Severity level
+
+// <0=> Off
+// <1=> Error
+// <2=> Warning
+// <3=> Info
+// <4=> Debug
+
+#ifndef NRFX_TWIM_CONFIG_LOG_LEVEL
+#define NRFX_TWIM_CONFIG_LOG_LEVEL 3
+#endif
+
+// <o> NRFX_TWIM_CONFIG_INFO_COLOR  - ANSI escape code prefix.
+
+// <0=> Default
+// <1=> Black
+// <2=> Red
+// <3=> Green
+// <4=> Yellow
+// <5=> Blue
+// <6=> Magenta
+// <7=> Cyan
+// <8=> White
+
+#ifndef NRFX_TWIM_CONFIG_INFO_COLOR
+#define NRFX_TWIM_CONFIG_INFO_COLOR 0
+#endif
+
+// <o> NRFX_TWIM_CONFIG_DEBUG_COLOR  - ANSI escape code prefix.
+
+// <0=> Default
+// <1=> Black
+// <2=> Red
+// <3=> Green
+// <4=> Yellow
+// <5=> Blue
+// <6=> Magenta
+// <7=> Cyan
+// <8=> White
+
+#ifndef NRFX_TWIM_CONFIG_DEBUG_COLOR
+#define NRFX_TWIM_CONFIG_DEBUG_COLOR 0
+#endif
+
+// </e>
+
+// </e>
+
 // <e> NRFX_TWIS_ENABLED - nrfx_twis - TWIS peripheral driver
 //==========================================================
 #ifndef NRFX_TWIS_ENABLED
@@ -7959,6 +7377,59 @@
 #define TWIS_DEFAULT_CONFIG_IRQ_PRIORITY 7
 #endif
 
+// </e>
+
+// <e> TWI_ENABLED - nrf_drv_twi - TWI/TWIM peripheral driver - legacy layer
+//==========================================================
+#ifndef TWI_ENABLED
+#define TWI_ENABLED 0
+#endif
+// <o> TWI_DEFAULT_CONFIG_FREQUENCY  - Frequency
+
+// <26738688=> 100k
+// <67108864=> 250k
+// <104857600=> 400k
+
+#ifndef TWI_DEFAULT_CONFIG_FREQUENCY
+#define TWI_DEFAULT_CONFIG_FREQUENCY 26738688
+#endif
+
+// <q> TWI_DEFAULT_CONFIG_CLR_BUS_INIT  - Enables bus clearing procedure during init
+
+
+#ifndef TWI_DEFAULT_CONFIG_CLR_BUS_INIT
+#define TWI_DEFAULT_CONFIG_CLR_BUS_INIT 0
+#endif
+
+// <q> TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT  - Enables bus holding after uninit
+
+
+#ifndef TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT
+#define TWI_DEFAULT_CONFIG_HOLD_BUS_UNINIT 0
+#endif
+
+// <o> TWI_DEFAULT_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef TWI_DEFAULT_CONFIG_IRQ_PRIORITY
+#define TWI_DEFAULT_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// <e> TWI0_ENABLED - Enable TWI0 instance
+//==========================================================
+#ifndef TWI0_ENABLED
+#define TWI0_ENABLED 0
+#endif
 
 // <e> USBD_ENABLED - nrf_drv_usbd - USB driver
 //==========================================================
@@ -8104,6 +7575,27 @@
 #define APP_PWM_ENABLED 0
 #endif
 
+// <e> APP_SCHEDULER_ENABLED - app_scheduler - Events scheduler
+//==========================================================
+#ifndef APP_SCHEDULER_ENABLED
+#define APP_SCHEDULER_ENABLED 0
+#endif
+// <q> APP_SCHEDULER_WITH_PAUSE  - Enabling pause feature
+
+
+#ifndef APP_SCHEDULER_WITH_PAUSE
+#define APP_SCHEDULER_WITH_PAUSE 0
+#endif
+
+// <q> APP_SCHEDULER_WITH_PROFILER  - Enabling scheduler profiling
+
+
+#ifndef APP_SCHEDULER_WITH_PROFILER
+#define APP_SCHEDULER_WITH_PROFILER 0
+#endif
+
+// </e>
+
 // <e> APP_SDCARD_ENABLED - app_sdcard - SD/MMC card support using SPI
 //==========================================================
 #ifndef APP_SDCARD_ENABLED
@@ -8146,6 +7638,87 @@
 #ifndef APP_SDCARD_FREQ_DATA
 #define APP_SDCARD_FREQ_DATA 1073741824
 #endif
+
+// <o> APP_TIMER_CONFIG_RTC_FREQUENCY  - Configure RTC prescaler.
+
+// <0=> 32768 Hz
+// <1=> 16384 Hz
+// <3=> 8192 Hz
+// <7=> 4096 Hz
+// <15=> 2048 Hz
+// <31=> 1024 Hz
+
+#ifndef APP_TIMER_CONFIG_RTC_FREQUENCY
+#define APP_TIMER_CONFIG_RTC_FREQUENCY 0
+#endif
+
+// <o> APP_TIMER_CONFIG_IRQ_PRIORITY  - Interrupt priority
+
+
+// <i> Priorities 0,2 (nRF51) and 0,1,4,5 (nRF52) are reserved for SoftDevice
+// <0=> 0 (highest)
+// <1=> 1
+// <2=> 2
+// <3=> 3
+// <4=> 4
+// <5=> 5
+// <6=> 6
+// <7=> 7
+
+#ifndef APP_TIMER_CONFIG_IRQ_PRIORITY
+#define APP_TIMER_CONFIG_IRQ_PRIORITY 7
+#endif
+
+// <o> APP_TIMER_CONFIG_OP_QUEUE_SIZE - Capacity of timer requests queue.
+// <i> Size of the queue depends on how many timers are used
+// <i> in the system, how often timers are started and overall
+// <i> system latency. If queue size is too small app_timer calls
+// <i> will fail.
+
+#ifndef APP_TIMER_CONFIG_OP_QUEUE_SIZE
+#define APP_TIMER_CONFIG_OP_QUEUE_SIZE 10
+#endif
+
+// <q> APP_TIMER_CONFIG_USE_SCHEDULER  - Enable scheduling app_timer events to app_scheduler
+
+
+#ifndef APP_TIMER_CONFIG_USE_SCHEDULER
+#define APP_TIMER_CONFIG_USE_SCHEDULER 0
+#endif
+
+// <q> APP_TIMER_KEEPS_RTC_ACTIVE  - Enable RTC always on
+
+
+// <i> If option is enabled RTC is kept running even if there is no active timers.
+// <i> This option can be used when app_timer is used for timestamping.
+
+#ifndef APP_TIMER_KEEPS_RTC_ACTIVE
+#define APP_TIMER_KEEPS_RTC_ACTIVE 0
+#endif
+
+// <h> App Timer Legacy configuration - Legacy configuration.
+
+//==========================================================
+// <q> APP_TIMER_WITH_PROFILER  - Enable app_timer profiling
+
+
+#ifndef APP_TIMER_WITH_PROFILER
+#define APP_TIMER_WITH_PROFILER 0
+#endif
+
+// <q> APP_TIMER_CONFIG_SWI_NUMBER  - Configure SWI instance used.
+
+
+#ifndef APP_TIMER_CONFIG_SWI_NUMBER
+#define APP_TIMER_CONFIG_SWI_NUMBER 0
+#endif
+
+// </h>
+//==========================================================
+
+// </e>
+
+// <q> APP_USBD_AUDIO_ENABLED  - app_usbd_audio - USB AUDIO class
 
 
 #ifndef APP_USBD_AUDIO_ENABLED
@@ -8850,6 +8423,16 @@
 #define MEASUREMENT_PERIOD 20
 #endif
 
+// </e>
+
+// </e>
+
+// <q> NRF_FPRINTF_ENABLED  - nrf_fprintf - fprintf function.
+
+
+#ifndef NRF_FPRINTF_ENABLED
+#define NRF_FPRINTF_ENABLED 1
+#endif
 
 // <e> NRF_FSTORAGE_ENABLED - nrf_fstorage - Flash abstraction library
 //==========================================================
@@ -8915,6 +8498,135 @@
 #define NRF_GFX_ENABLED 0
 #endif
 
+
+// <e> NRF_PWR_MGMT_ENABLED - nrf_pwr_mgmt - Power management module
+//==========================================================
+#ifndef NRF_PWR_MGMT_ENABLED
+#define NRF_PWR_MGMT_ENABLED 0
+#endif
+// <e> NRF_PWR_MGMT_CONFIG_DEBUG_PIN_ENABLED - Enables pin debug in the module.
+
+// <i> Selected pin will be set when CPU is in sleep mode.
+//==========================================================
+#ifndef NRF_PWR_MGMT_CONFIG_DEBUG_PIN_ENABLED
+#define NRF_PWR_MGMT_CONFIG_DEBUG_PIN_ENABLED 0
+#endif
+// <o> NRF_PWR_MGMT_SLEEP_DEBUG_PIN  - Pin number
+
+// <0=> 0 (P0.0)
+// <1=> 1 (P0.1)
+// <2=> 2 (P0.2)
+// <3=> 3 (P0.3)
+// <4=> 4 (P0.4)
+// <5=> 5 (P0.5)
+// <6=> 6 (P0.6)
+// <7=> 7 (P0.7)
+// <8=> 8 (P0.8)
+// <9=> 9 (P0.9)
+// <10=> 10 (P0.10)
+// <11=> 11 (P0.11)
+// <12=> 12 (P0.12)
+// <13=> 13 (P0.13)
+// <14=> 14 (P0.14)
+// <15=> 15 (P0.15)
+// <16=> 16 (P0.16)
+// <17=> 17 (P0.17)
+// <18=> 18 (P0.18)
+// <19=> 19 (P0.19)
+// <20=> 20 (P0.20)
+// <21=> 21 (P0.21)
+// <22=> 22 (P0.22)
+// <23=> 23 (P0.23)
+// <24=> 24 (P0.24)
+// <25=> 25 (P0.25)
+// <26=> 26 (P0.26)
+// <27=> 27 (P0.27)
+// <28=> 28 (P0.28)
+// <29=> 29 (P0.29)
+// <30=> 30 (P0.30)
+// <31=> 31 (P0.31)
+// <4294967295=> Not connected
+
+#ifndef NRF_PWR_MGMT_SLEEP_DEBUG_PIN
+#define NRF_PWR_MGMT_SLEEP_DEBUG_PIN 31
+#endif
+
+// </e>
+
+// <q> NRF_PWR_MGMT_CONFIG_CPU_USAGE_MONITOR_ENABLED  - Enables CPU usage monitor.
+
+
+// <i> Module will trace percentage of CPU usage in one second intervals.
+
+#ifndef NRF_PWR_MGMT_CONFIG_CPU_USAGE_MONITOR_ENABLED
+#define NRF_PWR_MGMT_CONFIG_CPU_USAGE_MONITOR_ENABLED 0
+#endif
+
+// <e> NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_ENABLED - Enable standby timeout.
+//==========================================================
+#ifndef NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_ENABLED
+#define NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_ENABLED 0
+#endif
+// <o> NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_S - Standby timeout (in seconds).
+// <i> Shutdown procedure will begin no earlier than after this number of seconds.
+
+#ifndef NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_S
+#define NRF_PWR_MGMT_CONFIG_STANDBY_TIMEOUT_S 3
+#endif
+
+// </e>
+
+// <q> NRF_PWR_MGMT_CONFIG_FPU_SUPPORT_ENABLED  - Enables FPU event cleaning.
+
+
+#ifndef NRF_PWR_MGMT_CONFIG_FPU_SUPPORT_ENABLED
+#define NRF_PWR_MGMT_CONFIG_FPU_SUPPORT_ENABLED 0
+#endif
+
+// <q> NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY  - Blocked shutdown procedure will be retried every second.
+
+
+#ifndef NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY
+#define NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY 0
+#endif
+
+// <q> NRF_PWR_MGMT_CONFIG_USE_SCHEDULER  - Module will use @ref app_scheduler.
+
+
+#ifndef NRF_PWR_MGMT_CONFIG_USE_SCHEDULER
+#define NRF_PWR_MGMT_CONFIG_USE_SCHEDULER 0
+#endif
+
+// <o> NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT - The number of priorities for module handlers.
+// <i> The number of stages of the shutdown process.
+
+#ifndef NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT
+#define NRF_PWR_MGMT_CONFIG_HANDLER_PRIORITY_COUNT 3
+#endif
+
+// </e>
+
+// <e> NRF_QUEUE_ENABLED - nrf_queue - Queue module
+//==========================================================
+#ifndef NRF_QUEUE_ENABLED
+#define NRF_QUEUE_ENABLED 0
+#endif
+// <q> NRF_QUEUE_CLI_CMDS  - Enable CLI commands specific to the module
+
+
+#ifndef NRF_QUEUE_CLI_CMDS
+#define NRF_QUEUE_CLI_CMDS 0
+#endif
+
+// </e>
+
+// <q> NRF_SECTION_ITER_ENABLED  - nrf_section_iter - Section iterator
+
+
+#ifndef NRF_SECTION_ITER_ENABLED
+#define NRF_SECTION_ITER_ENABLED 1
+#endif
+
 // <q> NRF_SORTLIST_ENABLED  - nrf_sortlist - Sorted list
 
 
@@ -8928,6 +8640,17 @@
 #ifndef NRF_SPI_MNGR_ENABLED
 #define NRF_SPI_MNGR_ENABLED 0
 #endif
+
+
+// <q> NRF_TWI_MNGR_ENABLED  - nrf_twi_mngr - TWI transaction manager
+
+
+#ifndef NRF_TWI_MNGR_ENABLED
+#define NRF_TWI_MNGR_ENABLED 0
+#endif
+
+// <q> SLIP_ENABLED  - slip - SLIP encoding and decoding
+
 
 #ifndef SLIP_ENABLED
 #define SLIP_ENABLED 0
@@ -8973,6 +8696,25 @@
 
 #ifndef TASK_MANAGER_CONFIG_STACK_GUARD
 #define TASK_MANAGER_CONFIG_STACK_GUARD 7
+#endif
+
+// </e>
+
+// <h> app_button - buttons handling module
+
+//==========================================================
+// <q> BUTTON_ENABLED  - Enables Button module
+
+
+#ifndef BUTTON_ENABLED
+#define BUTTON_ENABLED 0
+#endif
+
+// <q> BUTTON_HIGH_ACCURACY_ENABLED  - Enables GPIOTE high accuracy for buttons
+
+
+#ifndef BUTTON_HIGH_ACCURACY_ENABLED
+#define BUTTON_HIGH_ACCURACY_ENABLED 0
 #endif
 
 // </h>
@@ -9069,7 +8811,21 @@
 #define NRF_CLI_USES_TASK_MANAGER_ENABLED 0
 #endif
 
-// <i> Requested BLE GAP data length to be negotiated.
+// </h>
+//==========================================================
+
+// </h>
+//==========================================================
+
+// <h> nRF_Log
+
+//==========================================================
+// <q> NRF_LOG_STR_FORMATTER_TIMESTAMP_FORMAT_ENABLED  - nrf_log_str_formatter - Log string formatter
+
+
+#ifndef NRF_LOG_STR_FORMATTER_TIMESTAMP_FORMAT_ENABLED
+#define NRF_LOG_STR_FORMATTER_TIMESTAMP_FORMAT_ENABLED 1
+#endif
 
 #ifndef NRF_SDH_BLE_GAP_DATA_LENGTH
 #define NRF_SDH_BLE_GAP_DATA_LENGTH 27
@@ -9093,6 +8849,7 @@
 #ifndef NRF_SDH_BLE_GAP_EVENT_LENGTH
 #define NRF_SDH_BLE_GAP_EVENT_LENGTH 6
 #endif
+
 
 // <o> NRF_SDH_BLE_GATTS_ATTR_TAB_SIZE - Attribute Table size in bytes. The size must be a multiple of 4.
 #ifndef NRF_SDH_BLE_GATTS_ATTR_TAB_SIZE
@@ -9359,6 +9116,7 @@
 #define NFC_BLE_PAIR_LIB_BLE_OBSERVER_PRIO 1
 #endif
 
+
 // <o> NRF_BLE_BMS_BLE_OBSERVER_PRIO
 // <i> Priority with which BLE events are dispatched to the Bond Management Service.
 
@@ -9560,6 +9318,8 @@
 #define NRF_SDH_SOC_STACK_OBSERVER_PRIO 0
 #endif
 
+// <h> SoC Observers - Observers and priority levels
+
 //==========================================================
 // <o> NRF_SDH_SOC_OBSERVER_PRIO_LEVELS - Total number of priority levels for SoC observers.
 // <i> This setting configures the number of priority levels available for the SoC event handlers.
@@ -9600,6 +9360,17 @@
 #define POWER_CONFIG_SOC_OBSERVER_PRIO 0
 #endif
 
+// </h>
+//==========================================================
+
+// </h>
+//==========================================================
+
+
+// </e>
+
+// </h>
+//==========================================================
 
 // <<< end of configuration section >>>
 #endif //SDK_CONFIG_H

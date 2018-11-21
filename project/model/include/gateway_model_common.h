@@ -57,10 +57,10 @@
 #endif
 
 /** Number of active clients nodes. */
-#define CLIENT_NODE_COUNT            (4)
+#define CLIENT_NODE_COUNT            (2)
 
 /** Number of On-Off client models on the Switch Node */
-#define CLIENT_MODEL_INSTANCE_COUNT  (4)
+#define CLIENT_MODEL_INSTANCE_COUNT  (2)
 
 /** Number of group address being used in this example */
 #define GROUP_ADDR_COUNT             (2)
