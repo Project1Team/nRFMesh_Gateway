@@ -168,7 +168,8 @@ void uart_event_handle(app_uart_evt_t * p_event)
             
             do
             {
-                err_code = app_uart_put(cr);
+                //err_code = app_uart_put(cr);
+                
                 hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
                 hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
                 set_params.byte = cr;
@@ -296,11 +297,18 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Device: 0x%04x, Message: %d\n",
               p_meta->src.value, p_in->present_byte);
-    if (p_in->present_byte == 213)
+    int i;
+    uint16_t data = p_in->present_byte;
+    uint8_t start_byte = 0x01;
+    uint8_t end_byte = 0xFF;
+
+    app_uart_put(start_byte);
+    for(i = 0; i < 2; i++)
     {
-        hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-        hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+        app_uart_put((uint8_t)(data & 0x00FF));
+        data = data >> 8;
     }
+    app_uart_put(end_byte);
 }
 
 static void node_reset(void)
@@ -324,6 +332,10 @@ static void button_event_handler(uint32_t button_number)
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Button %u pressed\n", button_number);
 
     uint32_t status = NRF_SUCCESS;
+    uint16_t temperature_1;
+    uint16_t temperature_2;
+    uint8_t dataSend;
+    int i = 0;
     generic_byte_set_params_t set_params;
     model_transition_t transition_params;
     static uint8_t tid = 0;
@@ -332,7 +344,27 @@ static void button_event_handler(uint32_t button_number)
     {
         case 0:
             set_params.byte = 65535;
-            break;
+        break;
+
+        case 1:
+            temperature_1 = (uint16_t)(0x58 << 8) | (uint16_t)(32);
+            app_uart_put('a');
+            for(i = 0; i < 2; i++)
+            {
+              app_uart_put((uint8_t)temperature_1);
+              temperature_1 = temperature_1 >> 8;
+            }
+        break;
+
+        case 3:
+            temperature_2 = (0x58 << 8) | (uint16_t)(67);
+            app_uart_put('b');
+            for(i = 0; i < 2; i++)
+            {
+              app_uart_put((uint8_t)temperature_2);
+              temperature_2 = temperature_2 >> 8;
+            }
+        break;
     }
 
     set_params.tid = tid++;
