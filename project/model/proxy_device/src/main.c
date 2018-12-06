@@ -100,7 +100,6 @@
 //  of temperature samples]
 #define NUMBER_OF_SAMPLES               16
 
-#define LED_PIN                         (2)
 
 #define DEVICE_NAME                     "Mesh Device Node"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)         /**< Minimum acceptable connection interval. */
@@ -115,8 +114,27 @@
 #define MSG_OPCODE_FLAME                (0x46 << 8)                               /**< ASCII "F"(0x46) for "Fire" */
 #define MSG_OPCODE_GAS                  (0x47 << 8)                               /**< ASCII "G"(0x47) for "Gas" */
 #define MSG_OPCODE_TEMP                 (0x54 << 8)                               /**< ASCII "T"(0x54) for "Temperature" */
-#define MSG_OPCODE_SWITCH_ON            (0x2BD)                                   /**< ASCII "0"(0x4F) + "1" for "ON"  (equivalent 701(DEC)) */
-#define MSG_OPCODE_SWITCH_OFF           (0x2BC)                                   /**< ASCII "0"(0x4F) + "0" for "OFF" (equivalent 700(DEC))*/
+
+#define MSG_OPCODE_SWITCH_ON_A          (0x30A)                                   /**< ASCII "0"(0x30) + "A" for "ON-ALL"  */
+#define MSG_OPCODE_SWITCH_ON_1          (0x301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1"    */
+#define MSG_OPCODE_SWITCH_ON_2          (0x302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2"    */
+#define MSG_OPCODE_SWITCH_ON_3          (0x303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3"    */
+#define MSG_OPCODE_SWITCH_ON_4          (0x304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4"    */
+
+#define MSG_OPCODE_SWITCH_OFF_A         (0x31A)                                   /**< ASCII "1"(0x31) + "A" for "OFF-ALL" */
+#define MSG_OPCODE_SWITCH_OFF_1         (0x311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1"    */
+#define MSG_OPCODE_SWITCH_OFF_2         (0x312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2"    */
+#define MSG_OPCODE_SWITCH_OFF_3         (0x313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
+#define MSG_OPCODE_SWITCH_OFF_4         (0x314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
+
+#define SWITCH_PIN_1                    (2)
+#define SWITCH_PIN_2                    (3)
+#define SWITCH_PIN_3                    (4)
+#define SWITCH_PIN_4                    (5)
+
+#define BOARD_LED_ON                    (1)
+#define BOARD_LED_OFF                   (0)
+
 
 
 /*------------------------------------TWI-----------------------------------*/
@@ -173,24 +191,88 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t 
     /* Resolve the server instance here if required, this example uses only 1 instance. */
 
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Received MSG: %d\n", byte)
+    nrf_gpio_cfg_output(SWITCH_PIN_1);
+    nrf_gpio_cfg_output(SWITCH_PIN_2);
+    nrf_gpio_cfg_output(SWITCH_PIN_3);
+    nrf_gpio_cfg_output(SWITCH_PIN_4);
+    switch (byte)
+    {       
+        case MSG_OPCODE_SWITCH_ON_A:
+            nrf_gpio_pin_clear(SWITCH_PIN_1);
+            nrf_gpio_pin_clear(SWITCH_PIN_2);
+            nrf_gpio_pin_clear(SWITCH_PIN_3);
+            nrf_gpio_pin_clear(SWITCH_PIN_4);
 
-    /* TODO 4-RELAYS MODULE Configuration ----> THONG will do this */
-    /* Just for testing receive ON/OFF msg from gateway --> Set LED on PIN 2 */
-    if (byte == MSG_OPCODE_SWITCH_ON)
-    {
-        nrf_gpio_cfg_output(LED_PIN);
-        nrf_gpio_pin_set(LED_PIN);
-    }
-    if (byte == MSG_OPCODE_SWITCH_OFF)
-    {
-        nrf_gpio_cfg_output(LED_PIN);
-        nrf_gpio_pin_clear(LED_PIN);
-    }
-    
-    if (byte == 78)
-    {
-        hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
-        hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
+            hal_led_pin_set(BSP_LED_0, BOARD_LED_ON);
+            hal_led_pin_set(BSP_LED_1, BOARD_LED_ON);
+            hal_led_pin_set(BSP_LED_2, BOARD_LED_ON);
+            hal_led_pin_set(BSP_LED_3, BOARD_LED_ON);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_ON_1:
+            nrf_gpio_pin_clear(SWITCH_PIN_1);
+            hal_led_pin_set(BSP_LED_0, BOARD_LED_ON);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_ON_2:
+            nrf_gpio_pin_clear(SWITCH_PIN_2);
+            hal_led_pin_set(BSP_LED_1, BOARD_LED_ON);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_ON_3:
+            nrf_gpio_pin_clear(SWITCH_PIN_3);
+            hal_led_pin_set(BSP_LED_2, BOARD_LED_ON);
+
+            break;
+        
+        case MSG_OPCODE_SWITCH_ON_4:
+            nrf_gpio_pin_clear(SWITCH_PIN_4);
+            hal_led_pin_set(BSP_LED_3, BOARD_LED_ON);
+
+            break;
+        
+        case MSG_OPCODE_SWITCH_OFF_A:
+            nrf_gpio_pin_set(SWITCH_PIN_1);
+            nrf_gpio_pin_set(SWITCH_PIN_2);
+            nrf_gpio_pin_set(SWITCH_PIN_3);
+            nrf_gpio_pin_set(SWITCH_PIN_4);
+
+            hal_led_pin_set(BSP_LED_0, BOARD_LED_OFF);
+            hal_led_pin_set(BSP_LED_1, BOARD_LED_OFF);
+            hal_led_pin_set(BSP_LED_2, BOARD_LED_OFF);
+            hal_led_pin_set(BSP_LED_3, BOARD_LED_OFF);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_OFF_1:
+            nrf_gpio_pin_set(SWITCH_PIN_1);
+            hal_led_pin_set(BSP_LED_0, BOARD_LED_OFF);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_OFF_2:
+            nrf_gpio_pin_set(SWITCH_PIN_2);
+            hal_led_pin_set(BSP_LED_1, BOARD_LED_OFF);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_OFF_3:
+            nrf_gpio_pin_set(SWITCH_PIN_3);
+            hal_led_pin_set(BSP_LED_2, BOARD_LED_OFF);
+
+            break;
+        
+        case MSG_OPCODE_SWITCH_OFF_4:
+            nrf_gpio_pin_set(SWITCH_PIN_4);
+            hal_led_pin_set(BSP_LED_3, BOARD_LED_OFF);
+
+            break;
+
+        default:
+            break;
     }
 }
 
