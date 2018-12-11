@@ -115,17 +115,28 @@
 #define MSG_OPCODE_GAS                  (0x47 << 8)                               /**< ASCII "G"(0x47) for "Gas" */
 #define MSG_OPCODE_TEMP                 (0x54 << 8)                               /**< ASCII "T"(0x54) for "Temperature" */
 
-#define MSG_OPCODE_SWITCH_ON_A          (0x30A)                                   /**< ASCII "0"(0x30) + "A" for "ON-ALL"  */
-#define MSG_OPCODE_SWITCH_ON_1          (0x301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1"    */
-#define MSG_OPCODE_SWITCH_ON_2          (0x302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2"    */
-#define MSG_OPCODE_SWITCH_ON_3          (0x303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3"    */
-#define MSG_OPCODE_SWITCH_ON_4          (0x304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4"    */
+/* Generic message opcode for SWITCH_NODE_1 (0x0) */
+#define MSG_OPCODE_SWITCH_ON_1          (0x0301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1"    */
+#define MSG_OPCODE_SWITCH_ON_2          (0x0302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2"    */
+#define MSG_OPCODE_SWITCH_ON_3          (0x0303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3"    */
+#define MSG_OPCODE_SWITCH_ON_4          (0x0304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4"    */
 
-#define MSG_OPCODE_SWITCH_OFF_A         (0x31A)                                   /**< ASCII "1"(0x31) + "A" for "OFF-ALL" */
-#define MSG_OPCODE_SWITCH_OFF_1         (0x311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1"    */
-#define MSG_OPCODE_SWITCH_OFF_2         (0x312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2"    */
-#define MSG_OPCODE_SWITCH_OFF_3         (0x313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
-#define MSG_OPCODE_SWITCH_OFF_4         (0x314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
+#define MSG_OPCODE_SWITCH_OFF_1         (0x0311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1"    */
+#define MSG_OPCODE_SWITCH_OFF_2         (0x0312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2"    */
+#define MSG_OPCODE_SWITCH_OFF_3         (0x0313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
+#define MSG_OPCODE_SWITCH_OFF_4         (0x0314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
+
+/* Generic message opcode for SWITCH_NODE_2 (0x1) */
+#define MSG_OPCODE_SWITCH_ON_5          (0x1301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1"    */
+#define MSG_OPCODE_SWITCH_ON_6          (0x1302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2"    */
+#define MSG_OPCODE_SWITCH_ON_7          (0x1303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3"    */
+#define MSG_OPCODE_SWITCH_ON_8          (0x1304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4"    */
+
+#define MSG_OPCODE_SWITCH_OFF_5         (0x1311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1"    */
+#define MSG_OPCODE_SWITCH_OFF_6         (0x1312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2"    */
+#define MSG_OPCODE_SWITCH_OFF_7         (0x1313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
+#define MSG_OPCODE_SWITCH_OFF_8         (0x1314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
+
 
 #define SWITCH_PIN_1                    (2)
 #define SWITCH_PIN_2                    (3)
@@ -191,38 +202,29 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t 
     /* Resolve the server instance here if required, this example uses only 1 instance. */
 
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Received MSG: %d\n", byte)
-    nrf_gpio_cfg_output(SWITCH_PIN_1);
-    nrf_gpio_cfg_output(SWITCH_PIN_2);
-    nrf_gpio_cfg_output(SWITCH_PIN_3);
-    nrf_gpio_cfg_output(SWITCH_PIN_4);
+//    nrf_gpio_cfg_output(SWITCH_PIN_1);
+//    nrf_gpio_cfg_output(SWITCH_PIN_2);
+//    nrf_gpio_cfg_output(SWITCH_PIN_3);
+//    nrf_gpio_cfg_output(SWITCH_PIN_4);
     switch (byte)
     {       
-        case MSG_OPCODE_SWITCH_ON_A:
-            nrf_gpio_pin_clear(SWITCH_PIN_1);
-            nrf_gpio_pin_clear(SWITCH_PIN_2);
-            nrf_gpio_pin_clear(SWITCH_PIN_3);
-            nrf_gpio_pin_clear(SWITCH_PIN_4);
-
-            hal_led_pin_set(BSP_LED_0, BOARD_LED_ON);
-            hal_led_pin_set(BSP_LED_1, BOARD_LED_ON);
-            hal_led_pin_set(BSP_LED_2, BOARD_LED_ON);
-            hal_led_pin_set(BSP_LED_3, BOARD_LED_ON);
-
-            break;
 
         case MSG_OPCODE_SWITCH_ON_1:
             nrf_gpio_pin_clear(SWITCH_PIN_1);
+            nrf_gpio_cfg_output(SWITCH_PIN_1);
             hal_led_pin_set(BSP_LED_0, BOARD_LED_ON);
 
             break;
 
         case MSG_OPCODE_SWITCH_ON_2:
             nrf_gpio_pin_clear(SWITCH_PIN_2);
+            nrf_gpio_cfg_output(SWITCH_PIN_2);
             hal_led_pin_set(BSP_LED_1, BOARD_LED_ON);
 
             break;
 
         case MSG_OPCODE_SWITCH_ON_3:
+            nrf_gpio_cfg_output(SWITCH_PIN_3);
             nrf_gpio_pin_clear(SWITCH_PIN_3);
             hal_led_pin_set(BSP_LED_2, BOARD_LED_ON);
 
@@ -230,42 +232,89 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t 
         
         case MSG_OPCODE_SWITCH_ON_4:
             nrf_gpio_pin_clear(SWITCH_PIN_4);
+            nrf_gpio_cfg_output(SWITCH_PIN_4);
             hal_led_pin_set(BSP_LED_3, BOARD_LED_ON);
 
             break;
-        
-        case MSG_OPCODE_SWITCH_OFF_A:
-            nrf_gpio_pin_set(SWITCH_PIN_1);
-            nrf_gpio_pin_set(SWITCH_PIN_2);
-            nrf_gpio_pin_set(SWITCH_PIN_3);
-            nrf_gpio_pin_set(SWITCH_PIN_4);
 
-            hal_led_pin_set(BSP_LED_0, BOARD_LED_OFF);
-            hal_led_pin_set(BSP_LED_1, BOARD_LED_OFF);
-            hal_led_pin_set(BSP_LED_2, BOARD_LED_OFF);
-            hal_led_pin_set(BSP_LED_3, BOARD_LED_OFF);
+        case MSG_OPCODE_SWITCH_ON_5:
+            nrf_gpio_pin_clear(SWITCH_PIN_1);
+            nrf_gpio_cfg_output(SWITCH_PIN_1);
+            hal_led_pin_set(BSP_LED_0, BOARD_LED_ON);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_ON_6:
+            nrf_gpio_pin_clear(SWITCH_PIN_2);
+            nrf_gpio_cfg_output(SWITCH_PIN_2);
+            hal_led_pin_set(BSP_LED_1, BOARD_LED_ON);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_ON_7:
+            nrf_gpio_pin_clear(SWITCH_PIN_3);
+            nrf_gpio_cfg_output(SWITCH_PIN_3);
+            hal_led_pin_set(BSP_LED_2, BOARD_LED_ON);
+
+            break;
+        
+        case MSG_OPCODE_SWITCH_ON_8:
+            nrf_gpio_pin_clear(SWITCH_PIN_4);
+            nrf_gpio_cfg_output(SWITCH_PIN_4);
+            hal_led_pin_set(BSP_LED_3, BOARD_LED_ON);
 
             break;
 
         case MSG_OPCODE_SWITCH_OFF_1:
+            nrf_gpio_cfg_output(SWITCH_PIN_1);
             nrf_gpio_pin_set(SWITCH_PIN_1);
             hal_led_pin_set(BSP_LED_0, BOARD_LED_OFF);
 
             break;
 
         case MSG_OPCODE_SWITCH_OFF_2:
+            nrf_gpio_cfg_output(SWITCH_PIN_2);
             nrf_gpio_pin_set(SWITCH_PIN_2);
             hal_led_pin_set(BSP_LED_1, BOARD_LED_OFF);
 
             break;
 
         case MSG_OPCODE_SWITCH_OFF_3:
+            nrf_gpio_cfg_output(SWITCH_PIN_3);
             nrf_gpio_pin_set(SWITCH_PIN_3);
             hal_led_pin_set(BSP_LED_2, BOARD_LED_OFF);
 
             break;
         
         case MSG_OPCODE_SWITCH_OFF_4:
+            nrf_gpio_cfg_output(SWITCH_PIN_4);
+            nrf_gpio_pin_set(SWITCH_PIN_4);
+            hal_led_pin_set(BSP_LED_3, BOARD_LED_OFF);
+
+            break;
+        case MSG_OPCODE_SWITCH_OFF_5:
+            nrf_gpio_cfg_output(SWITCH_PIN_1);
+            nrf_gpio_pin_set(SWITCH_PIN_1);
+            hal_led_pin_set(BSP_LED_0, BOARD_LED_OFF);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_OFF_6:
+            nrf_gpio_cfg_output(SWITCH_PIN_2);
+            nrf_gpio_pin_set(SWITCH_PIN_2);
+            hal_led_pin_set(BSP_LED_1, BOARD_LED_OFF);
+
+            break;
+
+        case MSG_OPCODE_SWITCH_OFF_7:
+            nrf_gpio_cfg_output(SWITCH_PIN_3);
+            nrf_gpio_pin_set(SWITCH_PIN_3);
+            hal_led_pin_set(BSP_LED_2, BOARD_LED_OFF);
+
+            break;
+        
+        case MSG_OPCODE_SWITCH_OFF_8:
+            nrf_gpio_cfg_output(SWITCH_PIN_4);
             nrf_gpio_pin_set(SWITCH_PIN_4);
             hal_led_pin_set(BSP_LED_3, BOARD_LED_OFF);
 

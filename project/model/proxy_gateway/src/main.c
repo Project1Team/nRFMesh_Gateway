@@ -180,7 +180,15 @@ void uart_event_handle(app_uart_evt_t * p_event)
                 if(count_value == 3)
                 {
                    // sent data to device
-                   count_value = 0; 
+                    set_params.byte = received_data;
+                    set_params.tid = tid++;
+                    transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
+                    transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
+                    __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: %d\n", set_params.byte);
+                    (void)access_model_reliable_cancel(m_clients[1].model_handle);
+                    status = generic_byte_client_set(&m_clients[1], &set_params, &transition_params);
+
+                    count_value = 0; 
                 }
                 if(cr == 0xFE)
                 {
@@ -190,14 +198,7 @@ void uart_event_handle(app_uart_evt_t * p_event)
                 hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
                 set_params.byte = cr;
                 //__LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending message to client... \n");
-                //app_byte_value_publish(&m_byte_server_0, cr);
             } while (err_code == NRF_ERROR_BUSY);
-            set_params.tid = tid++;
-            transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
-            transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
-            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: %d\n", set_params.byte);
-            (void)access_model_reliable_cancel(m_clients[1].model_handle);
-            status = generic_byte_client_set(&m_clients[1], &set_params, &transition_params);
             break;
 
         case APP_UART_COMMUNICATION_ERROR:
