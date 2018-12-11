@@ -99,6 +99,9 @@
 #define UART_RX_BUF_SIZE 256                                                      /**< UART RX buffer size. */
 
 
+static uint16_t received_data = 0x0000;
+static int count_value = 0;
+
 static void gap_params_init(void);
 static void conn_params_init(void);
 
@@ -169,7 +172,20 @@ void uart_event_handle(app_uart_evt_t * p_event)
             do
             {
                 //err_code = app_uart_put(cr);
-                
+                if(count_value > 0)
+                {
+                   received_data = (received_data << 8) | (uint16_t)(cr);
+                   count_value ++;
+                }
+                if(count_value == 3)
+                {
+                   // sent data to device
+                   count_value = 0; 
+                }
+                if(cr == 0xFE)
+                {
+                    count_value ++;
+                }
                 hal_led_mask_set(LEDS_MASK, LED_MASK_STATE_OFF);
                 hal_led_blink_ms(LEDS_MASK, LED_BLINK_INTERVAL_MS, LED_BLINK_CNT_START);
                 set_params.byte = cr;
@@ -299,8 +315,7 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
               p_meta->src.value, p_in->present_byte);
     int i;
     uint16_t data = p_in->present_byte;
-    uint8_t start_byte = 0x01;
-    uint8_t end_byte = 0xFF;
+    uint8_t start_byte = 0xFE;
 
     app_uart_put(start_byte);
     for(i = 0; i < 2; i++)
@@ -308,7 +323,6 @@ static void app_generic_byte_client_status_cb(const generic_byte_client_t * p_se
         app_uart_put((uint8_t)(data & 0x00FF));
         data = data >> 8;
     }
-    app_uart_put(end_byte);
 }
 
 static void node_reset(void)
