@@ -186,7 +186,7 @@ void uart_event_handle(app_uart_evt_t * p_event)
                     transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
                     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: %d\n", set_params.byte);
                     (void)access_model_reliable_cancel(m_clients[1].model_handle);
-                    status = generic_byte_client_set(&m_clients[1], &set_params, &transition_params);
+                    status = generic_byte_client_set_unack(&m_clients[1], &set_params, &transition_params, 1);
 
                     count_value = 0; 
                 }

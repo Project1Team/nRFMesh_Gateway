@@ -137,11 +137,15 @@
 #define MSG_OPCODE_SWITCH_OFF_7         (0x1313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
 #define MSG_OPCODE_SWITCH_OFF_8         (0x1314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
 
+#define MSG_OPCODE_CLEAR_FIRE           (0x4346)                                   /**< ASCII "C"(0x43) for "Clear" & "F"(0x46) for "Fire"" */
+#define MSG_OPCODE_CLEAR_GAS            (0x4347)                                   /**< ASCII "C"(0x43) for "Clear" & "G"(0x47) for "Gas"" */
 
 #define SWITCH_PIN_1                    (2)
 #define SWITCH_PIN_2                    (3)
 #define SWITCH_PIN_3                    (4)
 #define SWITCH_PIN_4                    (5)
+
+#define ALARM_PIN                       (11)
 
 #define BOARD_LED_ON                    (1)
 #define BOARD_LED_OFF                   (0)
@@ -210,15 +214,15 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t 
     {       
 
         case MSG_OPCODE_SWITCH_ON_1:
-            nrf_gpio_pin_clear(SWITCH_PIN_1);
             nrf_gpio_cfg_output(SWITCH_PIN_1);
+            nrf_gpio_pin_clear(SWITCH_PIN_1);
             hal_led_pin_set(BSP_LED_0, BOARD_LED_ON);
 
             break;
 
         case MSG_OPCODE_SWITCH_ON_2:
-            nrf_gpio_pin_clear(SWITCH_PIN_2);
             nrf_gpio_cfg_output(SWITCH_PIN_2);
+            nrf_gpio_pin_clear(SWITCH_PIN_2);
             hal_led_pin_set(BSP_LED_1, BOARD_LED_ON);
 
             break;
@@ -231,36 +235,36 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t 
             break;
         
         case MSG_OPCODE_SWITCH_ON_4:
-            nrf_gpio_pin_clear(SWITCH_PIN_4);
             nrf_gpio_cfg_output(SWITCH_PIN_4);
+            nrf_gpio_pin_clear(SWITCH_PIN_4);
             hal_led_pin_set(BSP_LED_3, BOARD_LED_ON);
 
             break;
 
         case MSG_OPCODE_SWITCH_ON_5:
-            nrf_gpio_pin_clear(SWITCH_PIN_1);
             nrf_gpio_cfg_output(SWITCH_PIN_1);
+            nrf_gpio_pin_clear(SWITCH_PIN_1);
             hal_led_pin_set(BSP_LED_0, BOARD_LED_ON);
 
             break;
 
         case MSG_OPCODE_SWITCH_ON_6:
-            nrf_gpio_pin_clear(SWITCH_PIN_2);
             nrf_gpio_cfg_output(SWITCH_PIN_2);
+            nrf_gpio_pin_clear(SWITCH_PIN_2);
             hal_led_pin_set(BSP_LED_1, BOARD_LED_ON);
 
             break;
 
         case MSG_OPCODE_SWITCH_ON_7:
-            nrf_gpio_pin_clear(SWITCH_PIN_3);
             nrf_gpio_cfg_output(SWITCH_PIN_3);
+            nrf_gpio_pin_clear(SWITCH_PIN_3);
             hal_led_pin_set(BSP_LED_2, BOARD_LED_ON);
 
             break;
         
         case MSG_OPCODE_SWITCH_ON_8:
-            nrf_gpio_pin_clear(SWITCH_PIN_4);
             nrf_gpio_cfg_output(SWITCH_PIN_4);
+            nrf_gpio_pin_clear(SWITCH_PIN_4);
             hal_led_pin_set(BSP_LED_3, BOARD_LED_ON);
 
             break;
@@ -317,6 +321,18 @@ static void app_byte_server_set_cb(const app_byte_server_t * p_server, uint16_t 
             nrf_gpio_cfg_output(SWITCH_PIN_4);
             nrf_gpio_pin_set(SWITCH_PIN_4);
             hal_led_pin_set(BSP_LED_3, BOARD_LED_OFF);
+
+            break;
+
+        case MSG_OPCODE_CLEAR_FIRE:
+            nrf_gpio_pin_clear(INPUT_0);
+            nrf_gpio_pin_clear(ALARM_PIN);
+
+            break;
+
+        case MSG_OPCODE_CLEAR_GAS:
+            nrf_gpio_pin_clear(INPUT_1);
+            nrf_gpio_pin_clear(ALARM_PIN);
 
             break;
 
@@ -395,22 +411,29 @@ static void input_event_handler(uint32_t input_number)
     switch(input_number)
     {
         case 0:
-            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Flame detected!!!\n");
+            //__LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Flame detected!!!\n");
             hal_led_pin_set(BSP_LED_0, !hal_led_pin_get(BSP_LED_0));
 
             /* Sending TWO BYTES: FLAME_OPCODE|VALUE */
             uint16_t flame = ((uint16_t)(MSG_OPCODE_FLAME)) | ((uint16_t)(1));
             app_byte_value_publish(&m_byte_server_0, flame);
             
+            nrf_gpio_cfg_output(ALARM_PIN);
+            nrf_gpio_pin_set(ALARM_PIN);
+
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "%d Flame detected!!!\n", flame);
             break;
+
         case 1:
-            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Gas detected!!!\n");
+            //__LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Gas detected!!!\n");
             hal_led_pin_set(BSP_LED_2, !hal_led_pin_get(BSP_LED_2));
 
             /* Sending TWO BYTES: GAS_OPCODE|VALUE */
             uint16_t gas = ((uint16_t)(MSG_OPCODE_GAS)) | ((uint16_t)(1));
             app_byte_value_publish(&m_byte_server_0, gas);
+
+            nrf_gpio_cfg_output(ALARM_PIN);
+            nrf_gpio_pin_set(ALARM_PIN);
 
             __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "%d Gas detected!!!\n", gas);
             break;
@@ -534,6 +557,8 @@ static void initialize(void)
 
     ERROR_CHECK(app_timer_init());
     hal_leds_init();
+    
+    nrf_gpio_pin_clear(ALARM_PIN);
 
     //ERROR_CHECK(hal_buttons_init(button_event_handler));
     ERROR_CHECK(hal_inputs_init(input_event_handler));
@@ -690,7 +715,7 @@ void read_init(void)
     APP_ERROR_CHECK(err_code);
     
     //about half a minute calculated
-    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(1000), NULL);
+    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(300), NULL);
     APP_ERROR_CHECK(err_code);
 }
 
