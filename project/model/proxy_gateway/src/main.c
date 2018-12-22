@@ -80,6 +80,7 @@
 /* UART specific includes */
 #include "app_uart.h"
 #include "nrf_uart.h"
+#include "nrf_delay.h"
 
 #define CLIENT_LED_VALUE      (0)
 
@@ -94,12 +95,39 @@
 #define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(2000)                     /**< Time between each call to sd_ble_gap_conn_param_update after the first call. */
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                         /**< Number of attempts before giving up the connection parameter negotiation. */
 
+/* Generic message opcode for SWITCH_NODE_1 (0x0) */
+#define MSG_OPCODE_SWITCH_ON_1          (0x0301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1"    */
+#define MSG_OPCODE_SWITCH_ON_2          (0x0302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2"    */
+#define MSG_OPCODE_SWITCH_ON_3          (0x0303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3"    */
+#define MSG_OPCODE_SWITCH_ON_4          (0x0304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4"    */
+
+#define MSG_OPCODE_SWITCH_OFF_1         (0x0311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1"    */
+#define MSG_OPCODE_SWITCH_OFF_2         (0x0312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2"    */
+#define MSG_OPCODE_SWITCH_OFF_3         (0x0313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
+#define MSG_OPCODE_SWITCH_OFF_4         (0x0314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
+
+/* Generic message opcode for SWITCH_NODE_2 (0x1) */
+#define MSG_OPCODE_SWITCH_ON_5          (0x1301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1"    */
+#define MSG_OPCODE_SWITCH_ON_6          (0x1302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2"    */
+#define MSG_OPCODE_SWITCH_ON_7          (0x1303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3"    */
+#define MSG_OPCODE_SWITCH_ON_8          (0x1304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4"    */
+
+#define MSG_OPCODE_SWITCH_OFF_5         (0x1311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1"    */
+#define MSG_OPCODE_SWITCH_OFF_6         (0x1312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2"    */
+#define MSG_OPCODE_SWITCH_OFF_7         (0x1313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
+#define MSG_OPCODE_SWITCH_OFF_8         (0x1314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
+
+#define MSG_OPCODE_CLEAR_FIRE           (0x4346)                                   /**< ASCII "C"(0x43) for "Clear" & "F"(0x46) for "Fire"" */
+#define MSG_OPCODE_CLEAR_GAS            (0x4347)                                   /**< ASCII "C"(0x43) for "Clear" & "G"(0x47) for "Gas"" */
+
+
 /* UART specific includes */
 #define UART_TX_BUF_SIZE 256                                                      /**< UART TX buffer size. */
 #define UART_RX_BUF_SIZE 256                                                      /**< UART RX buffer size. */
 
 
 static uint16_t received_data = 0x0000;
+
 static int count_value = 0;
 
 static void gap_params_init(void);
@@ -177,6 +205,7 @@ void uart_event_handle(app_uart_evt_t * p_event)
                    received_data = (received_data << 8) | (uint16_t)(cr);
                    count_value ++;
                 }
+
                 if(count_value == 3)
                 {
                    // sent data to device
@@ -185,8 +214,40 @@ void uart_event_handle(app_uart_evt_t * p_event)
                     transition_params.delay_ms = APP_CONFIG_ONOFF_DELAY_MS;
                     transition_params.transition_time_ms = APP_CONFIG_ONOFF_TRANSITION_TIME_MS;
                     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Sending msg: %d\n", set_params.byte);
-                    (void)access_model_reliable_cancel(m_clients[1].model_handle);
-                    status = generic_byte_client_set_unack(&m_clients[1], &set_params, &transition_params, 1);
+
+                    // Fire clear state
+                    if (received_data == MSG_OPCODE_CLEAR_FIRE) 
+                    {
+                        (void)access_model_reliable_cancel(m_clients[0].model_handle);
+                        status = generic_byte_client_set_unack(&m_clients[0], &set_params, &transition_params, 1);
+                    }
+
+                    // Gas clear state
+                    if (received_data == MSG_OPCODE_CLEAR_GAS)
+                    {
+                        (void)access_model_reliable_cancel(m_clients[1].model_handle);
+                        status = generic_byte_client_set_unack(&m_clients[1], &set_params, &transition_params, 1);
+                    }
+
+                    // Switch 1 Controller
+                    if ((received_data == MSG_OPCODE_SWITCH_ON_1)  || (received_data == MSG_OPCODE_SWITCH_ON_2)  ||
+                        (received_data == MSG_OPCODE_SWITCH_ON_3)  || (received_data == MSG_OPCODE_SWITCH_ON_4)  ||
+                        (received_data == MSG_OPCODE_SWITCH_OFF_1) || (received_data == MSG_OPCODE_SWITCH_OFF_2) ||
+                        (received_data == MSG_OPCODE_SWITCH_OFF_3) || (received_data == MSG_OPCODE_SWITCH_OFF_4)) 
+                    {
+                        (void)access_model_reliable_cancel(m_clients[2].model_handle);
+                        status = generic_byte_client_set_unack(&m_clients[2], &set_params, &transition_params, 1);
+                    }
+                    
+                    // Switch 2 Controller
+                    if ((received_data == MSG_OPCODE_SWITCH_ON_5)  || (received_data == MSG_OPCODE_SWITCH_ON_6)  ||
+                        (received_data == MSG_OPCODE_SWITCH_ON_7)  || (received_data == MSG_OPCODE_SWITCH_ON_8)  ||
+                        (received_data == MSG_OPCODE_SWITCH_OFF_5) || (received_data == MSG_OPCODE_SWITCH_OFF_6) ||
+                        (received_data == MSG_OPCODE_SWITCH_OFF_7) || (received_data == MSG_OPCODE_SWITCH_OFF_8)) 
+                    {
+                        (void)access_model_reliable_cancel(m_clients[3].model_handle);
+                        status = generic_byte_client_set_unack(&m_clients[3], &set_params, &transition_params, 1);
+                    }
 
                     count_value = 0; 
                 }
@@ -413,6 +474,7 @@ static void rtt_input_handler(int key)
 static void models_init_cb(void)
 {
     __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Initializing and adding models\n");
+
     for (uint32_t i = 0; i < CLIENT_MODEL_INSTANCE_COUNT; ++i)
     {
         m_clients[i].settings.p_callbacks = &client_cbs;
@@ -560,6 +622,7 @@ static void start(void)
 
 int main(void)
 {
+    nrf_delay_ms(2000);
     uart_init();
     initialize();
     execution_start(start);
