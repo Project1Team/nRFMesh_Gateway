@@ -111,34 +111,34 @@
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                         /**< Number of attempts before giving up the connection parameter negotiation. */
 
 /* Generic message opcode for devices' data */
-#define MSG_OPCODE_FLAME                (0x46 << 8)                               /**< ASCII "F"(0x46) for "Fire" */
+#define MSG_OPCODE_FIRE                 (0x46 << 8)                               /**< ASCII "F"(0x46) for "Fire" */
 #define MSG_OPCODE_GAS                  (0x47 << 8)                               /**< ASCII "G"(0x47) for "Gas" */
 #define MSG_OPCODE_TEMP                 (0x54 << 8)                               /**< ASCII "T"(0x54) for "Temperature" */
 
 /* Generic message opcode for SWITCH_NODE_1 (0x0) */
-#define MSG_OPCODE_SWITCH_ON_1          (0x0301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1"    */
-#define MSG_OPCODE_SWITCH_ON_2          (0x0302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2"    */
-#define MSG_OPCODE_SWITCH_ON_3          (0x0303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3"    */
-#define MSG_OPCODE_SWITCH_ON_4          (0x0304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4"    */
+#define MSG_OPCODE_SWITCH_ON_1          (0x0301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1" */
+#define MSG_OPCODE_SWITCH_ON_2          (0x0302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2" */
+#define MSG_OPCODE_SWITCH_ON_3          (0x0303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3" */
+#define MSG_OPCODE_SWITCH_ON_4          (0x0304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4" */
 
-#define MSG_OPCODE_SWITCH_OFF_1         (0x0311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1"    */
-#define MSG_OPCODE_SWITCH_OFF_2         (0x0312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2"    */
-#define MSG_OPCODE_SWITCH_OFF_3         (0x0313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
-#define MSG_OPCODE_SWITCH_OFF_4         (0x0314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
+#define MSG_OPCODE_SWITCH_OFF_1         (0x0311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1" */
+#define MSG_OPCODE_SWITCH_OFF_2         (0x0312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2" */
+#define MSG_OPCODE_SWITCH_OFF_3         (0x0313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3" */
+#define MSG_OPCODE_SWITCH_OFF_4         (0x0314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4" */
 
 /* Generic message opcode for SWITCH_NODE_2 (0x1) */
-#define MSG_OPCODE_SWITCH_ON_5          (0x1301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1"    */
-#define MSG_OPCODE_SWITCH_ON_6          (0x1302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2"    */
-#define MSG_OPCODE_SWITCH_ON_7          (0x1303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3"    */
-#define MSG_OPCODE_SWITCH_ON_8          (0x1304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4"    */
+#define MSG_OPCODE_SWITCH_ON_5          (0x1301)                                   /**< ASCII "0"(0x30) + "1" for "ON-1" */
+#define MSG_OPCODE_SWITCH_ON_6          (0x1302)                                   /**< ASCII "0"(0x30) + "2" for "ON-2" */
+#define MSG_OPCODE_SWITCH_ON_7          (0x1303)                                   /**< ASCII "0"(0x30) + "3" for "ON-3" */
+#define MSG_OPCODE_SWITCH_ON_8          (0x1304)                                   /**< ASCII "0"(0x30) + "4" for "ON-4" */
 
-#define MSG_OPCODE_SWITCH_OFF_5         (0x1311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1"    */
-#define MSG_OPCODE_SWITCH_OFF_6         (0x1312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2"    */
-#define MSG_OPCODE_SWITCH_OFF_7         (0x1313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
-#define MSG_OPCODE_SWITCH_OFF_8         (0x1314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
+#define MSG_OPCODE_SWITCH_OFF_5         (0x1311)                                   /**< ASCII "1"(0x31) + "1" for "OFF-1" */
+#define MSG_OPCODE_SWITCH_OFF_6         (0x1312)                                   /**< ASCII "1"(0x31) + "2" for "OFF-2" */
+#define MSG_OPCODE_SWITCH_OFF_7         (0x1313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3" */
+#define MSG_OPCODE_SWITCH_OFF_8         (0x1314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4" */
 
-#define MSG_OPCODE_CLEAR_FIRE           (0x4346)                                   /**< ASCII "C"(0x43) for "Clear" & "F"(0x46) for "Fire"" */
-#define MSG_OPCODE_CLEAR_GAS            (0x4347)                                   /**< ASCII "C"(0x43) for "Clear" & "G"(0x47) for "Gas"" */
+#define MSG_OPCODE_CLEAR_FIRE           (0x4600)                                   /** Clear Fire State */
+#define MSG_OPCODE_CLEAR_GAS            (0x4700)                                   /** Clear Gas State */
 
 #define SWITCH_PIN_1                    (2)
 #define SWITCH_PIN_2                    (3)
@@ -411,17 +411,17 @@ static void input_event_handler(uint32_t input_number)
     switch(input_number)
     {
         case 0:
-            //__LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Flame detected!!!\n");
+            //__LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "Fire detected!!!\n");
             hal_led_pin_set(BSP_LED_0, !hal_led_pin_get(BSP_LED_0));
 
-            /* Sending TWO BYTES: FLAME_OPCODE|VALUE */
-            uint16_t flame = ((uint16_t)(MSG_OPCODE_FLAME)) | ((uint16_t)(1));
-            app_byte_value_publish(&m_byte_server_0, flame);
+            /* Sending TWO BYTES: FIRE_OPCODE|VALUE */
+            uint16_t fire = ((uint16_t)(MSG_OPCODE_FIRE)) | ((uint16_t)(1));
+            app_byte_value_publish(&m_byte_server_0, fire);
             
             nrf_gpio_cfg_output(ALARM_PIN);
             nrf_gpio_pin_set(ALARM_PIN);
 
-            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "%d Flame detected!!!\n", flame);
+            __LOG(LOG_SRC_APP, LOG_LEVEL_INFO, "%d Fire detected!!!\n", fire);
             break;
 
         case 1:
@@ -714,8 +714,8 @@ void read_init(void)
     err_code = app_timer_create(&m_timer, APP_TIMER_MODE_REPEATED, timer_handler);
     APP_ERROR_CHECK(err_code);
     
-    //about half a minute calculated
-    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(300), NULL);
+    //about a minute calculated
+    err_code = app_timer_start(m_timer, APP_TIMER_TICKS(2000), NULL);
     APP_ERROR_CHECK(err_code);
 }
 

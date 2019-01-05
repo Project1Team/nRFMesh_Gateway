@@ -82,11 +82,11 @@
 #include "nrf_uart.h"
 #include "nrf_delay.h"
 
-#define CLIENT_LED_VALUE      (0)
+#define CLIENT_LED_VALUE                (0)
 
-#define APP_UNACK_MSG_REPEAT_COUNT   (2)
+#define APP_UNACK_MSG_REPEAT_COUNT      (2)
 
-#define DEVICE_NAME                     "Mesh Gateway Node"
+#define DEVICE_NAME                     "Gateway"
 #define MIN_CONN_INTERVAL               MSEC_TO_UNITS(150,  UNIT_1_25_MS)         /**< Minimum acceptable connection interval. */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(250,  UNIT_1_25_MS)         /**< Maximum acceptable connection interval. */
 #define SLAVE_LATENCY                   0                                         /**< Slave latency. */
@@ -117,8 +117,8 @@
 #define MSG_OPCODE_SWITCH_OFF_7         (0x1313)                                   /**< ASCII "1"(0x31) + "3" for "OFF-3"    */
 #define MSG_OPCODE_SWITCH_OFF_8         (0x1314)                                   /**< ASCII "1"(0x31) + "4" for "OFF-4"    */
 
-#define MSG_OPCODE_CLEAR_FIRE           (0x4346)                                   /**< ASCII "C"(0x43) for "Clear" & "F"(0x46) for "Fire"" */
-#define MSG_OPCODE_CLEAR_GAS            (0x4347)                                   /**< ASCII "C"(0x43) for "Clear" & "G"(0x47) for "Gas"" */
+#define MSG_OPCODE_CLEAR_FIRE           (0x4600)                                   /** Clear Fire State */
+#define MSG_OPCODE_CLEAR_GAS            (0x4700)                                   /** Clear Gas State */
 
 
 /* UART specific includes */
