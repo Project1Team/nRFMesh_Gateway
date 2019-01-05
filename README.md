@@ -1,5 +1,5 @@
 # nRFMesh_Gateway
-The nRFMesh Gateway project is an project bases on nRF5 SDK for Mesh of Nordic Semiconductor's implementation of the Bluetooth Mesh and uses light_switch_proxy example. It allows applications to utilize the features provided by the Bluetooth Mesh when running on nRF52832. This comprises a Gateway(uses proxy_server) and maybe two or more nodes use proxy_client. The provisioner is nRF Mesh application running on a tablet.
+The nRFMesh Gateway project is a project bases on nRF5 SDK for Mesh of Nordic Semiconductor's implementation of the Bluetooth Mesh and uses light_switch_proxy example. It allows applications to utilize the features provided by the Bluetooth Mesh when running on nRF52832. This comprises a Gateway(uses proxy_client) and maybe two or more nodes use proxy_server. The provisioner is nRF Mesh application running on a tablet.
 
 # Introduction to nRF5 SDK for Mesh
 
